@@ -5,15 +5,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.w3c.dom.Text;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 public class AppController {
 
+
     DataOutputStream dout ;
-    DataInputStream  din;
 
     public void get_list() throws IOException {
         dout = new DataOutputStream(IntroController.s.getOutputStream());
@@ -24,6 +27,9 @@ public class AppController {
         client_list.setScene(list_scene);
         dout.writeUTF("list");
         client_list.showAndWait();
+
     }
+
+
 
 }

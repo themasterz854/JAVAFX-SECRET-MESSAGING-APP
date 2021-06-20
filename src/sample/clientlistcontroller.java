@@ -1,17 +1,22 @@
 package sample;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import java.io.DataInputStream;
-import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class clientlistcontroller {
+    public static int cid =0;
     @FXML
     private Button button1;
     @FXML
@@ -52,12 +57,11 @@ public class clientlistcontroller {
         int i ;
         for(i=0;i<10;i++) {
             button[i].setOnAction(new EventHandler<ActionEvent>() {
-
                 String str;
+                String[] data;
                 Button testbutton;
                 int i;
                 @Override
-
                 public void handle(ActionEvent event) {
                     try {
                         testbutton = (Button) event.getSource();
@@ -65,13 +69,17 @@ public class clientlistcontroller {
                         {
                             if(testbutton ==button[i])
                             {
-                                chat(i);
+                                str = testbutton.getText();
+                                data = str.split(" ");
+                                cid = Integer.parseInt(data[1]);
+                                chat();
+                                Stage stage = (Stage) testbutton.getScene().getWindow();
+                                stage.close();
                             }
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
                 }
             });
         }
@@ -86,10 +94,17 @@ public class clientlistcontroller {
             str = din.readUTF();
         }
         }
-    public void chat(int i) throws IOException {
-        DataInputStream din = new DataInputStream(IntroController.s.getInputStream());
+    public void chat() throws IOException {
         DataOutputStream dout = new DataOutputStream(IntroController.s.getOutputStream());
-
-        dout.writeUTF("chat "+i);
+        dout.writeUTF("chat "+cid);
+        Stage Chatscreen = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("chatdialog.fxml"));
+        Parent root = loader.load();
+        Scene ChatScene = new Scene(root);
+        Chatscreen.setScene(ChatScene);
+        Chatscreen.setTitle("Chatting with "+ cid);
+        ChatDialogController cdc = loader.getController();
+        cdc.transferdata();
+        Chatscreen.show();
     }
     }

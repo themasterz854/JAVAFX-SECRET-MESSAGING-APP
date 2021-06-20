@@ -20,16 +20,10 @@ public class IntroController {
     public void start_chatting(ActionEvent event){
          s = null;
         try {
-            s = new Socket("localhost", 4545);
+            s = new Socket("localhost", 4848);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        /*Sender sen = new Sender(s);
-        Receiver rec = new Receiver(s);
-        sen.start();
-        rec.start();
-
-         */
         Stage stage1 = (Stage) button.getScene().getWindow();
         stage1.close();
 }

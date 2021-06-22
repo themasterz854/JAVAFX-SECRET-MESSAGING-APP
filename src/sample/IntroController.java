@@ -20,7 +20,7 @@ public class IntroController {
     public void start_chatting(ActionEvent event){
          s = null;
         try {
-            s = new Socket("localhost", 4848);
+            s = new     Socket("192.168.0.105", 4848);
         } catch (IOException e) {
             e.printStackTrace();
         }

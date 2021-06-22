@@ -1,8 +1,11 @@
 package sample;
 
-import com.sun.javafx.geom.AreaOp;
+
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 import java.io.DataInputStream;
@@ -15,25 +18,51 @@ public class ChatDialogController {
     @FXML
     private TextField message;
     @FXML
-    private Button send;
+    private TextArea ta;
     @FXML
-    private TextArea TA;
+    private TextArea myta;
     int id;
-    int focusedflag=0;
+
     public void transferdata(){
         id = cid;
     }
 DataOutputStream dout ;
 
-    public void receive_message() throws IOException {
-        String s;
-        DataInputStream din = new DataInputStream(IntroController.s.getInputStream());
-        while(din.available() > 0) {
+    public void run_task(){
+        Task task = new Task(){
 
-            s = din.readUTF();
-            TA.setText(s);
-        }
+            @Override
+            protected Object call() throws Exception {
+                String s;
+                Stage stage ;
+
+
+                DataInputStream din = new DataInputStream(IntroController.s.getInputStream());
+                stage = (Stage) message.getScene().getWindow();
+                while(true)
+                {
+                    while(stage.isFocused() == false)
+                    {
+                        Thread.sleep(100);
+                    }
+                    while(din.available()> 0)
+                    {
+                        s = din.readUTF();
+                        ta.appendText(s + "\n");
+                    }
+                    if(stage.isShowing() == false)
+                    {
+                        break;
+                    }
+                    Thread.sleep(500);
+                }
+                return null;
+            }
+        };
+
+        new Thread(task).start();
     }
+
     public void changereceiver() throws IOException {
         dout = new DataOutputStream(IntroController.s.getOutputStream());
         dout.writeUTF("chat "+id);
@@ -43,6 +72,10 @@ DataOutputStream dout ;
         dout = new DataOutputStream(IntroController.s.getOutputStream());
         dout.writeUTF(message.getText());
         dout.flush();
+        myta.appendText(message.getText() + "\n");
+        message.clear();
+
+
 
     }
 }

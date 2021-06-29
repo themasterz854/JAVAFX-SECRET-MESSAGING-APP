@@ -1,14 +1,12 @@
 package sample;
 
-import javafx.fxml.FXML;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+
 import javafx.stage.Stage;
-import org.w3c.dom.Text;
+
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -26,10 +24,7 @@ public class AppController {
         Scene list_scene = new Scene(root);
         client_list.setScene(list_scene);
         dout.writeUTF("list");
-        client_list.showAndWait();
-
+        client_list.show();
     }
-
-
 
 }

@@ -5,7 +5,6 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 import java.io.DataInputStream;
@@ -26,35 +25,59 @@ public class ChatDialogController {
     public void transferdata(){
         id = cid;
     }
-DataOutputStream dout ;
+    DataOutputStream dout ;
+    DataInputStream din;
+    String s;
+    String[] data = new String[4];
+    String[] queue= new String[10];
+    int front,rear;
+    public synchronized void checkandwrite() throws IOException{
+        front = rear = -1;
+        while(din.available()> 0)
+        {
+            s = din.readUTF();
+            data = s.split(" ");
+            if(Integer.parseInt(data[0]) == id) {
+                for(int i =0;i<data.length;i++)
+                ta.appendText(data[i]+" ");
+                ta.appendText("\n");
+            }
+            else
+            {
+                if(front == -1)
+                {
+                    front = 0;
+                }
+                queue[++rear] = s;
 
+            }
+        }
+        while(front != rear + 1 && front != -1 && rear != -1)
+        {
+            dout.writeUTF("others"+" "+queue[front++]);
+        }
+    }
     public void run_task(){
         Task task = new Task(){
 
             @Override
             protected Object call() throws Exception {
-                String s;
+
                 Stage stage ;
-
-
-                DataInputStream din = new DataInputStream(IntroController.s.getInputStream());
+                din = new DataInputStream(IntroController.s.getInputStream());
+                dout = new DataOutputStream(IntroController.s.getOutputStream());
                 stage = (Stage) message.getScene().getWindow();
+
                 while(true)
                 {
-                    while(stage.isFocused() == false)
-                    {
-                        Thread.sleep(100);
-                    }
-                    while(din.available()> 0)
-                    {
-                        s = din.readUTF();
-                        ta.appendText(s + "\n");
-                    }
+
+                    checkandwrite();
                     if(stage.isShowing() == false)
                     {
                         break;
                     }
-                    Thread.sleep(500);
+                    Thread.sleep(3000);
+
                 }
                 return null;
             }
@@ -74,8 +97,5 @@ DataOutputStream dout ;
         dout.flush();
         myta.appendText(message.getText() + "\n");
         message.clear();
-
-
-
     }
 }

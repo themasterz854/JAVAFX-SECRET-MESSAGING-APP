@@ -39,11 +39,10 @@ public class clientlistcontroller {
     private Button button10;
 
     Button[] button = new Button[10];
-
-    public void show() throws IOException {
+    Stage stage;
+    public  void show() throws IOException {
         String str;
         DataInputStream din = new DataInputStream(IntroController.s.getInputStream());
-        DataOutputStream dout = new DataOutputStream(IntroController.s.getOutputStream());
         button[0] = button1;
         button[1] = button2;
         button[2] = button3;
@@ -73,7 +72,7 @@ public class clientlistcontroller {
                                 data = str.split(" ");
                                 cid = Integer.parseInt(data[1]);
                                 chat();
-                                Stage stage = (Stage) testbutton.getScene().getWindow();
+                                stage = (Stage) testbutton.getScene().getWindow();
                                 stage.close();
                             }
                         }
@@ -83,7 +82,6 @@ public class clientlistcontroller {
                 }
             });
         }
-
         str = din.readUTF();
         i =0;
         while (!str.equals("end of list")) {
@@ -93,6 +91,9 @@ public class clientlistcontroller {
             i++;
             str = din.readUTF();
         }
+        stage = (Stage) button1.getScene().getWindow();
+        stage.close();
+        stage.show();
         }
     public void chat() throws IOException {
         DataOutputStream dout = new DataOutputStream(IntroController.s.getOutputStream());

@@ -38,7 +38,7 @@ public class ChatDialogController {
             s = din.readUTF();
             data = s.split(" ");
             if(Integer.parseInt(data[0]) == id) {
-                for(int i =0;i<data.length;i++)
+                for(int i =1;i<data.length;i++)
                 ta.appendText(data[i]+" ");
                 ta.appendText("\n");
             }
@@ -70,13 +70,16 @@ public class ChatDialogController {
 
                 while(true)
                 {
-
+                    while(!stage.isFocused())
+                    {
+                        Thread.sleep(1000);
+                    }
                     checkandwrite();
-                    if(stage.isShowing() == false)
+                    if(!stage.isShowing())
                     {
                         break;
                     }
-                    Thread.sleep(3000);
+                    Thread.sleep(100);
 
                 }
                 return null;

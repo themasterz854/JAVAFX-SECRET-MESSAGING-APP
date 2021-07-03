@@ -28,9 +28,7 @@ public class ChatDialogController {
     private Button dirchoose;
     int id;
 
-    public void transferdata(){
-        id = cid;
-    }
+
     DataOutputStream dout ;
     DataInputStream din;
     String s;
@@ -43,6 +41,10 @@ public class ChatDialogController {
     File directory;
     DirectoryChooser dc = new DirectoryChooser();
     FileOutputStream fos;
+
+    public void transferdata(){
+        id = cid;
+    }
 
     public void direchooser()
     {

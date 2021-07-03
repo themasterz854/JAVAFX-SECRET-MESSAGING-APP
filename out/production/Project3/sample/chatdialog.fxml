@@ -7,7 +7,7 @@
 <AnchorPane onMouseClicked="#changereceiver" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ChatDialogController">
    <children>
       <Button defaultButton="true" layoutX="534.0" layoutY="318.0" mnemonicParsing="false" onAction="#send_message" text="Send" />
-      <TextField fx:id="message" layoutX="43.0" layoutY="307.0" onMousePressed="#changereceiver" prefHeight="46.0" prefWidth="481.0" />
+      <TextField fx:id="message" layoutX="33.0" layoutY="308.0" onMousePressed="#changereceiver" prefHeight="46.0" prefWidth="481.0" />
       <TextArea fx:id="ta" editable="false" layoutX="14.0" layoutY="55.0" prefHeight="200.0" prefWidth="294.0" wrapText="true">
          <opaqueInsets>
             <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
@@ -16,6 +16,8 @@
          <opaqueInsets>
             <Insets />
          </opaqueInsets></TextArea>
+      <Button fx:id="send_file_button" layoutX="43.0" layoutY="271.0" mnemonicParsing="false" onAction="#start_file_window" text="Send a File" />
+      <Button fx:id="dirchoose" layoutX="425.0" layoutY="271.0" mnemonicParsing="false" onAction="#direchooser" text="dir choose" />
       
    </children>
 </AnchorPane>

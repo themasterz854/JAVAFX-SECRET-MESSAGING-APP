@@ -4,16 +4,10 @@ package sample;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-
 import javafx.stage.Stage;
-
-
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 public class AppController {
-
-
     DataOutputStream dout ;
 
     public void get_list() throws IOException {

@@ -3,7 +3,7 @@ package sample;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import java.io.*;
+
 import java.net.Socket;
 import javafx.stage.Stage;
 
@@ -11,14 +11,9 @@ public class IntroController {
     @FXML
     private Button button;
 
-    public static Socket s;
+    public static Socket s = null;
     public void start_chatting(ActionEvent event){
-         s = null;
-        try {
-            s = new Socket("192.168.0.103", 4949);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         Stage stage1 = (Stage) button.getScene().getWindow();
         stage1.close();
 }

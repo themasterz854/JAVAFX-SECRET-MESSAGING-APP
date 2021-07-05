@@ -4,7 +4,9 @@ package sample;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressBar;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.io.*;
 import java.util.List;
@@ -53,8 +55,11 @@ public class FileChooserController {
         int i;
         File file;
         FileInputStream fis;
+
+        int n = send_list.getItems().size();
         DataOutputStream dout = new DataOutputStream(IntroController.s.getOutputStream());
-        for(i=0;i<send_list.getItems().size();i++)
+
+        for(i=0;i<n;i++)
         {
             file = new File((String) send_list.getItems().get(i));
             fis = new FileInputStream(file);

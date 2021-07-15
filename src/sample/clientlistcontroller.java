@@ -38,6 +38,12 @@ public class clientlistcontroller {
 
     Button[] button = new Button[10];
     Stage stage;
+    String currentchat;
+    DataOutputStream dout = new DataOutputStream(IntroController.s.getOutputStream());
+
+    public clientlistcontroller() throws IOException {
+    }
+
     public  void show() throws IOException {
         String str;
         DataInputStream din = new DataInputStream(IntroController.s.getInputStream());
@@ -54,9 +60,10 @@ public class clientlistcontroller {
         int i ;
         for(i=0;i<10;i++) {
             button[i].setOnAction(new EventHandler<ActionEvent>() {
-                String str;
+                String str1;
                 String[] data;
                 Button testbutton;
+
                 int i;
                 @Override
                 public void handle(ActionEvent event) {
@@ -66,9 +73,10 @@ public class clientlistcontroller {
                         {
                             if(testbutton ==button[i])
                             {
-                                str = testbutton.getText();
-                                data = str.split(" ");
+                                str1 = testbutton.getText();
+                                data = str1.split(" ");
                                 cid = Integer.parseInt(data[1]);
+                                currentchat = data[0];
                                 chat();
                                 stage = (Stage) testbutton.getScene().getWindow();
                                 stage.close();
@@ -83,7 +91,8 @@ public class clientlistcontroller {
         str = din.readUTF();
         i =0;
         while (!str.equals("end of list")) {
-            button[i].setText("Client " + str);
+
+            button[i].setText(str);
             button[i].setOpacity(1.0);
             button[i].setDisable(false);
             i++;
@@ -101,7 +110,7 @@ public class clientlistcontroller {
         Parent root = loader.load();
         Scene ChatScene = new Scene(root);
         Chatscreen.setScene(ChatScene);
-        Chatscreen.setTitle("Chatting with "+ cid);
+        Chatscreen.setTitle("Chatting with "+ currentchat);
         ChatDialogController cdc = loader.getController();
         cdc.transferdata();
         cdc.run_task();

@@ -54,6 +54,8 @@ public class ChatDialogController {
         front = rear = -1;
 
         while(din.available()> 0) {
+            synchronized (myta)
+            {
             s = din.readUTF();
             if (s.equals("file")) {
                 FileName = din.readUTF();
@@ -69,6 +71,7 @@ public class ChatDialogController {
                     for (int i = 1; i < data.length; i++)
                         ta.appendText(data[i] + " ");
                     ta.appendText("\n");
+                    myta.appendText("\n");
                 } else {
                     if (front == -1) {
                         front = 0;
@@ -80,6 +83,7 @@ public class ChatDialogController {
                 while (front != rear + 1 && front != -1 && rear != -1) {
                     dout.writeUTF("others" + " " + queue[front++]);
                 }
+            }
             }
         }
     }
@@ -120,12 +124,21 @@ public class ChatDialogController {
         dout.writeUTF("chat "+id);
         dout.flush();
     }
+    public void enable_encryption() throws IOException {
+        dout.writeUTF("enableencryption");
+        dout.flush();
+        myta.clear();
+        ta.clear();
+    }
     public void send_message() throws IOException {
         dout = new DataOutputStream(IntroController.s.getOutputStream());
         dout.writeUTF(message.getText());
         dout.flush();
-        myta.appendText(message.getText() + "\n");
-        message.clear();
+        synchronized (myta) {
+            ta.appendText("\n");
+            myta.appendText(message.getText() + "\n");
+            message.clear();
+        }
     }
 
     public void start_file_window() throws IOException {

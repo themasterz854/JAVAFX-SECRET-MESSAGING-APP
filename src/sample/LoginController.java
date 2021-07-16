@@ -82,7 +82,7 @@ public class LoginController {
         }
         else
         {
-            status.setText("Login failed");
+            status.setText(response);
         }
 
     }

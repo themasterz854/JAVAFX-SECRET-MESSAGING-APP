@@ -74,6 +74,8 @@ public class FileChooserController {
             dout.write(sendData,0,sendData.length);
             dout.flush();
         }
+        Stage stage = (Stage) send_list.getScene().getWindow();
+        stage.close();
     }
 
 }

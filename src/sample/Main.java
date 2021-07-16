@@ -1,16 +1,21 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+
+import java.io.DataOutput;
+import java.io.DataOutputStream;
 import java.io.IOException;
 
 
 public class Main extends Application {
     public static int flag=0;
-
+    DataOutputStream dout;
     public static void main(String[] args) {
         launch(args);
     }
@@ -32,6 +37,16 @@ public class Main extends Application {
             introdialog.setScene(scene);
             introdialog.showAndWait();
             primaryStage.setTitle("Application");
+            primaryStage.setOnCloseRequest(windowEvent -> {
+                try {
+                    dout = new DataOutputStream(IntroController.s.getOutputStream());
+                    dout.writeUTF("exit");
+                    dout.flush();
+                    primaryStage.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
             root = FXMLLoader.load(getClass().getResource("app.fxml"));
             scene = new Scene(root);
             primaryStage.setScene(scene);

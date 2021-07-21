@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane onMouseClicked="#changereceiver" pickOnBounds="false" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ChatDialogController">
@@ -20,6 +21,7 @@
          </opaqueInsets></TextArea>
       <Button fx:id="send_file_button" layoutX="43.0" layoutY="271.0" mnemonicParsing="false" onAction="#start_file_window" text="Send a File" />
       <Button fx:id="dirchoose" layoutX="425.0" layoutY="271.0" mnemonicParsing="false" onAction="#direchooser" text="dir choose" />
-      <Button layoutX="245.0" layoutY="271.0" mnemonicParsing="false" onAction="#enable_encryption" text="Enable Encryption" />
+      <ToggleButton fx:id="togglebutton" layoutX="264.0" layoutY="271.0" mnemonicParsing="false" onAction="#encryption_toggle" text="Encryption" />
+      <Button layoutX="185.0" layoutY="271.0" mnemonicParsing="false" onAction="#decryptrequest" text="Decrypt" />
    </children>
 </AnchorPane>

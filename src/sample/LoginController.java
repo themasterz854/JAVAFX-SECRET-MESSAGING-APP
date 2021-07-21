@@ -14,6 +14,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 
 
 public class LoginController {
@@ -31,9 +32,15 @@ public class LoginController {
     private PasswordField newpassword1;
     @FXML
     private Label status2;
-
+    @FXML
+    private TextField serverip;
     public void createnewaccount() throws IOException {
         DataOutputStream dout;
+        if(newpassword.getText().equals("") || newusername.getText().equals("") || newpassword1.getText().equals(""))
+        {
+            status2.setText("All fields must be non empty");
+            return;
+        }
         if(newpassword.getText().equals(newpassword1.getText()))
         {
             dout = new DataOutputStream(IntroController.s.getOutputStream());
@@ -56,7 +63,13 @@ public class LoginController {
     }
     public void newuser() throws IOException {
         Stage newaccountcreator = new Stage();
-        IntroController.s = new Socket("192.168.0.105",4949);
+        try {
+            IntroController.s = new Socket(serverip.getText(), 4949);
+        }catch(SocketException e)
+        {
+            status2.setText("Server not running at that ip");
+            return;
+        }
         FXMLLoader loader = new FXMLLoader(getClass().getResource("newaccountdialog.fxml"));
         Parent root = loader.load();
         Scene newaccount_scene = new Scene(root);
@@ -64,10 +77,23 @@ public class LoginController {
         newaccountcreator.show();
     }
     public void  Login() throws IOException {
-        IntroController.s = new Socket("192.168.0.105", 4949);
+        try {
+            IntroController.s = new Socket(serverip.getText(), 4949);
+        }catch(SocketException e)
+        {
+            status.setText("Server not running at that ip");
+            return;
+        }
         String response;
         DataOutputStream dout = new DataOutputStream(IntroController.s.getOutputStream());
         DataInputStream din = new DataInputStream(IntroController.s.getInputStream());
+        if(username.getText().equals("") || password.equals("") )
+        {
+            status.setText("Username,Password should be non empty");
+            dout.writeUTF("%exit%");
+            IntroController.s = null;
+            return;
+        }
         dout.writeUTF(username.getText()+" "+ password.getText());
         dout.flush();
         response = din.readUTF();

@@ -26,6 +26,8 @@ public class ChatDialogController {
     private TextArea myta;
     @FXML
     private Button dirchoose;
+    @FXML
+    private ToggleButton togglebutton;
     int id;
 
 
@@ -38,6 +40,7 @@ public class ChatDialogController {
     String FileName;
     int FileSize;
     byte[] ReceivedData;
+    boolean encryptflag = false;
     File directory;
     DirectoryChooser dc = new DirectoryChooser();
     FileOutputStream fos;
@@ -81,7 +84,7 @@ public class ChatDialogController {
                 }
 
                 while (front != rear + 1 && front != -1 && rear != -1) {
-                    dout.writeUTF("others" + " " + queue[front++]);
+                    dout.writeUTF("%others%" + " " + queue[front++]);
                 }
             }
             }
@@ -121,24 +124,44 @@ public class ChatDialogController {
 
     public void changereceiver() throws IOException {
         dout = new DataOutputStream(IntroController.s.getOutputStream());
-        dout.writeUTF("chat "+id);
+        dout.writeUTF("%chat% "+id);
         dout.flush();
     }
-    public void enable_encryption() throws IOException {
-        dout.writeUTF("enableencryption");
+    public void encryption_toggle() throws IOException {
+        String str;
+        if(togglebutton.isSelected()) {
+            str = "%enableencryption%";
+            encryptflag = true;
+        }
+        else
+        {
+            encryptflag = false;
+            str = "%disableencryption%";
+        }
+        dout.writeUTF(str);
         dout.flush();
         myta.clear();
         ta.clear();
+    }
+
+    public void decryptrequest() throws IOException {
+        String str = ta.getText();
+        ta.clear();
+        dout.writeUTF("%decrypt%");
+        dout.writeUTF(str);
+        dout.flush();
     }
     public void send_message() throws IOException {
         dout = new DataOutputStream(IntroController.s.getOutputStream());
         dout.writeUTF(message.getText());
         dout.flush();
-        synchronized (myta) {
-            ta.appendText("\n");
-            myta.appendText(message.getText() + "\n");
-            message.clear();
+        if(!encryptflag) {
+            synchronized (myta) {
+                ta.appendText("\n");
+                myta.appendText(message.getText() + "\n");
+            }
         }
+        message.clear();
     }
 
     public void start_file_window() throws IOException {

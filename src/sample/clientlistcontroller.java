@@ -104,7 +104,7 @@ public class clientlistcontroller {
         }
     public void chat() throws IOException {
         DataOutputStream dout = new DataOutputStream(IntroController.s.getOutputStream());
-        dout.writeUTF("chat "+cid);
+        dout.writeUTF("%chat% "+cid);
         Stage Chatscreen = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("chatdialog.fxml"));
         Parent root = loader.load();

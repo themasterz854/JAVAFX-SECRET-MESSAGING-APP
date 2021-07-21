@@ -17,7 +17,7 @@ public class AppController {
         Parent root = loader.load();
         Scene list_scene = new Scene(root);
         client_list.setScene(list_scene);
-        dout.writeUTF("list");
+        dout.writeUTF("%list%");
         client_list.show();
     }
 

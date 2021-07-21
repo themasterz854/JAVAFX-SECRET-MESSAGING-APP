@@ -4,7 +4,6 @@ package sample;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ProgressBar;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -65,7 +64,7 @@ public class FileChooserController {
             fis = new FileInputStream(file);
             byte[] sendData = new byte[(int)file.length()];
             fis.read(sendData);
-            dout.writeUTF("file");
+            dout.writeUTF("%file%");
             dout.flush();
             dout.writeUTF(file.getName());
             dout.flush();

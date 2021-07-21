@@ -1,14 +1,10 @@
 package sample;
 
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-
-import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
@@ -40,9 +36,10 @@ public class Main extends Application {
             primaryStage.setOnCloseRequest(windowEvent -> {
                 try {
                     dout = new DataOutputStream(IntroController.s.getOutputStream());
-                    dout.writeUTF("exit");
+                    dout.writeUTF("%exit%");
                     dout.flush();
                     primaryStage.close();
+                    System.exit(0);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

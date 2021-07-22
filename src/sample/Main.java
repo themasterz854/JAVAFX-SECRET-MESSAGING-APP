@@ -7,11 +7,13 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.Socket;
 
 
 public class Main extends Application {
     public static int flag=0;
     DataOutputStream dout;
+    private Socket s;
     public static void main(String[] args) {
         launch(args);
     }
@@ -19,23 +21,27 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
+        FXMLLoader loader;
         Stage logindialog = new Stage();
         logindialog.setTitle("Login");
-        Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
+        loader = new FXMLLoader(getClass().getResource("login.fxml"));
+        Parent root = loader.load();
         Scene scene = new Scene(root);
         logindialog.setScene(scene);
         logindialog.showAndWait();
         if(flag == 1) {
+            LoginController lc = loader.getController();
+            s = lc.getSocket();
             Stage introdialog = new Stage();
             introdialog.setTitle("Intro");
-            root = FXMLLoader.load(getClass().getResource("intro.fxml"));
+            root = loader.load(getClass().getResource("intro.fxml"));
             scene = new Scene(root);
             introdialog.setScene(scene);
             introdialog.showAndWait();
             primaryStage.setTitle("Application");
             primaryStage.setOnCloseRequest(windowEvent -> {
                 try {
-                    dout = new DataOutputStream(IntroController.s.getOutputStream());
+                    dout = new DataOutputStream(s.getOutputStream());
                     dout.writeUTF("%exit%");
                     dout.flush();
                     primaryStage.close();
@@ -44,7 +50,10 @@ public class Main extends Application {
                     e.printStackTrace();
                 }
             });
-            root = FXMLLoader.load(getClass().getResource("app.fxml"));
+            loader = new FXMLLoader(getClass().getResource("app.fxml"));
+            root = loader.load();
+            AppController ac = loader.getController();
+            ac.transferdata(s);
             scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.show();

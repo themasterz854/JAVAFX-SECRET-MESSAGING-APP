@@ -22,6 +22,6 @@
       <Button fx:id="send_file_button" layoutX="43.0" layoutY="271.0" mnemonicParsing="false" onAction="#start_file_window" text="Send a File" />
       <Button fx:id="dirchoose" layoutX="425.0" layoutY="271.0" mnemonicParsing="false" onAction="#direchooser" text="dir choose" />
       <ToggleButton fx:id="togglebutton" layoutX="264.0" layoutY="271.0" mnemonicParsing="false" onAction="#encryption_toggle" text="Encryption" />
-      <Button layoutX="185.0" layoutY="271.0" mnemonicParsing="false" onAction="#decryptrequest" text="Decrypt" />
+      <Button fx:id="decryptbutton" disable="true" layoutX="185.0" layoutY="271.0" mnemonicParsing="false" onAction="#decryptrequest" opacity="0.0" text="Decrypt" />
    </children>
 </AnchorPane>

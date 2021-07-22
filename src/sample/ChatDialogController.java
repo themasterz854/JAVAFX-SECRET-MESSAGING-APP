@@ -12,28 +12,22 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.net.Socket;
 
-import static sample.clientlistcontroller.cid;
 
 public class ChatDialogController {
     @FXML
-    private Button send_file_button;
+    private Button send_file_button,decryptbutton,dirchoose;
     @FXML
     private TextField message;
     @FXML
-    private TextArea ta;
-    @FXML
-    private TextArea myta;
-    @FXML
-    private Button dirchoose;
+    private TextArea myta,ta;
     @FXML
     private ToggleButton togglebutton;
     int id;
-
-
     DataOutputStream dout ;
     DataInputStream din;
-    String s;
+    String str;
     String[] data = new String[4];
     String[] queue= new String[10];
     int front,rear;
@@ -44,9 +38,10 @@ public class ChatDialogController {
     File directory;
     DirectoryChooser dc = new DirectoryChooser();
     FileOutputStream fos;
-
-    public void transferdata(){
+    private Socket s;
+    public void transferdata(int cid, Socket s){
         id = cid;
+        this.s = s;
     }
 
     public void direchooser()
@@ -57,19 +52,19 @@ public class ChatDialogController {
         front = rear = -1;
 
         while(din.available()> 0) {
-            synchronized (myta)
+
+            str = din.readUTF();
+            if(str.equals("%file%"))
             {
-            s = din.readUTF();
-            if (s.equals("file")) {
                 FileName = din.readUTF();
                 FileSize = Integer.parseInt(din.readUTF());
                 ReceivedData = new byte[FileSize];
                 din.readFully(ReceivedData);
-                fos = new FileOutputStream(directory.getAbsolutePath()+"\\"+FileName);
+                fos = new FileOutputStream(directory.getAbsolutePath() + "\\" + FileName);
                 fos.write(ReceivedData, 0, FileSize);
                 fos.close();
             } else {
-                data = s.split(" ");
+                data = str.split(" ");
                 if (Integer.parseInt(data[0]) == id) {
                     for (int i = 1; i < data.length; i++)
                         ta.appendText(data[i] + " ");
@@ -79,13 +74,12 @@ public class ChatDialogController {
                     if (front == -1) {
                         front = 0;
                     }
-                    queue[++rear] = s;
+                    queue[++rear] = str;
 
                 }
 
                 while (front != rear + 1 && front != -1 && rear != -1) {
                     dout.writeUTF("%others%" + " " + queue[front++]);
-                }
             }
             }
         }
@@ -97,8 +91,8 @@ public class ChatDialogController {
             protected Object call() throws Exception {
 
                 Stage stage ;
-                din = new DataInputStream(IntroController.s.getInputStream());
-                dout = new DataOutputStream(IntroController.s.getOutputStream());
+                din = new DataInputStream(s.getInputStream());
+                dout = new DataOutputStream(s.getOutputStream());
                 stage = (Stage) message.getScene().getWindow();
 
                 while(true)
@@ -123,7 +117,7 @@ public class ChatDialogController {
     }
 
     public void changereceiver() throws IOException {
-        dout = new DataOutputStream(IntroController.s.getOutputStream());
+        dout = new DataOutputStream(s.getOutputStream());
         dout.writeUTF("%chat% "+id);
         dout.flush();
     }
@@ -132,11 +126,15 @@ public class ChatDialogController {
         if(togglebutton.isSelected()) {
             str = "%enableencryption%";
             encryptflag = true;
+            decryptbutton.setDisable(false);
+            decryptbutton.setOpacity(1.0);
         }
         else
         {
             encryptflag = false;
             str = "%disableencryption%";
+            decryptbutton.setDisable(true);
+            decryptbutton.setOpacity(0.0);
         }
         dout.writeUTF(str);
         dout.flush();
@@ -152,7 +150,7 @@ public class ChatDialogController {
         dout.flush();
     }
     public void send_message() throws IOException {
-        dout = new DataOutputStream(IntroController.s.getOutputStream());
+        dout = new DataOutputStream(s.getOutputStream());
         dout.writeUTF(message.getText());
         dout.flush();
         if(!encryptflag) {
@@ -167,7 +165,10 @@ public class ChatDialogController {
     public void start_file_window() throws IOException {
         Stage file_chooser = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("FileChooser.fxml"));
+
         Parent root = loader.load();
+        FileChooserController fcc = loader.getController();
+        fcc.transferdata(s);
         Scene list_scene = new Scene(root);
         file_chooser.setScene(list_scene);
         file_chooser.show();

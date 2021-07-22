@@ -12,41 +12,29 @@ import javafx.stage.Stage;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.Socket;
 
 public class clientlistcontroller {
-    public static int cid =0;
+     int cid =0;
     @FXML
-    private Button button1;
-    @FXML
-    private Button button2;
-    @FXML
-    private Button button3;
-    @FXML
-    private Button button4;
-    @FXML
-    private Button button5;
-    @FXML
-    private Button button6;
-    @FXML
-    private Button button7;
-    @FXML
-    private Button button8;
-    @FXML
-    private Button button9;
-    @FXML
-    private Button button10;
+    private Button button1,button2,button3,button4,button5,button6,button7,button8,button9,button10;
+
 
     Button[] button = new Button[10];
     Stage stage;
     String currentchat;
-    DataOutputStream dout = new DataOutputStream(IntroController.s.getOutputStream());
+    private Socket s;
 
-    public clientlistcontroller() throws IOException {
+    public void transferdata(Socket s)
+    {
+        this.s = s;
+    }
+    public clientlistcontroller() {
     }
 
     public  void show() throws IOException {
         String str;
-        DataInputStream din = new DataInputStream(IntroController.s.getInputStream());
+        DataInputStream din = new DataInputStream(s.getInputStream());
         button[0] = button1;
         button[1] = button2;
         button[2] = button3;
@@ -103,7 +91,7 @@ public class clientlistcontroller {
         stage.show();
         }
     public void chat() throws IOException {
-        DataOutputStream dout = new DataOutputStream(IntroController.s.getOutputStream());
+        DataOutputStream dout = new DataOutputStream(s.getOutputStream());
         dout.writeUTF("%chat% "+cid);
         Stage Chatscreen = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("chatdialog.fxml"));
@@ -112,7 +100,7 @@ public class clientlistcontroller {
         Chatscreen.setScene(ChatScene);
         Chatscreen.setTitle("Chatting with "+ currentchat);
         ChatDialogController cdc = loader.getController();
-        cdc.transferdata();
+        cdc.transferdata(cid,s);
         cdc.run_task();
         Chatscreen.show();
     }

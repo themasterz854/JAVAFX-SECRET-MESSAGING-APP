@@ -8,20 +8,21 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.net.Socket;
 import java.util.List;
 
 
 public class FileChooserController {
     @FXML
-    private Button select_one;
-    @FXML
-    private Button select_multiple;
+    private Button select_one,select_multiple,sendfiles;
     @FXML
     private ListView send_list;
+    private Socket s;
 
-    @FXML
-    private Button sendfiles;
-
+    public void transferdata(Socket s)
+    {
+        this.s = s;
+    }
     public void selectafile(){
 
         FileChooser fc = new FileChooser();
@@ -56,12 +57,14 @@ public class FileChooserController {
         FileInputStream fis;
 
         int n = send_list.getItems().size();
-        DataOutputStream dout = new DataOutputStream(IntroController.s.getOutputStream());
+        DataOutputStream dout = new DataOutputStream(s.getOutputStream());
 
         for(i=0;i<n;i++)
         {
             file = new File((String) send_list.getItems().get(i));
             fis = new FileInputStream(file);
+            dout.writeUTF("Sending file "+file.getName());
+            dout.flush();
             byte[] sendData = new byte[(int)file.length()];
             fis.read(sendData);
             dout.writeUTF("%file%");

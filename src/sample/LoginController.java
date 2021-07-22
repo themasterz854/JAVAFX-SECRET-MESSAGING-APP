@@ -8,8 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
-import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -19,21 +17,18 @@ import java.net.SocketException;
 
 public class LoginController {
     @FXML
-    private Label status;
+    private Label status,status2;
     @FXML
-    private TextField username;
+    private TextField username,newusername,serverip;
     @FXML
     private PasswordField password;
     @FXML
-    private TextField newusername;
-    @FXML
-    private PasswordField newpassword;
-    @FXML
-    private PasswordField newpassword1;
-    @FXML
-    private Label status2;
-    @FXML
-    private TextField serverip;
+    private PasswordField newpassword,newpassword1;
+    private Socket s;
+    public Socket getSocket()
+    {
+        return s;
+    }
     public void createnewaccount() throws IOException {
         DataOutputStream dout;
         if(newpassword.getText().equals("") || newusername.getText().equals("") || newpassword1.getText().equals(""))
@@ -43,7 +38,7 @@ public class LoginController {
         }
         if(newpassword.getText().equals(newpassword1.getText()))
         {
-            dout = new DataOutputStream(IntroController.s.getOutputStream());
+            dout = new DataOutputStream(s.getOutputStream());
             dout.writeUTF("newaccount");
             dout.flush();
             dout.writeUTF(newusername.getText());
@@ -53,23 +48,21 @@ public class LoginController {
             newpassword.clear();
             newpassword1.clear();
             status2.setText("Account creation successful. close this and login :)");
-            IntroController.s.close();
+            s.close();
         }
         else
             status2.setText("Passwords do not match");
-
-
-
     }
     public void newuser() throws IOException {
         Stage newaccountcreator = new Stage();
         try {
-            IntroController.s = new Socket(serverip.getText(), 4949);
+            s = new Socket(serverip.getText(), 4949);
         }catch(SocketException e)
         {
             status2.setText("Server not running at that ip");
             return;
         }
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("newaccountdialog.fxml"));
         Parent root = loader.load();
         Scene newaccount_scene = new Scene(root);
@@ -77,39 +70,45 @@ public class LoginController {
         newaccountcreator.show();
     }
     public void  Login() throws IOException {
+        if(serverip.getText().equals(""))
+        {
+            status.setText("pls enter the ip address");
+            return;
+        }
         try {
-            IntroController.s = new Socket(serverip.getText(), 4949);
+            s = new Socket(serverip.getText(), 4949);
         }catch(SocketException e)
         {
             status.setText("Server not running at that ip");
             return;
         }
         String response;
-        DataOutputStream dout = new DataOutputStream(IntroController.s.getOutputStream());
-        DataInputStream din = new DataInputStream(IntroController.s.getInputStream());
-        if(username.getText().equals("") || password.equals("") )
+        try {
+            DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+            DataInputStream din = new DataInputStream(s.getInputStream());
+            if (username.getText().equals("") || password.getText().equals("")) {
+                status.setText("Username,Password should be non empty");
+                dout.writeUTF("%exit%");
+                s = null;
+                return;
+            }
+            dout.writeUTF(username.getText() + " " + password.getText());
+            dout.flush();
+            response = din.readUTF();
+            if (response.equals("ok")) {
+                status.setText("LOGIN SUCCESSFUL");
+                username.clear();
+                password.clear();
+                serverip.clear();
+                Stage stage = (Stage) status.getScene().getWindow();
+                Main.flag = 1;
+                stage.close();
+            } else {
+                status.setText(response);
+            }
+        }catch(IOException e)
         {
-            status.setText("Username,Password should be non empty");
-            dout.writeUTF("%exit%");
-            IntroController.s = null;
-            return;
+            e.printStackTrace();
         }
-        dout.writeUTF(username.getText()+" "+ password.getText());
-        dout.flush();
-        response = din.readUTF();
-        if(response.equals("ok"))
-        {
-            status.setText("LOGIN SUCCESSFUL");
-            username.clear();
-            password.clear();
-            Stage stage = (Stage) status.getScene().getWindow();
-            Main.flag = 1;
-            stage.close();
-        }
-        else
-        {
-            status.setText(response);
-        }
-
     }
 }

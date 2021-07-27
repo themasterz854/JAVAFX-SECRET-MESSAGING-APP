@@ -20,7 +20,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-
+        String username;
         FXMLLoader loader;
         Stage logindialog = new Stage();
         logindialog.setTitle("Login");
@@ -32,6 +32,7 @@ public class Main extends Application {
         if(flag == 1) {
             LoginController lc = loader.getController();
             s = lc.getSocket();
+            username = lc.getusername();
             Stage introdialog = new Stage();
             introdialog.setTitle("Intro");
             root = loader.load(getClass().getResource("intro.fxml"));
@@ -53,7 +54,7 @@ public class Main extends Application {
             loader = new FXMLLoader(getClass().getResource("app.fxml"));
             root = loader.load();
             AppController ac = loader.getController();
-            ac.transferdata(s);
+            ac.transferdata(s,username);
             scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.show();

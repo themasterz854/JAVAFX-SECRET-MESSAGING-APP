@@ -17,7 +17,7 @@ import java.net.Socket;
 public class clientlistcontroller {
      int cid =0;
     @FXML
-    private Button button1,button2,button3,button4,button5,button6,button7,button8,button9,button10;
+    private Button button1,button2,button3,button4,button5,button6,button7,button8,button9,button10,showbutton;
 
 
     Button[] button = new Button[10];
@@ -47,7 +47,7 @@ public class clientlistcontroller {
         button[9] = button10;
         int i ;
         for(i=0;i<10;i++) {
-            button[i].setOnAction(new EventHandler<ActionEvent>() {
+            button[i].setOnAction(new EventHandler<>() {
                 String str1;
                 String[] data;
                 Button testbutton;
@@ -81,13 +81,15 @@ public class clientlistcontroller {
         while (!str.equals("end of list")) {
 
             button[i].setText(str);
-            button[i].setOpacity(1.0);
             button[i].setDisable(false);
+            button[i].setOpacity(1.0);
             i++;
             str = din.readUTF();
         }
         stage = (Stage) button1.getScene().getWindow();
         stage.close();
+        showbutton.setDisable(true);
+        showbutton.setOpacity(0.0);
         stage.show();
         }
     public void chat() throws IOException {

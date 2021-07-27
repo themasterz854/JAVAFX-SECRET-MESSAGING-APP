@@ -17,7 +17,7 @@ import java.net.Socket;
 
 public class ChatDialogController {
     @FXML
-    private Button send_file_button,decryptbutton,dirchoose;
+    private Button send_file_button,dirchoose;
     @FXML
     private TextField message;
     @FXML
@@ -84,7 +84,7 @@ public class ChatDialogController {
             }
         }
     }
-    public void run_task(){
+     void run_task(){
         Task task = new Task(){
 
             @Override
@@ -99,7 +99,7 @@ public class ChatDialogController {
                 {
                     while(!stage.isFocused())
                     {
-                        Thread.sleep(1000);
+                        Thread.sleep(200);
                     }
                     checkandwrite();
                     if(!stage.isShowing())
@@ -112,7 +112,6 @@ public class ChatDialogController {
                 return null;
             }
         };
-
         new Thread(task).start();
     }
 
@@ -126,15 +125,11 @@ public class ChatDialogController {
         if(togglebutton.isSelected()) {
             str = "%enableencryption%";
             encryptflag = true;
-            decryptbutton.setDisable(false);
-            decryptbutton.setOpacity(1.0);
         }
         else
         {
             encryptflag = false;
             str = "%disableencryption%";
-            decryptbutton.setDisable(true);
-            decryptbutton.setOpacity(0.0);
         }
         dout.writeUTF(str);
         dout.flush();

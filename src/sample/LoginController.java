@@ -13,9 +13,11 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.regex.Pattern;
 
 
 public class LoginController {
+    private String usernamestr;
     @FXML
     private Label status,status2;
     @FXML
@@ -25,49 +27,81 @@ public class LoginController {
     @FXML
     private PasswordField newpassword,newpassword1;
     private Socket s;
+    int closingflag = 0;
+    DataOutputStream dout ;
     public Socket getSocket()
     {
         return s;
     }
+    public String getusername()
+    {
+        return usernamestr;
+    }
     public void createnewaccount() throws IOException {
-        DataOutputStream dout;
+
+
+        Pattern P1 = Pattern.compile("([$-/:-?{-~!\"^_`\\[\\]])[A-Za-z0-9]*");
+        Pattern P2 = Pattern.compile("[A-Za-z0-9]*[$-/:-?{-~!\"^_`\\[\\]]");
+        Pattern P3 = Pattern.compile("[A-Za-z0-9]*[$-/:-?{-~!\"^_`\\[\\]][A-Za-z0-9]*");
+
         if(newpassword.getText().equals("") || newusername.getText().equals("") || newpassword1.getText().equals(""))
         {
             status2.setText("All fields must be non empty");
             return;
         }
+        String newusernamestr = newusername.getText().trim();
+        String newpasswordstr = newpassword.getText().trim();
+        if(P1.matcher(newusernamestr).matches() || P2.matcher(newusernamestr).matches() || P3.matcher(newusernamestr).matches())
+        {
+            status2.setText("no special characters allowed");
+            return;
+        }
+        if(P1.matcher(newpasswordstr).matches() || P2.matcher(newpasswordstr).matches() || P3.matcher(newpasswordstr).matches())
+        {
+            status2.setText("no special characters allowed");
+            return;
+        }
         if(newpassword.getText().equals(newpassword1.getText()))
         {
-            dout = new DataOutputStream(s.getOutputStream());
+
             dout.writeUTF("newaccount");
             dout.flush();
-            dout.writeUTF(newusername.getText());
-            dout.writeUTF(newpassword.getText());
+
+            dout.writeUTF(newusernamestr);
+            dout.writeUTF(newpasswordstr);
             dout.flush();
             newusername.clear();
             newpassword.clear();
             newpassword1.clear();
-            status2.setText("Account creation successful. close this and login :)");
+            status2.setText("Account creation successful. Close this and login :)");
             s.close();
+            closingflag = 1;
         }
         else
             status2.setText("Passwords do not match");
     }
     public void newuser() throws IOException {
         Stage newaccountcreator = new Stage();
+
         try {
-            s = new Socket(serverip.getText(), 4949);
+            s = new Socket(serverip.getText().trim(), 4949);
         }catch(SocketException e)
         {
             status2.setText("Server not running at that ip");
             return;
         }
-
+        dout = new DataOutputStream(s.getOutputStream());
         FXMLLoader loader = new FXMLLoader(getClass().getResource("newaccountdialog.fxml"));
         Parent root = loader.load();
         Scene newaccount_scene = new Scene(root);
         newaccountcreator.setScene(newaccount_scene);
-        newaccountcreator.show();
+        newaccountcreator.showAndWait();
+        if(closingflag == 0)
+        {
+            dout.writeUTF("%exit%");
+            dout.flush();
+        }
+
     }
     public void  Login() throws IOException {
         if(serverip.getText().equals(""))
@@ -92,7 +126,8 @@ public class LoginController {
                 s = null;
                 return;
             }
-            dout.writeUTF(username.getText() + " " + password.getText());
+            usernamestr = username.getText().trim();
+            dout.writeUTF(usernamestr + " " + password.getText().trim());
             dout.flush();
             response = din.readUTF();
             if (response.equals("ok")) {

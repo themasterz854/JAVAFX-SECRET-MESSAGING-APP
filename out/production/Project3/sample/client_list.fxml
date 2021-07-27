@@ -20,6 +20,6 @@
             <Button fx:id="button10" disable="true" mnemonicParsing="false" opacity="0.0" text="Button" />
          </buttons>
       </ButtonBar>
-      <Button layoutX="386.0" layoutY="29.0" mnemonicParsing="false" onAction="#show" text="Button" />
+      <Button fx:id="showbutton" layoutX="382.0" layoutY="29.0" mnemonicParsing="false" onAction="#show" text="SHOW ONLINE USERS" />
    </children>
 </AnchorPane>

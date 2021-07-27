@@ -136,14 +136,6 @@ public class ChatDialogController {
         myta.clear();
         ta.clear();
     }
-
-    public void decryptrequest() throws IOException {
-        String str = ta.getText();
-        ta.clear();
-        dout.writeUTF("%decrypt%");
-        dout.writeUTF(str);
-        dout.flush();
-    }
     public void send_message() throws IOException {
         dout = new DataOutputStream(s.getOutputStream());
         dout.writeUTF(message.getText());

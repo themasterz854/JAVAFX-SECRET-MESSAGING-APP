@@ -35,7 +35,8 @@ public class Main extends Application {
             username = lc.getusername();
             Stage introdialog = new Stage();
             introdialog.setTitle("Intro");
-            root = loader.load(getClass().getResource("intro.fxml"));
+            loader = new FXMLLoader(getClass().getResource("Intro.fxml"));
+            root = loader.load();
             scene = new Scene(root);
             introdialog.setScene(scene);
             introdialog.showAndWait();

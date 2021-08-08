@@ -5,11 +5,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.AppController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="appbg" stylesheets="@design.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.AppController">
 
-      <Button layoutX="380.0" layoutY="188.0" mnemonicParsing="false" onAction="#get_list" text="getlist" />
-      <Button layoutX="104.0" layoutY="188.0" mnemonicParsing="false" onAction="#decryptservice" text="Decryption Service" />
-      <Label fx:id="welcome" layoutX="176.0" layoutY="65.0" prefHeight="81.0" prefWidth="219.0" text="WELCOME USER">
+      <Button layoutX="448.0" layoutY="201.0" mnemonicParsing="false" onAction="#get_list" text="getlist" />
+      <Button layoutX="30.0" layoutY="213.0" mnemonicParsing="false" onAction="#decryptservice" text="Decryption Service" />
+      <Label fx:id="welcome" layoutX="176.0" layoutY="65.0" prefHeight="81.0" prefWidth="219.0" text="WELCOME USER" textFill="WHITE">
          <font>
             <Font size="30.0" />
          </font></Label>

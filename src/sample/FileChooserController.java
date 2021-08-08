@@ -16,7 +16,7 @@ public class FileChooserController {
     @FXML
     private Button select_one,select_multiple,sendfiles;
     @FXML
-    private ListView send_list;
+    private ListView<String> send_list;
     private Socket s;
 
     public void transferdata(Socket s)
@@ -51,7 +51,7 @@ public class FileChooserController {
             System.out.print("Not valid file");
     }
 
-    public void sendthefiles() throws IOException {
+    public void sendthefiles() throws Exception {
         int i;
         File file;
         FileInputStream fis;
@@ -61,20 +61,21 @@ public class FileChooserController {
 
         for(i=0;i<n;i++)
         {
-            file = new File((String) send_list.getItems().get(i));
+            file = new File(send_list.getItems().get(i));
             fis = new FileInputStream(file);
             dout.writeUTF("Sending file "+file.getName());
             dout.flush();
             byte[] sendData = new byte[(int)file.length()];
-            fis.read(sendData);
-            dout.writeUTF("%file%");
-            dout.flush();
-            dout.writeUTF(file.getName());
-            dout.flush();
-            dout.writeUTF(Integer.toString(sendData.length));
-            dout.flush();
-            dout.write(sendData,0,sendData.length);
-            dout.flush();
+            if(fis.read(sendData) != -1) {
+                dout.writeUTF("%file%");
+                dout.flush();
+                dout.writeUTF(file.getName());
+                dout.flush();
+                dout.writeUTF(Integer.toString(sendData.length));
+                dout.flush();
+                dout.write(sendData, 0, sendData.length);
+                dout.flush();
+            }
         }
         Stage stage = (Stage) send_list.getScene().getWindow();
         stage.close();

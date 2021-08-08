@@ -7,21 +7,21 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="loginbg" stylesheets="@design.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.LoginController">
    <children>
-      <Label fx:id="status" layoutX="14.0" layoutY="14.0" prefHeight="68.0" prefWidth="419.0" text="status">
+      <Label fx:id="status" layoutX="14.0" layoutY="14.0" prefHeight="68.0" prefWidth="419.0" text="STATUS" textFill="WHITE">
          <font>
             <Font size="23.0" />
          </font>
       </Label>
-      <TextField fx:id="username" layoutX="96.0" layoutY="159.0" prefHeight="41.0" prefWidth="336.0" />
-      <PasswordField fx:id="password" layoutX="99.0" layoutY="233.0" prefHeight="41.0" prefWidth="336.0" />
-      <Label layoutX="96.0" layoutY="120.0" prefHeight="27.0" prefWidth="120.0" text="Username" />
-      <Label layoutX="96.0" layoutY="200.0" prefHeight="27.0" prefWidth="120.0" text="Password" />
+      <TextField fx:id="username" layoutX="96.0" layoutY="159.0" prefHeight="41.0" prefWidth="336.0" styleClass="textfield" stylesheets="@design.css" />
+      <PasswordField fx:id="password" layoutX="99.0" layoutY="233.0" prefHeight="41.0" prefWidth="336.0" styleClass="textfield" stylesheets="@design.css" />
+      <Label layoutX="96.0" layoutY="120.0" prefHeight="27.0" prefWidth="120.0" text="Username" textFill="WHITE" />
+      <Label layoutX="96.0" layoutY="200.0" prefHeight="27.0" prefWidth="120.0" text="Password" textFill="WHITE" />
       <Button defaultButton="true" layoutX="249.0" layoutY="305.0" mnemonicParsing="false" onAction="#Login" prefHeight="49.0" prefWidth="102.0" text="LOGIN" />
-      <Label layoutX="36.0" layoutY="297.0" text="New User?" />
+      <Label layoutX="36.0" layoutY="297.0" text="New User?" textFill="WHITE" />
       <Button layoutX="39.0" layoutY="317.0" mnemonicParsing="false" onAction="#newuser" text="Enter IP and Click Here" />
-      <TextField fx:id="serverip" layoutX="395.0" layoutY="48.0" />
-      <Label layoutX="395.0" layoutY="23.0" prefHeight="17.0" prefWidth="161.0" text="Enter the IP address of server" />
+      <TextField fx:id="serverip" layoutX="395.0" layoutY="48.0" styleClass="textfield" stylesheets="@design.css" />
+      <Label layoutX="395.0" layoutY="23.0" prefHeight="17.0" prefWidth="161.0" text="Enter the IP address of server" textFill="WHITE" />
    </children>
 </AnchorPane>

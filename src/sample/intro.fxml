@@ -3,8 +3,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.IntroController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="bodybg" stylesheets="@design.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.IntroController">
    <children>
-      <Button fx:id="button" layoutX="183.0" layoutY="139.0" mnemonicParsing="false" onAction="#start_chatting" prefHeight="122.0" prefWidth="234.0" text="START CHATTING" />
+      <Button fx:id="button" layoutX="183.0" layoutY="139.0" mnemonicParsing="false" onAction="#start_chatting" prefHeight="122.0" prefWidth="234.0" styleClass="windows7-default" stylesheets="@design.css" text="START CHATTING" />
    </children>
 </AnchorPane>

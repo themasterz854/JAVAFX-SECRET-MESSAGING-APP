@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
@@ -16,6 +17,8 @@ import java.net.Socket;
 
 
 public class ChatDialogController {
+    @FXML
+    private AnchorPane ap;
     @FXML
     private Button send_file_button,dirchoose;
     @FXML
@@ -39,6 +42,7 @@ public class ChatDialogController {
     DirectoryChooser dc = new DirectoryChooser();
     FileOutputStream fos;
     private Socket s;
+
     public void transferdata(int cid, Socket s){
         id = cid;
         this.s = s;
@@ -48,47 +52,51 @@ public class ChatDialogController {
     {
         directory = dc.showDialog(null);
     }
-    public synchronized void checkandwrite() throws IOException{
+    public synchronized void checkandwrite() throws Exception{
         front = rear = -1;
 
         while(din.available()> 0) {
-
-            str = din.readUTF();
-            if(str.equals("%file%"))
-            {
-                FileName = din.readUTF();
-                FileSize = Integer.parseInt(din.readUTF());
-                ReceivedData = new byte[FileSize];
-                din.readFully(ReceivedData);
-                fos = new FileOutputStream(directory.getAbsolutePath() + "\\" + FileName);
-                fos.write(ReceivedData, 0, FileSize);
-                fos.close();
-            } else {
-                data = str.split(" ");
-                if (Integer.parseInt(data[0]) == id) {
-                    for (int i = 1; i < data.length; i++)
-                        ta.appendText(data[i] + " ");
-                    ta.appendText("\n");
-                    myta.appendText("\n");
+            try {
+                str = din.readUTF();
+                if (str.equals("%file%")) {
+                    FileName = din.readUTF();
+                    FileSize = Integer.parseInt(din.readUTF());
+                    ReceivedData = new byte[FileSize];
+                    din.readFully(ReceivedData);
+                    fos = new FileOutputStream(directory.getAbsolutePath() + "\\" + FileName);
+                    fos.write(ReceivedData, 0, FileSize);
+                    fos.close();
                 } else {
-                    if (front == -1) {
-                        front = 0;
+                    data = str.split(" ");
+                    if (Integer.parseInt(data[0]) == id) {
+                        for (int i = 1; i < data.length; i++)
+                            ta.appendText(data[i] + " ");
+                        ta.appendText("\n");
+                        myta.appendText("\n");
+                    } else {
+                        if (front == -1) {
+                            front = 0;
+                        }
+                        queue[++rear] = str;
+
                     }
-                    queue[++rear] = str;
 
+                    while (front != rear + 1 && front != -1 && rear != -1) {
+                        dout.writeUTF("%others%" + " " + queue[front++]);
+                    }
                 }
+            }catch (Exception e)
+            {
+                e.printStackTrace();
 
-                while (front != rear + 1 && front != -1 && rear != -1) {
-                    dout.writeUTF("%others%" + " " + queue[front++]);
-            }
             }
         }
     }
      void run_task(){
-        Task task = new Task(){
+        Task<Thread> task = new Task<>(){
 
             @Override
-            protected Object call() throws Exception {
+            protected Thread call() throws Exception {
 
                 Stage stage ;
                 din = new DataInputStream(s.getInputStream());
@@ -115,19 +123,24 @@ public class ChatDialogController {
         new Thread(task).start();
     }
 
-    public void changereceiver() throws IOException {
+    public void changereceiver() throws Exception {
         dout = new DataOutputStream(s.getOutputStream());
         dout.writeUTF("%chat% "+id);
         dout.flush();
     }
-    public void encryption_toggle() throws IOException {
+    public void encryption_toggle() throws Exception {
         String str;
+        ap.getStylesheets().add("sample/design.css");
         if(togglebutton.isSelected()) {
+            ap.getStyleClass().remove("chatbg");
+            ap.getStyleClass().add("encryptchatbg");
             str = "%enableencryption%";
             encryptflag = true;
         }
         else
         {
+            ap.getStyleClass().remove("encryptchatbg");
+            ap.getStyleClass().add("chatbg");
             encryptflag = false;
             str = "%disableencryption%";
         }
@@ -136,7 +149,7 @@ public class ChatDialogController {
         myta.clear();
         ta.clear();
     }
-    public void send_message() throws IOException {
+    public void send_message() throws Exception {
         dout = new DataOutputStream(s.getOutputStream());
         dout.writeUTF(message.getText());
         dout.flush();
@@ -148,16 +161,21 @@ public class ChatDialogController {
         }
         message.clear();
     }
-
-    public void start_file_window() throws IOException {
-        Stage file_chooser = new Stage();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("FileChooser.fxml"));
-
-        Parent root = loader.load();
-        FileChooserController fcc = loader.getController();
-        fcc.transferdata(s);
-        Scene list_scene = new Scene(root);
-        file_chooser.setScene(list_scene);
-        file_chooser.show();
+    public void start_file_window(){
+        try {
+            Stage file_chooser = new Stage();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("FileChooser.fxml"));
+            Parent root = loader.load();
+            FileChooserController fcc = loader.getController();
+            fcc.transferdata(s);
+            Scene list_scene = new Scene(root);
+            file_chooser.setScene(list_scene);
+            file_chooser.show();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            System.exit(0);
+        }
     }
 }

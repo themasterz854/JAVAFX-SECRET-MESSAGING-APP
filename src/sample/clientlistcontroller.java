@@ -15,14 +15,14 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class clientlistcontroller {
-     int cid =0;
+    private int cid =0;
     @FXML
     private Button button1,button2,button3,button4,button5,button6,button7,button8,button9,button10,showbutton;
 
 
-    Button[] button = new Button[10];
-    Stage stage;
-    String currentchat;
+    private final Button[] button = new Button[10];
+    private Stage stage;
+    private String currentchat;
     private Socket s;
 
     public void transferdata(Socket s)
@@ -104,6 +104,7 @@ public class clientlistcontroller {
         ChatDialogController cdc = loader.getController();
         cdc.transferdata(cid,s);
         cdc.run_task();
+        Chatscreen.setResizable(false);
         Chatscreen.show();
     }
     }

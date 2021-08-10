@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
@@ -27,7 +28,12 @@
             <Font name="System Bold" size="15.0" />
          </font></TextArea>
       <Button fx:id="send_file_button" layoutX="43.0" layoutY="271.0" mnemonicParsing="false" onAction="#start_file_window" text="Send a File" />
-      <Button fx:id="dirchoose" layoutX="425.0" layoutY="271.0" mnemonicParsing="false" onAction="#direchooser" text="dir choose" />
+      <Button fx:id="dirchoose" layoutX="401.0" layoutY="271.0" mnemonicParsing="false" onAction="#direchooser" text="Choose Downloads Folder" />
       <ToggleButton fx:id="togglebutton" layoutX="264.0" layoutY="271.0" mnemonicParsing="false" onAction="#encryption_toggle" text="Encryption" />
+      <Label fx:id="encryplabel" layoutX="221.0" layoutY="14.0" text="Encryption is OFF" textFill="WHITE">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

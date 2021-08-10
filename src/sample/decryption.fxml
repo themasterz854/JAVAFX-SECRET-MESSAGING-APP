@@ -14,7 +14,7 @@
          </font></TextArea>
       <Label layoutX="48.0" layoutY="34.0" text="Enter yout text here" />
       <Button defaultButton="true" layoutX="259.0" layoutY="361.0" mnemonicParsing="false" onAction="#decryptrequest" text="DECRYPT" />
-      <TextArea fx:id="ota" editable="false" layoutX="340.0" layoutY="72.0" opacity="0.6" prefHeight="274.0" prefWidth="249.0" text="&#10;" wrapText="true">
+      <TextArea fx:id="ota" editable="false" layoutX="330.0" layoutY="72.0" opacity="0.6" prefHeight="274.0" prefWidth="259.0" text="&#10;" wrapText="true">
          <font>
             <Font name="System Bold" size="15.0" />
          </font></TextArea>

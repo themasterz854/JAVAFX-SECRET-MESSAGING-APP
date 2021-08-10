@@ -11,8 +11,6 @@ public class DecryptionController {
     @FXML
     private TextArea ta,ota;
     private Socket s;
-    DataInputStream din ;
-    DataOutputStream dout ;
     public void transferdata(Socket s)
     {
         this.s = s;
@@ -21,7 +19,7 @@ public class DecryptionController {
         String str;
         try {
             str = ta.getText();
-            dout = new DataOutputStream(s.getOutputStream());
+            DataOutputStream dout = new DataOutputStream(s.getOutputStream());
             dout.writeUTF("%decrypt%");
             dout.writeUTF(str);
             dout.flush();
@@ -35,7 +33,7 @@ public class DecryptionController {
     }
     public void checkandwrite2(){
         try {
-            din = new DataInputStream(s.getInputStream());
+            DataInputStream din = new DataInputStream(s.getInputStream());
             String str;
             while (din.available() > 0) {
                 str = din.readUTF();

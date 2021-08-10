@@ -6,15 +6,15 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.LoginController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="newaccountbg" stylesheets="@design.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.LoginController">
    <children>
-      <Label layoutX="87.0" layoutY="102.0" text="New Username" />
+      <Label layoutX="87.0" layoutY="102.0" text="New Username" textFill="WHITE" />
       <TextField fx:id="newusername" layoutX="87.0" layoutY="130.0" />
-      <Label layoutX="87.0" layoutY="173.0" text="New Password" />
+      <Label layoutX="87.0" layoutY="173.0" text="New Password" textFill="WHITE" />
       <PasswordField fx:id="newpassword" layoutX="87.0" layoutY="188.0" />
-      <Label layoutX="87.0" layoutY="228.0" text="Confirm Password" />
+      <Label layoutX="87.0" layoutY="228.0" text="Confirm Password" textFill="WHITE" />
       <PasswordField fx:id="newpassword1" layoutX="87.0" layoutY="245.0" />
       <Button layoutX="103.0" layoutY="307.0" mnemonicParsing="false" onAction="#createnewaccount" text="Create New Account" />
-      <Label fx:id="status2" layoutX="310.0" layoutY="155.0" prefHeight="167.0" prefWidth="278.0" text="STATUS" />
+      <Label fx:id="status2" layoutX="310.0" layoutY="155.0" prefHeight="167.0" prefWidth="278.0" text="STATUS" textFill="WHITE" />
    </children>
 </AnchorPane>

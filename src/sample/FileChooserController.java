@@ -2,11 +2,11 @@ package sample;
 
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import java.io.*;
 import java.net.Socket;
 import java.util.List;
@@ -18,10 +18,14 @@ public class FileChooserController {
     @FXML
     private ListView<String> send_list;
     private Socket s;
-
     public void transferdata(Socket s)
     {
         this.s = s;
+    }
+    String[] str;
+    public void senddata(String[] str){
+        this.str = str;
+
     }
     public void selectafile(){
 
@@ -55,10 +59,8 @@ public class FileChooserController {
         int i;
         File file;
         FileInputStream fis;
-
         int n = send_list.getItems().size();
         DataOutputStream dout = new DataOutputStream(s.getOutputStream());
-
         for(i=0;i<n;i++)
         {
             file = new File(send_list.getItems().get(i));
@@ -77,6 +79,7 @@ public class FileChooserController {
                 dout.flush();
             }
         }
+
         Stage stage = (Stage) send_list.getScene().getWindow();
         stage.close();
     }

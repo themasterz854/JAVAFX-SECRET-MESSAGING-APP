@@ -10,7 +10,7 @@ import java.net.Socket;
 
 public class Main extends Application {
     public static int flag=0;
-    DataOutputStream dout;
+    private DataOutputStream dout;
     private Socket s;
     public static void main(String[] args) {
         launch(args);
@@ -26,6 +26,7 @@ public class Main extends Application {
             Parent root = loader.load();
             Scene scene = new Scene(root);
             logindialog.setScene(scene);
+            logindialog.setResizable(false);
             logindialog.showAndWait();
             if (flag == 1) {
                 LoginController lc = loader.getController();
@@ -37,6 +38,7 @@ public class Main extends Application {
                 root = loader.load();
                 scene = new Scene(root);
                 introdialog.setScene(scene);
+                introdialog.setResizable(false);
                 introdialog.showAndWait();
                 primaryStage.setTitle("Application");
                 primaryStage.setOnCloseRequest(windowEvent -> {
@@ -59,6 +61,7 @@ public class Main extends Application {
                 ac.transferdata(s, username);
                 scene = new Scene(root);
                 primaryStage.setScene(scene);
+                primaryStage.setResizable(false);
                 primaryStage.show();
             }
         }

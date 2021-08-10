@@ -27,8 +27,8 @@ public class LoginController {
     @FXML
     private PasswordField newpassword,newpassword1;
     private Socket s;
-    int closingflag = 0;
-    DataOutputStream dout ;
+    private int closingflag = 0;
+    private DataOutputStream dout ;
     public Socket getSocket()
     {
         return s;

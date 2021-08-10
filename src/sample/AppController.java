@@ -11,7 +11,7 @@ import java.net.Socket;
 public class AppController{
     @FXML
     private Label welcome;
-    DataOutputStream dout ;
+    private DataOutputStream dout ;
     private Socket s;
 
     public void transferdata(Socket s,String username){
@@ -29,6 +29,7 @@ public class AppController{
             Scene list_scene = new Scene(root);
             client_list.setScene(list_scene);
             dout.writeUTF("%list%");
+            client_list.setResizable(false);
             client_list.show();
         }
         catch (Exception e)
@@ -47,6 +48,7 @@ public class AppController{
             Scene decryptscene = new Scene(root);
             decryptstage.setScene(decryptscene);
             dc.run_task();
+            decryptstage.setResizable(false);
             decryptstage.show();
         }
         catch(Exception e)

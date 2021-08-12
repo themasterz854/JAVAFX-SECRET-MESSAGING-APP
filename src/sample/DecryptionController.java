@@ -30,7 +30,7 @@ public class DecryptionController extends Controller{
         catch (Exception e)
         {
             e.printStackTrace();
-            System.exit(0);
+            System.exit(-1);
         }
     }
     public void checkandwrite2(){
@@ -46,7 +46,7 @@ public class DecryptionController extends Controller{
         catch (Exception e)
         {
             e.printStackTrace();
-            System.exit(0);
+            System.exit(-1);
         }
     }
     void run_task() {
@@ -74,7 +74,7 @@ public class DecryptionController extends Controller{
         catch (Exception e)
         {
             e.printStackTrace();
-            System.exit(0);
+            System.exit(-1);
         }
     }
 }

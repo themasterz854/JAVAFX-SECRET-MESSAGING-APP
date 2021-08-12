@@ -51,33 +51,38 @@ public class FileChooserController extends Controller{
             System.out.print("Not valid file");
     }
 
-    public void sendthefiles() throws Exception {
+    public void sendthefiles(){
         int i;
         File file;
         FileInputStream fis;
         int n = send_list.getItems().size();
-        dout = new DataOutputStream(s.getOutputStream());
-        for(i=0;i<n;i++)
-        {
-            file = new File(send_list.getItems().get(i));
-            fis = new FileInputStream(file);
-            dout.writeUTF("Sending file "+file.getName());
-            dout.flush();
-            byte[] sendData = new byte[(int)file.length()];
-            if(fis.read(sendData) != -1) {
-                dout.writeUTF("%file%");
+        try {
+            dout = new DataOutputStream(s.getOutputStream());
+            for (i = 0; i < n; i++) {
+                file = new File(send_list.getItems().get(i));
+                fis = new FileInputStream(file);
+                dout.writeUTF("Sending file " + file.getName());
                 dout.flush();
-                dout.writeUTF(file.getName());
-                dout.flush();
-                dout.writeUTF(Integer.toString(sendData.length));
-                dout.flush();
-                dout.write(sendData, 0, sendData.length);
-                dout.flush();
+                byte[] sendData = new byte[(int) file.length()];
+                if (fis.read(sendData) != -1) {
+                    dout.writeUTF("%file%");
+                    dout.flush();
+                    dout.writeUTF(file.getName());
+                    dout.flush();
+                    dout.writeUTF(Integer.toString(sendData.length));
+                    dout.flush();
+                    dout.write(sendData, 0, sendData.length);
+                    dout.flush();
+                }
             }
-        }
 
-        Stage stage = (Stage) send_list.getScene().getWindow();
-        stage.close();
+            Stage stage = (Stage) send_list.getScene().getWindow();
+            stage.close();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            System.exit(-1);
+        }
     }
 
 }

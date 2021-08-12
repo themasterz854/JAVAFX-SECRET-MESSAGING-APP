@@ -37,65 +37,77 @@ public class clientlistcontroller extends Controller {
         Collections.addAll(ButtonList,button1,button2,button3,button4,button5,button6,button7,button8,button9,button10);
 
         int i ;
-        for(i=0;i<10;i++) {
-            ButtonList.get(i).setOnAction(new EventHandler<>() {
-                String str1;
-                String[] data;
-                Button testbutton;
+        try {
+            for (i = 0; i < 10; i++) {
+                ButtonList.get(i).setOnAction(new EventHandler<>() {
+                    String str1;
+                    String[] data;
+                    Button testbutton;
 
-                int i;
-                @Override
-                public void handle(ActionEvent event) {
-                    try {
-                        testbutton = (Button) event.getSource();
-                        for(i=0;i<10;i++)
-                        {
-                            if(testbutton == ButtonList.get(i))
-                            {
-                                str1 = testbutton.getText();
-                                data = str1.split(" ");
-                                cid = Integer.parseInt(data[1]);
-                                currentchat = data[0];
-                                chat();
-                                stage = (Stage) testbutton.getScene().getWindow();
-                                stage.close();
+                    int i;
+
+                    @Override
+                    public void handle(ActionEvent event) {
+                        try {
+                            testbutton = (Button) event.getSource();
+                            for (i = 0; i < 10; i++) {
+                                if (testbutton == ButtonList.get(i)) {
+                                    str1 = testbutton.getText();
+                                    data = str1.split(" ");
+                                    cid = Integer.parseInt(data[1]);
+                                    currentchat = data[0];
+                                    chat();
+                                    stage = (Stage) testbutton.getScene().getWindow();
+                                    stage.close();
+                                }
                             }
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
-                }
-            });
-        }
-        str = din.readUTF();
-        i =0;
-        while (!str.equals("end of list")) {
-
-            ButtonList.get(i).setText(str);
-            ButtonList.get(i).setDisable(false);
-            ButtonList.get(i).setOpacity(1.0);
-            i++;
+                });
+            }
             str = din.readUTF();
+            i = 0;
+            while (!str.equals("end of list")) {
+
+                ButtonList.get(i).setText(str);
+                ButtonList.get(i).setDisable(false);
+                ButtonList.get(i).setOpacity(1.0);
+                i++;
+                str = din.readUTF();
+            }
+            stage = (Stage) button1.getScene().getWindow();
+            stage.close();
+            showbutton.setDisable(true);
+            showbutton.setOpacity(0.0);
+            stage.show();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            System.exit(-1);
         }
-        stage = (Stage) button1.getScene().getWindow();
-        stage.close();
-        showbutton.setDisable(true);
-        showbutton.setOpacity(0.0);
-        stage.show();
+    }
+    public void chat() throws IOException{
+        try {
+            dout = new DataOutputStream(s.getOutputStream());
+            dout.writeUTF("%chat% " + cid);
+            Stage Chatscreen = new Stage();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("chatdialog.fxml"));
+            Parent root = loader.load();
+            Scene ChatScene = new Scene(root);
+            Chatscreen.setScene(ChatScene);
+            Chatscreen.setTitle("Chatting with " + currentchat);
+            ChatDialogController cdc = loader.getController();
+            cdc.transferdata(cid, s);
+            cdc.run_task();
+            Chatscreen.setResizable(false);
+            Chatscreen.show();
         }
-    public void chat() throws IOException {
-        dout = new DataOutputStream(s.getOutputStream());
-        dout.writeUTF("%chat% "+cid);
-        Stage Chatscreen = new Stage();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("chatdialog.fxml"));
-        Parent root = loader.load();
-        Scene ChatScene = new Scene(root);
-        Chatscreen.setScene(ChatScene);
-        Chatscreen.setTitle("Chatting with "+ currentchat);
-        ChatDialogController cdc = loader.getController();
-        cdc.transferdata(cid,s);
-        cdc.run_task();
-        Chatscreen.setResizable(false);
-        Chatscreen.show();
+        catch(IOException e)
+        {
+            e.printStackTrace();
+            System.exit(-1);
+        }
     }
     }

@@ -37,69 +37,76 @@ public class LoginController extends Controller{
     {
         return usernamestr;
     }
-    public void createnewaccount() throws IOException {
+    public void createnewaccount() {
 
+        try {
+            Pattern P1 = Pattern.compile("([$-/:-?{-~!\"^_`\\[\\]])[A-Za-z0-9]*");
+            Pattern P2 = Pattern.compile("[A-Za-z0-9]*[$-/:-?{-~!\"^_`\\[\\]]");
+            Pattern P3 = Pattern.compile("[A-Za-z0-9]*[$-/:-?{-~!\"^_`\\[\\]][A-Za-z0-9]*");
 
-        Pattern P1 = Pattern.compile("([$-/:-?{-~!\"^_`\\[\\]])[A-Za-z0-9]*");
-        Pattern P2 = Pattern.compile("[A-Za-z0-9]*[$-/:-?{-~!\"^_`\\[\\]]");
-        Pattern P3 = Pattern.compile("[A-Za-z0-9]*[$-/:-?{-~!\"^_`\\[\\]][A-Za-z0-9]*");
+            if (newpassword.getText().equals("") || newusername.getText().equals("") || newpassword1.getText().equals("")) {
+                status2.setText("All fields must be non empty");
+                return;
+            }
+            String newusernamestr = newusername.getText().trim();
+            String newpasswordstr = newpassword.getText().trim();
+            if (P1.matcher(newusernamestr).matches() || P2.matcher(newusernamestr).matches() || P3.matcher(newusernamestr).matches()) {
+                status2.setText("no special characters allowed");
+                return;
+            }
+            if (P1.matcher(newpasswordstr).matches() || P2.matcher(newpasswordstr).matches() || P3.matcher(newpasswordstr).matches()) {
+                status2.setText("no special characters allowed");
+                return;
+            }
+            if (newpassword.getText().equals(newpassword1.getText())) {
 
-        if(newpassword.getText().equals("") || newusername.getText().equals("") || newpassword1.getText().equals(""))
-        {
-            status2.setText("All fields must be non empty");
-            return;
+                dout.writeUTF("newaccount");
+                dout.flush();
+
+                dout.writeUTF(newusernamestr);
+                dout.writeUTF(newpasswordstr);
+                dout.flush();
+                newusername.clear();
+                newpassword.clear();
+                newpassword1.clear();
+                status2.setText("Account creation successful. Close this and login :)");
+                s.close();
+                closingflag = 1;
+            } else
+                status2.setText("Passwords do not match");
         }
-        String newusernamestr = newusername.getText().trim();
-        String newpasswordstr = newpassword.getText().trim();
-        if(P1.matcher(newusernamestr).matches() || P2.matcher(newusernamestr).matches() || P3.matcher(newusernamestr).matches())
+        catch (Exception e)
         {
-            status2.setText("no special characters allowed");
-            return;
+            e.printStackTrace();
+            System.exit(-1);
         }
-        if(P1.matcher(newpasswordstr).matches() || P2.matcher(newpasswordstr).matches() || P3.matcher(newpasswordstr).matches())
-        {
-            status2.setText("no special characters allowed");
-            return;
-        }
-        if(newpassword.getText().equals(newpassword1.getText()))
-        {
-
-            dout.writeUTF("newaccount");
-            dout.flush();
-
-            dout.writeUTF(newusernamestr);
-            dout.writeUTF(newpasswordstr);
-            dout.flush();
-            newusername.clear();
-            newpassword.clear();
-            newpassword1.clear();
-            status2.setText("Account creation successful. Close this and login :)");
-            s.close();
-            closingflag = 1;
-        }
-        else
-            status2.setText("Passwords do not match");
     }
-    public void newuser() throws IOException {
+    public void newuser() {
         Stage newaccountcreator = new Stage();
 
         try {
             s = new Socket(serverip.getText().trim(), 4949);
-        }catch(SocketException e)
+        }catch(Exception e)
         {
             status2.setText("Server not running at that ip");
             return;
         }
-        dout = new DataOutputStream(s.getOutputStream());
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("newaccountdialog.fxml"));
-        Parent root = loader.load();
-        Scene newaccount_scene = new Scene(root);
-        newaccountcreator.setScene(newaccount_scene);
-        newaccountcreator.showAndWait();
-        if(closingflag == 0)
+        try {
+            dout = new DataOutputStream(s.getOutputStream());
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("newaccountdialog.fxml"));
+            Parent root = loader.load();
+            Scene newaccount_scene = new Scene(root);
+            newaccountcreator.setScene(newaccount_scene);
+            newaccountcreator.showAndWait();
+            if (closingflag == 0) {
+                dout.writeUTF("%exit%");
+                dout.flush();
+            }
+        }
+        catch (Exception e)
         {
-            dout.writeUTF("%exit%");
-            dout.flush();
+            e.printStackTrace();
+            System.exit(-1);
         }
 
     }
@@ -144,6 +151,7 @@ public class LoginController extends Controller{
         }catch(IOException e)
         {
             e.printStackTrace();
+            System.exit(-1);
         }
     }
 

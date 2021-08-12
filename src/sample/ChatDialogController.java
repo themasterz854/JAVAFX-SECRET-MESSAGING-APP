@@ -83,7 +83,7 @@ public class ChatDialogController extends Controller{
             }catch (Exception e)
             {
                 e.printStackTrace();
-
+                System.exit(0);
             }
         }
     }
@@ -118,52 +118,71 @@ public class ChatDialogController extends Controller{
         new Thread(task).start();
     }
 
-    public void changereceiver() throws Exception {
-        dout = new DataOutputStream(s.getOutputStream());
-        dout.writeUTF("%chat% "+id);
-        dout.flush();
-    }
-    public void encryption_toggle() throws Exception {
-        String str;
-        if(togglebutton.isSelected()) {
-            ap.getStyleClass().remove("chatbg");
-            ap.getStyleClass().add("encryptchatbg");
-            str = "%enableencryption%";
-            dirchoose.setOpacity(0.0);
-            dirchoose.setDisable(true);
-            send_file_button.setOpacity(0.0);
-            send_file_button.setDisable(true);
-            encryplabel.setText("Encryption is ON");
-            encryptflag = true;
+    public void changereceiver() {
+        try {
+            dout = new DataOutputStream(s.getOutputStream());
+            dout.writeUTF("%chat% " + id);
+            dout.flush();
         }
-        else
+        catch (Exception e)
         {
-            ap.getStyleClass().remove("encryptchatbg");
-            ap.getStyleClass().add("chatbg");
-            encryptflag = false;
-            dirchoose.setDisable(false);
-            dirchoose.setOpacity(1.0);
-            send_file_button.setOpacity(1.0);
-            send_file_button.setDisable(false);
-            encryplabel.setText("Encryption is OFF");
-            str = "%disableencryption%";
+            e.printStackTrace();
+            System.exit(0);
         }
-        dout.writeUTF(str);
-        dout.flush();
-        myta.clear();
-        ta.clear();
     }
-    public void send_message() throws Exception {
-        dout = new DataOutputStream(s.getOutputStream());
-        dout.writeUTF(message.getText());
-        dout.flush();
-        if(!encryptflag) {
-            synchronized (myta) {
-                ta.appendText("\n");
-                myta.appendText(message.getText() + "\n");
+    public void encryption_toggle(){
+        String str;
+        try {
+            if (togglebutton.isSelected()) {
+                ap.getStyleClass().remove("chatbg");
+                ap.getStyleClass().add("encryptchatbg");
+                str = "%enableencryption%";
+                dirchoose.setOpacity(0.0);
+                dirchoose.setDisable(true);
+                send_file_button.setOpacity(0.0);
+                send_file_button.setDisable(true);
+                encryplabel.setText("Encryption is ON");
+                encryptflag = true;
+            } else {
+                ap.getStyleClass().remove("encryptchatbg");
+                ap.getStyleClass().add("chatbg");
+                encryptflag = false;
+                dirchoose.setDisable(false);
+                dirchoose.setOpacity(1.0);
+                send_file_button.setOpacity(1.0);
+                send_file_button.setDisable(false);
+                encryplabel.setText("Encryption is OFF");
+                str = "%disableencryption%";
             }
+            dout.writeUTF(str);
+            dout.flush();
+            myta.clear();
+            ta.clear();
         }
-        message.clear();
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            System.exit(0);
+        }
+    }
+    public void send_message(){
+        try {
+            dout = new DataOutputStream(s.getOutputStream());
+            dout.writeUTF(message.getText());
+            dout.flush();
+            if (!encryptflag) {
+                synchronized (myta) {
+                    ta.appendText("\n");
+                    myta.appendText(message.getText() + "\n");
+                }
+            }
+            message.clear();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            System.exit(0);
+        }
     }
     public void start_file_window(){
         try {

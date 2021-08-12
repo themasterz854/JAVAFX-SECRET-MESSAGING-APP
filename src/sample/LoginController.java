@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -16,7 +17,7 @@ import java.net.SocketException;
 import java.util.regex.Pattern;
 
 
-public class LoginController {
+public class LoginController extends Controller{
     private String usernamestr;
     @FXML
     private Label status,status2;
@@ -26,9 +27,8 @@ public class LoginController {
     private PasswordField password;
     @FXML
     private PasswordField newpassword,newpassword1;
-    private Socket s;
+
     private int closingflag = 0;
-    private DataOutputStream dout ;
     public Socket getSocket()
     {
         return s;
@@ -146,4 +146,5 @@ public class LoginController {
             e.printStackTrace();
         }
     }
+
 }

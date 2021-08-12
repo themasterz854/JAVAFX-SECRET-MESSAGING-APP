@@ -10,10 +10,9 @@ import javafx.stage.Stage;
 import java.io.DataOutputStream;
 import java.net.Socket;
 
-public class AppController {
+public class AppController extends Controller{
     @FXML
     private Label welcome;
-    private Socket s;
 
     public void transferdata(Socket s,String username){
         this.s = s;
@@ -21,7 +20,7 @@ public class AppController {
     }
     public void get_list(){
         try {
-            DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+            dout = new DataOutputStream(s.getOutputStream());
             Stage client_list = new Stage();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("client_list.fxml"));
             Parent root = loader.load();
@@ -50,6 +49,7 @@ public class AppController {
             decryptstage.setScene(decryptscene);
             dc.run_task();
             decryptstage.setResizable(false);
+            decryptstage.setTitle("Decryption Service");
             decryptstage.show();
         }
         catch(Exception e)

@@ -1,16 +1,18 @@
 package sample;
+
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
 
-public class DecryptionController {
+public class DecryptionController extends Controller{
     @FXML
     private TextArea ta,ota;
-    private Socket s;
+
     public void transferdata(Socket s)
     {
         this.s = s;
@@ -19,7 +21,7 @@ public class DecryptionController {
         String str;
         try {
             str = ta.getText();
-            DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+            dout = new DataOutputStream(s.getOutputStream());
             dout.writeUTF("%decrypt%");
             dout.writeUTF(str);
             dout.flush();
@@ -33,7 +35,7 @@ public class DecryptionController {
     }
     public void checkandwrite2(){
         try {
-            DataInputStream din = new DataInputStream(s.getInputStream());
+            din = new DataInputStream(s.getInputStream());
             String str;
             while (din.available() > 0) {
                 str = din.readUTF();

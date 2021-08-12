@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class clientlistcontroller {
+public class clientlistcontroller extends Controller {
     private int cid =0;
     @FXML
     private Button button1,button2,button3,button4,button5,button6,button7,button8,button9,button10,showbutton;
@@ -25,7 +25,7 @@ public class clientlistcontroller {
     private Stage stage;
     private String currentchat;
     private Socket s;
-    private List<Button> ButtonList = new ArrayList<>();
+    private final List<Button> ButtonList = new ArrayList<>();
     public void transferdata(Socket s)
     {
         this.s = s;
@@ -33,7 +33,7 @@ public class clientlistcontroller {
 
     public  void show() throws IOException {
         String str;
-        DataInputStream din = new DataInputStream(s.getInputStream());
+        din = new DataInputStream(s.getInputStream());
         Collections.addAll(ButtonList,button1,button2,button3,button4,button5,button6,button7,button8,button9,button10);
 
         int i ;
@@ -84,7 +84,7 @@ public class clientlistcontroller {
         stage.show();
         }
     public void chat() throws IOException {
-        DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+        dout = new DataOutputStream(s.getOutputStream());
         dout.writeUTF("%chat% "+cid);
         Stage Chatscreen = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("chatdialog.fxml"));

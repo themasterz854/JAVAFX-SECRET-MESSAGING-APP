@@ -14,12 +14,11 @@ import java.net.Socket;
 import java.util.List;
 
 
-public class FileChooserController {
+public class FileChooserController extends Controller{
     @FXML
     private Button select_one,select_multiple,sendfiles;
     @FXML
     private ListView<String> send_list;
-    private Socket s;
     public void transferdata(Socket s)
     {
         this.s = s;
@@ -57,7 +56,7 @@ public class FileChooserController {
         File file;
         FileInputStream fis;
         int n = send_list.getItems().size();
-        DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+        dout = new DataOutputStream(s.getOutputStream());
         for(i=0;i<n;i++)
         {
             file = new File(send_list.getItems().get(i));

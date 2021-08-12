@@ -17,7 +17,7 @@ import java.io.FileOutputStream;
 import java.net.Socket;
 
 
-public class ChatDialogController{
+public class ChatDialogController extends Controller{
     @FXML
     private AnchorPane ap;
     @FXML
@@ -31,15 +31,10 @@ public class ChatDialogController{
     @FXML
     private Label encryplabel;
     private int id;
-    private DataOutputStream dout ;
-    private DataInputStream din;
     private final String[] queue= new String[10];
-    private String[] filenames = new String[20];
     private boolean encryptflag = false;
     private File directory;
     private final DirectoryChooser dc = new DirectoryChooser();
-    private Socket s;
-
     public void transferdata(int cid, Socket s){
         id = cid;
         this.s = s;
@@ -180,6 +175,7 @@ public class ChatDialogController{
             Scene list_scene = new Scene(root);
             file_chooser.setScene(list_scene);
             file_chooser.setResizable(false);
+            file_chooser.setTitle("File sender");
             file_chooser.show();
         }
         catch (Exception e)

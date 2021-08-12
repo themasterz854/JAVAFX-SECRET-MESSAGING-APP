@@ -1,17 +1,18 @@
 package sample;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+
 import java.io.DataOutputStream;
 import java.net.Socket;
 
-public class AppController{
+public class AppController {
     @FXML
     private Label welcome;
-    private DataOutputStream dout ;
     private Socket s;
 
     public void transferdata(Socket s,String username){
@@ -20,7 +21,7 @@ public class AppController{
     }
     public void get_list(){
         try {
-            dout = new DataOutputStream(s.getOutputStream());
+            DataOutputStream dout = new DataOutputStream(s.getOutputStream());
             Stage client_list = new Stage();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("client_list.fxml"));
             Parent root = loader.load();
@@ -57,4 +58,6 @@ public class AppController{
             System.exit(0);
         }
     }
+
+
 }

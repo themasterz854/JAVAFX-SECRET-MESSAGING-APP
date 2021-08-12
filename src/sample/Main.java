@@ -5,8 +5,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import java.io.DataOutputStream;
 import java.net.Socket;
+
 
 public class Main extends Application {
     public static int flag=0;

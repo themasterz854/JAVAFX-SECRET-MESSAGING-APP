@@ -13,41 +13,32 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class clientlistcontroller {
     private int cid =0;
     @FXML
     private Button button1,button2,button3,button4,button5,button6,button7,button8,button9,button10,showbutton;
 
-
-    private final Button[] button = new Button[10];
     private Stage stage;
     private String currentchat;
     private Socket s;
-
+    private List<Button> ButtonList = new ArrayList<>();
     public void transferdata(Socket s)
     {
         this.s = s;
-    }
-    public clientlistcontroller() {
     }
 
     public  void show() throws IOException {
         String str;
         DataInputStream din = new DataInputStream(s.getInputStream());
-        button[0] = button1;
-        button[1] = button2;
-        button[2] = button3;
-        button[3] = button4;
-        button[4] = button5;
-        button[5] = button6;
-        button[6] = button7;
-        button[7] = button8;
-        button[8] = button9;
-        button[9] = button10;
+        Collections.addAll(ButtonList,button1,button2,button3,button4,button5,button6,button7,button8,button9,button10);
+
         int i ;
         for(i=0;i<10;i++) {
-            button[i].setOnAction(new EventHandler<>() {
+            ButtonList.get(i).setOnAction(new EventHandler<>() {
                 String str1;
                 String[] data;
                 Button testbutton;
@@ -59,7 +50,7 @@ public class clientlistcontroller {
                         testbutton = (Button) event.getSource();
                         for(i=0;i<10;i++)
                         {
-                            if(testbutton ==button[i])
+                            if(testbutton == ButtonList.get(i))
                             {
                                 str1 = testbutton.getText();
                                 data = str1.split(" ");
@@ -80,9 +71,9 @@ public class clientlistcontroller {
         i =0;
         while (!str.equals("end of list")) {
 
-            button[i].setText(str);
-            button[i].setDisable(false);
-            button[i].setOpacity(1.0);
+            ButtonList.get(i).setText(str);
+            ButtonList.get(i).setDisable(false);
+            ButtonList.get(i).setOpacity(1.0);
             i++;
             str = din.readUTF();
         }

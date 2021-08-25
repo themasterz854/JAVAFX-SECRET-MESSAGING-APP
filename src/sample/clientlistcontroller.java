@@ -24,7 +24,6 @@ public class clientlistcontroller extends Controller {
 
     private Stage stage;
     private String currentchat;
-    private Socket s;
     private final List<Button> ButtonList = new ArrayList<>();
     public void transferdata(Socket s)
     {

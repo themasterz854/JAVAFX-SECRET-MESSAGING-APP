@@ -85,7 +85,7 @@ public class LoginController extends Controller{
         Stage newaccountcreator = new Stage();
 
         try {
-            s = new Socket(serverip.getText().trim(), 4949);
+            s = new Socket(serverip.getText().trim().split(":")[0], Integer.parseInt(serverip.getText().trim().split(":")[1]));
         }catch(Exception e)
         {
             status2.setText("Server not running at that ip");
@@ -117,7 +117,7 @@ public class LoginController extends Controller{
             return;
         }
         try {
-            s = new Socket(serverip.getText(), 4949);
+            s = new Socket(serverip.getText().trim().split(":")[0], Integer.parseInt(serverip.getText().trim().split(":")[1]));
         }catch(SocketException e)
         {
             status.setText("Server not running at that ip");

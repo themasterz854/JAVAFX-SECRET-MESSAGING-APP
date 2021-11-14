@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="liblinux">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-17.0.1(Linux)/lib" />
+    </CLASSES>
+    <JAVADOC />
+    <NATIVE>
+      <root url="file://$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-17.0.1(Linux)/lib" />
+    </NATIVE>
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-17.0.1(Linux)/lib" recursive="false" />
+  </library>
+</component>

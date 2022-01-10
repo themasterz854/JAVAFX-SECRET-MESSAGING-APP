@@ -11,6 +11,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.Socket;
+import java.security.MessageDigest;
 import java.util.List;
 
 
@@ -55,9 +56,12 @@ public class FileChooserController extends Controller{
         int i;
         File file;
         FileInputStream fis;
+
         int n = send_list.getItems().size();
         try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
             dout = new DataOutputStream(s.getOutputStream());
+            String hash ;
             for (i = 0; i < n; i++) {
                 file = new File(send_list.getItems().get(i));
                 fis = new FileInputStream(file);
@@ -65,7 +69,15 @@ public class FileChooserController extends Controller{
                 dout.flush();
                 byte[] sendData = new byte[(int) file.length()];
                 if (fis.read(sendData) != -1) {
+                    md.update(sendData);
+                    byte[] digest = md.digest();
+                    hash = new String();
+                    for (byte x : digest) {
+                        hash += (String.format("%02x", x));
+                    }
                     dout.writeUTF("%file%");
+                    dout.flush();
+                    dout.writeUTF(hash);
                     dout.flush();
                     dout.writeUTF(file.getName());
                     dout.flush();

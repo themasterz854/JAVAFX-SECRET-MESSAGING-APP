@@ -48,13 +48,17 @@ public class ChatDialogController extends Controller{
         int front,rear;
         front = rear = -1;
         String fileName;
+        String hash;
         byte[] receivedData;
         FileOutputStream fos;
         while(din.available()> 0) {
             try {
                 String str = din.readUTF();
                 if (str.equals("%file%")) {
+                    hash = din.readUTF();
                     fileName = din.readUTF();
+                    myta.appendText("Receiving hash for file " + fileName +"\n" + hash +"\n");
+                    ta.appendText("\n\n");
                     int fileSize = Integer.parseInt(din.readUTF());
                     receivedData = new byte[fileSize];
                     din.readFully(receivedData);

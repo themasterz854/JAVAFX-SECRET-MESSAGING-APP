@@ -16,6 +16,8 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.regex.Pattern;
 
+import static sample.Main.aes;
+
 
 public class LoginController extends Controller{
     private String usernamestr;
@@ -63,8 +65,8 @@ public class LoginController extends Controller{
                 dout.writeUTF("newaccount");
                 dout.flush();
 
-                dout.writeUTF(newusernamestr);
-                dout.writeUTF(newpasswordstr);
+                dout.writeUTF(aes.encrypt(newusernamestr));
+                dout.writeUTF(aes.encrypt(newpasswordstr));
                 dout.flush();
                 newusername.clear();
                 newpassword.clear();
@@ -134,9 +136,9 @@ public class LoginController extends Controller{
                 return;
             }
             usernamestr = username.getText().trim();
-            dout.writeUTF(usernamestr + " " + password.getText().trim());
+            dout.writeUTF(aes.encrypt(usernamestr + " " + password.getText().trim()));
             dout.flush();
-            response = din.readUTF();
+            response =  din.readUTF();
             if (response.equals("ok")) {
                 status.setText("LOGIN SUCCESSFUL");
                 username.clear();

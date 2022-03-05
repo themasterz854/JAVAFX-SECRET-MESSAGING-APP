@@ -65,8 +65,6 @@ public class FileChooserController extends Controller{
             for (i = 0; i < n; i++) {
                 file = new File(send_list.getItems().get(i));
                 fis = new FileInputStream(file);
-                dout.writeUTF("Sending file " + file.getName());
-                dout.flush();
                 byte[] sendData = new byte[(int) file.length()];
                 if (fis.read(sendData) != -1) {
                     md.update(sendData);

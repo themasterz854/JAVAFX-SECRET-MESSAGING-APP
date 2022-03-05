@@ -55,8 +55,8 @@ public class ChatDialogController extends Controller{
             try {
                 String str = din.readUTF();
                 if (str.equals("%file%")) {
-                    hash = din.readUTF();
-                    fileName = din.readUTF();
+                    hash = Main.aes.decrypt(din.readUTF());
+                    fileName = Main.aes.decrypt(din.readUTF());
                     myta.appendText("Receiving hash for file " + fileName +"\n" + hash +"\n");
                     ta.appendText("\n\n");
                     int fileSize = Integer.parseInt(din.readUTF());
@@ -66,6 +66,7 @@ public class ChatDialogController extends Controller{
                     fos.write(receivedData, 0, fileSize);
                     fos.close();
                 } else {
+                    str = Main.aes.decrypt(str);
                     String[] data = str.split(" ");
                     if (Integer.parseInt(data[0]) == id) {
                         for (int i = 1; i < data.length; i++)

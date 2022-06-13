@@ -45,8 +45,9 @@ public class FileChooserController extends Controller{
 
         if(selected_Files != null)
         {
-            for(i=0;i<selected_Files.size();i++)
-            send_list.getItems().add(selected_Files.get(i).getAbsolutePath());
+            for (i = 0; i < selected_Files.size(); i++) {
+                send_list.getItems().add(selected_Files.get(i).getAbsolutePath());
+            }
         }
         else
             System.out.print("Not valid file");
@@ -61,7 +62,7 @@ public class FileChooserController extends Controller{
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             dout = new DataOutputStream(s.getOutputStream());
-            String hash ;
+            StringBuilder hash;
             for (i = 0; i < n; i++) {
                 file = new File(send_list.getItems().get(i));
                 fis = new FileInputStream(file);
@@ -69,13 +70,13 @@ public class FileChooserController extends Controller{
                 if (fis.read(sendData) != -1) {
                     md.update(sendData);
                     byte[] digest = md.digest();
-                    hash = new String();
+                    hash = new StringBuilder();
                     for (byte x : digest) {
-                        hash += (String.format("%02x", x));
+                        hash.append(String.format("%02x", x));
                     }
                     dout.writeUTF("%file%");
                     dout.flush();
-                    dout.writeUTF(hash);
+                    dout.writeUTF(hash.toString());
                     dout.flush();
                     dout.writeUTF(file.getName());
                     dout.flush();

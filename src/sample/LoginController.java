@@ -42,9 +42,9 @@ public class LoginController extends Controller{
     public void createnewaccount() {
 
         try {
-            Pattern P1 = Pattern.compile("([$-/:-?{-~!\"^_`\\[\\]])[A-Za-z0-9]*");
-            Pattern P2 = Pattern.compile("[A-Za-z0-9]*[$-/:-?{-~!\"^_`\\[\\]]");
-            Pattern P3 = Pattern.compile("[A-Za-z0-9]*[$-/:-?{-~!\"^_`\\[\\]][A-Za-z0-9]*");
+            Pattern P1 = Pattern.compile("([$-/:-?{-~!\"^_`\\[\\]])[A-Za-z\\d]*");
+            Pattern P2 = Pattern.compile("[A-Za-z\\d]*[$-/:-?{-~!\"^_`\\[\\]]");
+            Pattern P3 = Pattern.compile("[A-Za-z\\d]*[$-/:-?{-~!\"^_`\\[\\]][A-Za-z\\d]*");
 
             if (newpassword.getText().equals("") || newusername.getText().equals("") || newpassword1.getText().equals("")) {
                 status2.setText("All fields must be non empty");

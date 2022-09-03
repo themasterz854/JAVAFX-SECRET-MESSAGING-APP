@@ -9,6 +9,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
 
+import static sample.Main.aes;
+
 public class DecryptionController extends Controller{
     @FXML
     private TextArea ta,ota;
@@ -22,8 +24,8 @@ public class DecryptionController extends Controller{
         try {
             str = ta.getText();
             dout = new DataOutputStream(s.getOutputStream());
-            dout.writeUTF("%decrypt%");
-            dout.writeUTF(str);
+            dout.writeUTF(aes.encrypt("%decrypt%"));
+            dout.writeUTF(aes.encrypt(str));
             dout.flush();
             ta.clear();
         }
@@ -38,7 +40,7 @@ public class DecryptionController extends Controller{
             din = new DataInputStream(s.getInputStream());
             String str;
             while (din.available() > 0) {
-                str = din.readUTF();
+                str = aes.decrypt(din.readUTF());
                 ota.appendText(str);
                 ota.appendText("\n");
             }

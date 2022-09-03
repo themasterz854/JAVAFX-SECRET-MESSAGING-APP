@@ -69,7 +69,7 @@ public class LoginController extends Controller{
             }
             if (newpassword.getText().equals(newpassword1.getText())) {
 
-                dout.writeUTF("%newaccount%");
+                dout.writeUTF(aes.encrypt("%newaccount%"));
                 dout.flush();
 
                 dout.writeUTF(aes.encrypt(newusernamestr));
@@ -78,13 +78,13 @@ public class LoginController extends Controller{
                 newusername.clear();
                 newpassword.clear();
                 newpassword1.clear();
-                String res = din.readUTF();
+                String res = aes.decrypt(din.readUTF());
                 if (res.equals("exists")) {
                     status.setText("Account creation failed, username already exists :(");
                     stage.close();
                     return;
-                }
-                status.setText("Account creation successful.");
+                } else if (res.equals("account created"))
+                    status.setText("Account creation successful.");
             } else
                 status.setText("Passwords do not match");
             stage.close();
@@ -142,14 +142,14 @@ public class LoginController extends Controller{
             DataInputStream din = new DataInputStream(s.getInputStream());
             if (username.getText().equals("") || password.getText().equals("")) {
                 status.setText("Username,Password should be non empty");
-                dout.writeUTF("%exit%");
+                dout.writeUTF(aes.encrypt("%exit%"));
                 s = null;
                 return;
             }
             usernamestr = username.getText().trim();
             dout.writeUTF(aes.encrypt(usernamestr + " " + password.getText().trim()));
             dout.flush();
-            response =  din.readUTF();
+            response = aes.decrypt(din.readUTF());
             if (response.equals("ok")) {
                 status.setText("LOGIN SUCCESSFUL");
                 username.clear();

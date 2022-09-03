@@ -16,6 +16,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.net.Socket;
 
+import static sample.Main.aes;
+
 
 public class ChatDialogController extends Controller{
     @FXML
@@ -53,20 +55,19 @@ public class ChatDialogController extends Controller{
         FileOutputStream fos;
         while(din.available()> 0) {
             try {
-                String str = din.readUTF();
+                String str = aes.decrypt(din.readUTF());
                 if (str.equals("%file%")) {
-                    hash = Main.aes.decrypt(din.readUTF());
-                    fileName = Main.aes.decrypt(din.readUTF());
-                    myta.appendText("Receiving hash for file " + fileName +"\n" + hash +"\n");
+                    hash = aes.decrypt(din.readUTF());
+                    fileName = aes.decrypt(din.readUTF());
+                    myta.appendText("Receiving hash for file " + fileName + "\n" + hash + "\n");
                     ta.appendText("\n\n");
-                    int fileSize = Integer.parseInt(din.readUTF());
+                    int fileSize = Integer.parseInt(aes.decrypt(din.readUTF()));
                     receivedData = new byte[fileSize];
                     din.readFully(receivedData);
                     fos = new FileOutputStream(directory.getAbsolutePath() + "\\" + fileName);
                     fos.write(receivedData, 0, fileSize);
                     fos.close();
                 } else {
-                    str = Main.aes.decrypt(str);
                     String[] data = str.split(" ");
                     if (Integer.parseInt(data[0]) == id) {
                         for (int i = 1; i < data.length; i++)
@@ -82,7 +83,7 @@ public class ChatDialogController extends Controller{
                     }
 
                     while (front != rear + 1 && front != -1) {
-                        dout.writeUTF("%others%" + " " + queue[front++]);
+                        dout.writeUTF(aes.encrypt("%others%" + " " + queue[front++]));
                     }
                 }
             }catch (Exception e)
@@ -126,7 +127,7 @@ public class ChatDialogController extends Controller{
     public void changereceiver() {
         try {
             dout = new DataOutputStream(s.getOutputStream());
-            dout.writeUTF("%chat% " + id);
+            dout.writeUTF(aes.encrypt(("%chat% " + id)));
             dout.flush();
         }
         catch (Exception e)
@@ -159,7 +160,7 @@ public class ChatDialogController extends Controller{
                 encryplabel.setText("Encryption is OFF");
                 str = "%disableencryption%";
             }
-            dout.writeUTF(str);
+            dout.writeUTF(aes.encrypt(str));
             dout.flush();
             myta.clear();
             ta.clear();
@@ -173,7 +174,7 @@ public class ChatDialogController extends Controller{
     public void send_message(){
         try {
             dout = new DataOutputStream(s.getOutputStream());
-            dout.writeUTF(message.getText());
+            dout.writeUTF(aes.encrypt(message.getText()));
             dout.flush();
             if (!encryptflag) {
                 synchronized (myta) {

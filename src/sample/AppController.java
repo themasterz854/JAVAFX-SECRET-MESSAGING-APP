@@ -10,6 +10,8 @@ import javafx.stage.Stage;
 import java.io.DataOutputStream;
 import java.net.Socket;
 
+import static sample.Main.aes;
+
 public class AppController extends Controller{
     @FXML
     private Label welcome;
@@ -28,7 +30,7 @@ public class AppController extends Controller{
             clc.transferdata(s);
             Scene list_scene = new Scene(root);
             client_list.setScene(list_scene);
-            dout.writeUTF("%list%");
+            dout.writeUTF(aes.encrypt("%list%"));
             client_list.setResizable(false);
             client_list.show();
         }

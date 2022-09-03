@@ -103,7 +103,7 @@ public class Main extends Application {
                 primaryStage.setOnCloseRequest(windowEvent -> {
                     try {
                         dout = new DataOutputStream(s.getOutputStream());
-                        dout.writeUTF("%exit%");
+                        dout.writeUTF(aes.encrypt("%exit%"));
                         dout.flush();
                         primaryStage.close();
                         System.exit(0);

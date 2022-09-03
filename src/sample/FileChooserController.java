@@ -14,6 +14,8 @@ import java.net.Socket;
 import java.security.MessageDigest;
 import java.util.List;
 
+import static sample.Main.aes;
+
 
 public class FileChooserController extends Controller{
     @FXML
@@ -74,13 +76,13 @@ public class FileChooserController extends Controller{
                     for (byte x : digest) {
                         hash.append(String.format("%02x", x));
                     }
-                    dout.writeUTF("%file%");
+                    dout.writeUTF(aes.encrypt("%file%"));
                     dout.flush();
-                    dout.writeUTF(hash.toString());
+                    dout.writeUTF(aes.encrypt(hash.toString()));
                     dout.flush();
-                    dout.writeUTF(file.getName());
+                    dout.writeUTF(aes.encrypt(file.getName()));
                     dout.flush();
-                    dout.writeUTF(Integer.toString(sendData.length));
+                    dout.writeUTF(aes.encrypt(Integer.toString(sendData.length)));
                     dout.flush();
                     dout.write(sendData, 0, sendData.length);
                     dout.flush();

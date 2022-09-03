@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static sample.Main.aes;
+
 public class clientlistcontroller extends Controller {
     private int cid =0;
     @FXML
@@ -66,7 +68,7 @@ public class clientlistcontroller extends Controller {
                     }
                 });
             }
-            str = din.readUTF();
+            str = aes.decrypt(din.readUTF());
             i = 0;
             while (!str.equals("end of list")) {
 
@@ -74,7 +76,7 @@ public class clientlistcontroller extends Controller {
                 ButtonList.get(i).setDisable(false);
                 ButtonList.get(i).setOpacity(1.0);
                 i++;
-                str = din.readUTF();
+                str = aes.decrypt(din.readUTF());
             }
             stage = (Stage) button1.getScene().getWindow();
             stage.close();
@@ -90,7 +92,7 @@ public class clientlistcontroller extends Controller {
     public void chat() throws IOException{
         try {
             dout = new DataOutputStream(s.getOutputStream());
-            dout.writeUTF("%chat% " + cid);
+            dout.writeUTF(aes.encrypt("%chat% " + cid));
             Stage Chatscreen = new Stage();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("chatdialog.fxml"));
             Parent root = loader.load();

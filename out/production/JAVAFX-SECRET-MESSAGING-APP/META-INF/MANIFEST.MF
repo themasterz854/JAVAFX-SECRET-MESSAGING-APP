@@ -1,3 +1,5 @@
 Manifest-Version: 1.0
 Main-Class: sample.Launcher
+Class-Path: C:\Users\Zaid\IdeaProjects\JAVAFX-SECRET-MESSAGING-APP\src\s
+ ample\Launcher.java
 

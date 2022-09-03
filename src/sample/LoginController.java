@@ -20,25 +20,30 @@ import static sample.Main.aes;
 
 
 public class LoginController extends Controller{
+
     private String usernamestr;
     @FXML
-    private Label status,status2;
+    private Label status, status2;
     @FXML
-    private TextField username,newusername,serverip;
+    private TextField username, newusername, serverip;
     @FXML
     private PasswordField password;
     @FXML
-    private PasswordField newpassword,newpassword1;
+    private PasswordField newpassword, newpassword1;
 
-    private int closingflag = 0;
-    public Socket getSocket()
-    {
+    public void setSocketanddout(Socket s, DataOutputStream dout) {
+        this.s = s;
+        this.dout = dout;
+    }
+
+    public Socket getSocket() {
         return s;
     }
-    public String getusername()
-    {
+
+    public String getusername() {
         return usernamestr;
     }
+
     public void createnewaccount() {
 
         try {
@@ -62,7 +67,7 @@ public class LoginController extends Controller{
             }
             if (newpassword.getText().equals(newpassword1.getText())) {
 
-                dout.writeUTF("newaccount");
+                dout.writeUTF("%newaccount%");
                 dout.flush();
 
                 dout.writeUTF(aes.encrypt(newusernamestr));
@@ -72,8 +77,6 @@ public class LoginController extends Controller{
                 newpassword.clear();
                 newpassword1.clear();
                 status2.setText("Account creation successful. Close this and login :)");
-                s.close();
-                closingflag = 1;
             } else
                 status2.setText("Passwords do not match");
         }
@@ -88,25 +91,23 @@ public class LoginController extends Controller{
 
         try {
             s = new Socket(serverip.getText().trim().split(":")[0], Integer.parseInt(serverip.getText().trim().split(":")[1]));
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
             status2.setText("Server not running at that ip");
             return;
         }
+
+
         try {
             dout = new DataOutputStream(s.getOutputStream());
             FXMLLoader loader = new FXMLLoader(getClass().getResource("newaccountdialog.fxml"));
+
             Parent root = loader.load();
             Scene newaccount_scene = new Scene(root);
             newaccountcreator.setScene(newaccount_scene);
+            LoginController newlc = loader.getController();
+            newlc.setSocketanddout(s, dout);
             newaccountcreator.showAndWait();
-            if (closingflag == 0) {
-                dout.writeUTF("%exit%");
-                dout.flush();
-            }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
         }

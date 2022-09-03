@@ -31,9 +31,11 @@ public class LoginController extends Controller{
     @FXML
     private PasswordField newpassword, newpassword1;
 
-    public void setSocketanddout(Socket s, DataOutputStream dout) {
+    public void transferdatatonew(Socket s, DataOutputStream dout, DataInputStream din, Label status) {
         this.s = s;
         this.dout = dout;
+        this.din = din;
+        this.status = status;
     }
 
     public Socket getSocket() {
@@ -45,24 +47,24 @@ public class LoginController extends Controller{
     }
 
     public void createnewaccount() {
-
+        Stage stage = (Stage) status2.getScene().getWindow();
         try {
             Pattern P1 = Pattern.compile("([$-/:-?{-~!\"^_`\\[\\]])[A-Za-z\\d]*");
             Pattern P2 = Pattern.compile("[A-Za-z\\d]*[$-/:-?{-~!\"^_`\\[\\]]");
             Pattern P3 = Pattern.compile("[A-Za-z\\d]*[$-/:-?{-~!\"^_`\\[\\]][A-Za-z\\d]*");
 
             if (newpassword.getText().equals("") || newusername.getText().equals("") || newpassword1.getText().equals("")) {
-                status2.setText("All fields must be non empty");
+                status.setText("All fields must be non empty");
                 return;
             }
             String newusernamestr = newusername.getText().trim();
             String newpasswordstr = newpassword.getText().trim();
             if (P1.matcher(newusernamestr).matches() || P2.matcher(newusernamestr).matches() || P3.matcher(newusernamestr).matches()) {
-                status2.setText("no special characters allowed");
+                status.setText("no special characters allowed");
                 return;
             }
             if (P1.matcher(newpasswordstr).matches() || P2.matcher(newpasswordstr).matches() || P3.matcher(newpasswordstr).matches()) {
-                status2.setText("no special characters allowed");
+                status.setText("no special characters allowed");
                 return;
             }
             if (newpassword.getText().equals(newpassword1.getText())) {
@@ -76,9 +78,16 @@ public class LoginController extends Controller{
                 newusername.clear();
                 newpassword.clear();
                 newpassword1.clear();
-                status2.setText("Account creation successful. Close this and login :)");
+                String res = din.readUTF();
+                if (res.equals("exists")) {
+                    status.setText("Account creation failed, username already exists :(");
+                    stage.close();
+                    return;
+                }
+                status.setText("Account creation successful.");
             } else
-                status2.setText("Passwords do not match");
+                status.setText("Passwords do not match");
+            stage.close();
         }
         catch (Exception e)
         {
@@ -99,13 +108,14 @@ public class LoginController extends Controller{
 
         try {
             dout = new DataOutputStream(s.getOutputStream());
+            din = new DataInputStream(s.getInputStream());
             FXMLLoader loader = new FXMLLoader(getClass().getResource("newaccountdialog.fxml"));
 
             Parent root = loader.load();
             Scene newaccount_scene = new Scene(root);
             newaccountcreator.setScene(newaccount_scene);
             LoginController newlc = loader.getController();
-            newlc.setSocketanddout(s, dout);
+            newlc.transferdatatonew(s, dout, din, status);
             newaccountcreator.showAndWait();
         } catch (Exception e) {
             e.printStackTrace();

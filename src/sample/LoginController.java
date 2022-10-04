@@ -9,11 +9,24 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.spec.EncodedKeySpec;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 import java.util.regex.Pattern;
 
 import static sample.Main.aes;
@@ -36,6 +49,23 @@ public class LoginController extends Controller{
         this.dout = dout;
         this.din = din;
         this.status = status;
+    }
+
+    public String encrypt(String message, PublicKey publicKey) {
+        Cipher encryptCipher;
+        try {
+            encryptCipher = Cipher.getInstance("RSA");
+            encryptCipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            byte[] secretMessageBytes = message.getBytes(StandardCharsets.UTF_8);
+            byte[] encryptedMessageBytes = encryptCipher.doFinal(secretMessageBytes);
+            String encodedMessage = Base64.getEncoder().encodeToString(encryptedMessageBytes);
+            System.out.println(encodedMessage);
+            return encodedMessage;
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException |
+                 InvalidKeyException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public Socket getSocket() {
@@ -131,6 +161,7 @@ public class LoginController extends Controller{
         }
         try {
             s = new Socket(serverip.getText().trim().split(":")[0], Integer.parseInt(serverip.getText().trim().split(":")[1]));
+
         }catch(SocketException e)
         {
             status.setText("Server not running at that ip");
@@ -140,6 +171,16 @@ public class LoginController extends Controller{
         try {
             DataOutputStream dout = new DataOutputStream(s.getOutputStream());
             DataInputStream din = new DataInputStream(s.getInputStream());
+            int keylength;
+            String testdata;
+            keylength = din.readInt();
+            byte[] publickeyBytes = new byte[keylength];
+            din.read(publickeyBytes, 0, keylength);
+            EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publickeyBytes);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            PublicKey publickey = keyFactory.generatePublic(publicKeySpec);
+            dout.writeUTF(encrypt("Hello", publickey));
+            dout.flush();
             if (username.getText().equals("") || password.getText().equals("")) {
                 status.setText("Username,Password should be non empty");
                 dout.writeUTF(aes.encrypt("%exit%"));
@@ -161,10 +202,11 @@ public class LoginController extends Controller{
             } else {
                 status.setText(response);
             }
-        }catch(IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
             System.exit(-1);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new RuntimeException(e);
         }
     }
 

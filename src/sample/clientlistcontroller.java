@@ -92,7 +92,7 @@ public class clientlistcontroller extends Controller {
     public void chat() throws IOException{
         try {
             dout = new DataOutputStream(s.getOutputStream());
-            dout.writeUTF(aes.encrypt("%chat% " + cid));
+            dout.writeUTF(aes.encrypt(("%chat% " + cid)));
             Stage Chatscreen = new Stage();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("chatdialog.fxml"));
             Parent root = loader.load();

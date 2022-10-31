@@ -34,11 +34,28 @@ class AES {
             encryptedText = encoder.encodeToString(cipherText);
 
         } catch (Exception E) {
-            System.err.println("Encrypt Exception : "+E.getMessage());
+            System.err.println("Encrypt Exception : " + E.getMessage());
         }
         return encryptedText;
     }
 
+    public byte[] encrypt(byte[] plainText) {
+        byte[] encryptedBytes = new byte[0];
+        try {
+            Cipher cipher = Cipher.getInstance(cipherTransformation);
+            byte[] key = encryptionKey.getBytes(characterEncoding);
+            SecretKeySpec secretKey = new SecretKeySpec(key, aesEncryptionAlgorithm);
+            IvParameterSpec ivparameterspec = new IvParameterSpec(key);
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivparameterspec);
+            byte[] cipherText = cipher.doFinal(plainText);
+            Base64.Encoder encoder = Base64.getEncoder();
+            encryptedBytes = encoder.encode(cipherText);
+
+        } catch (Exception E) {
+            System.err.println("Encrypt Exception : " + E.getMessage());
+        }
+        return encryptedBytes;
+    }
 
     public String decrypt(String encryptedText) {
         String decryptedText = "";
@@ -49,11 +66,29 @@ class AES {
             IvParameterSpec ivparameterspec = new IvParameterSpec(key);
             cipher.init(Cipher.DECRYPT_MODE, secretKey, ivparameterspec);
             Base64.Decoder decoder = Base64.getDecoder();
-            byte[] cipherText = decoder.decode(encryptedText.getBytes(StandardCharsets.UTF_8));
+            byte[] cipherText = decoder.decode(encryptedText);
             decryptedText = new String(cipher.doFinal(cipherText), StandardCharsets.UTF_8);
 
         } catch (Exception E) {
-            System.err.println("decrypt Exception : "+E.getMessage());
+            System.err.println("decrypt Exception : " + E.getMessage());
+        }
+        return decryptedText;
+    }
+
+    public byte[] decrypt(byte[] encryptedText) {
+        byte[] decryptedText = new byte[0];
+        try {
+            Cipher cipher = Cipher.getInstance(cipherTransformation);
+            byte[] key = encryptionKey.getBytes(characterEncoding);
+            SecretKeySpec secretKey = new SecretKeySpec(key, aesEncryptionAlgorithm);
+            IvParameterSpec ivparameterspec = new IvParameterSpec(key);
+            cipher.init(Cipher.DECRYPT_MODE, secretKey, ivparameterspec);
+            Base64.Decoder decoder = Base64.getDecoder();
+            byte[] cipherText = decoder.decode(encryptedText);
+            decryptedText = cipher.doFinal(cipherText);
+
+        } catch (Exception E) {
+            System.err.println("decrypt Exception : " + E.getMessage());
         }
         return decryptedText;
     }
@@ -74,6 +109,8 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+
     @Override
     public void start(Stage primaryStage) {
         try {

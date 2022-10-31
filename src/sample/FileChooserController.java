@@ -18,6 +18,7 @@ import static sample.Main.aes;
 
 
 public class FileChooserController extends Controller{
+
     @FXML
     private Button select_one,select_multiple,sendfiles;
     @FXML
@@ -76,6 +77,7 @@ public class FileChooserController extends Controller{
                     for (byte x : digest) {
                         hash.append(String.format("%02x", x));
                     }
+                    sendData = aes.encrypt(sendData);
                     dout.writeUTF(aes.encrypt("%file%"));
                     dout.flush();
                     dout.writeUTF(aes.encrypt(hash.toString()));
@@ -86,6 +88,8 @@ public class FileChooserController extends Controller{
                     dout.flush();
                     dout.write(sendData, 0, sendData.length);
                     dout.flush();
+                    sendData = null;
+                    System.gc();
                 }
             }
 

@@ -47,6 +47,7 @@ public class ChatDialogController extends Controller{
         directory = dc.showDialog(null);
     }
     public synchronized void checkandwrite() throws Exception{
+
         int front,rear;
         front = rear = -1;
         String fileName;
@@ -64,9 +65,13 @@ public class ChatDialogController extends Controller{
                     int fileSize = Integer.parseInt(aes.decrypt(din.readUTF()));
                     receivedData = new byte[fileSize];
                     din.readFully(receivedData);
-                    fos = new FileOutputStream(directory.getAbsolutePath() + "\\" + fileName);
-                    fos.write(receivedData, 0, fileSize);
+                    receivedData = aes.decrypt(receivedData);
+                    myta.appendText("\n" + receivedData.length);
+                    fos = new FileOutputStream(directory.getAbsolutePath() + "/" + fileName);
+                    fos.write(receivedData, 0, receivedData.length);
                     fos.close();
+                    receivedData = null;
+                    System.gc();
                 } else {
                     String[] data = str.split(" ");
                     if (Integer.parseInt(data[0]) == id) {
@@ -83,7 +88,7 @@ public class ChatDialogController extends Controller{
                     }
 
                     while (front != rear + 1 && front != -1) {
-                        dout.writeUTF(aes.encrypt("%others%" + " " + queue[front++]));
+                        dout.writeUTF(aes.encrypt(("%others%" + " " + queue[front++])));
                     }
                 }
             }catch (Exception e)
@@ -92,6 +97,7 @@ public class ChatDialogController extends Controller{
                 System.exit(0);
             }
         }
+
     }
      void run_task(){
         Task<Thread> task = new Task<>(){

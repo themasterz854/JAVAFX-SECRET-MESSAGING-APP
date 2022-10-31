@@ -42,7 +42,6 @@ public class DecryptionController extends Controller{
             while (din.available() > 0) {
                 str = aes.decrypt(din.readUTF());
                 ota.appendText(str);
-                ota.appendText("\n");
             }
         }
         catch (Exception e)

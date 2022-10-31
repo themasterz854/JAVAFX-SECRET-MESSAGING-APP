@@ -188,7 +188,7 @@ public class LoginController extends Controller{
                 return;
             }
             usernamestr = username.getText().trim();
-            dout.writeUTF(aes.encrypt(usernamestr + " " + password.getText().trim()));
+            dout.writeUTF(aes.encrypt((usernamestr + " " + password.getText().trim())));
             dout.flush();
             response = aes.decrypt(din.readUTF());
             if (response.equals("ok")) {

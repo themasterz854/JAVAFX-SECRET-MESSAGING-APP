@@ -11,15 +11,15 @@ import java.net.Socket;
 
 import static sample.Main.aes;
 
-public class DecryptionController extends Controller{
+public class DecryptionController extends Controller {
     @FXML
-    private TextArea ta,ota;
+    private TextArea ta, ota;
 
-    public void transferdata(Socket s)
-    {
+    public void transferdata(Socket s) {
         this.s = s;
     }
-    public void decryptrequest(){
+
+    public void decryptrequest() {
         String str;
         try {
             str = ta.getText();
@@ -28,14 +28,13 @@ public class DecryptionController extends Controller{
             dout.writeUTF(aes.encrypt(str));
             dout.flush();
             ta.clear();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
         }
     }
-    public void checkandwrite2(){
+
+    public void checkandwrite2() {
         try {
             din = new DataInputStream(s.getInputStream());
             String str;
@@ -43,13 +42,12 @@ public class DecryptionController extends Controller{
                 str = aes.decrypt(din.readUTF());
                 ota.appendText(str);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
         }
     }
+
     void run_task() {
         try {
             Task<Thread> task = new Task<>() {
@@ -71,9 +69,7 @@ public class DecryptionController extends Controller{
                 }
             };
             new Thread(task).start();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
         }

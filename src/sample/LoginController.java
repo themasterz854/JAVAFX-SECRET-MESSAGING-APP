@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 import static sample.Main.aes;
 
 
-public class LoginController extends Controller{
+public class LoginController extends Controller {
 
     private String usernamestr;
     @FXML
@@ -118,13 +118,12 @@ public class LoginController extends Controller{
             } else
                 status.setText("Passwords do not match");
             stage.close();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
         }
     }
+
     public void newuser() {
         Stage newaccountcreator = new Stage();
 
@@ -153,17 +152,16 @@ public class LoginController extends Controller{
         }
 
     }
-    public void  Login() throws IOException {
-        if(serverip.getText().equals(""))
-        {
+
+    public void Login() throws IOException {
+        if (serverip.getText().equals("")) {
             status.setText("pls enter the ip address");
             return;
         }
         try {
             s = new Socket(serverip.getText().trim().split(":")[0], Integer.parseInt(serverip.getText().trim().split(":")[1]));
 
-        }catch(SocketException e)
-        {
+        } catch (SocketException e) {
             status.setText("Server not running at that ip");
             return;
         }
@@ -172,7 +170,6 @@ public class LoginController extends Controller{
             DataOutputStream dout = new DataOutputStream(s.getOutputStream());
             DataInputStream din = new DataInputStream(s.getInputStream());
             int keylength;
-            String testdata;
             keylength = din.readInt();
             byte[] publickeyBytes = new byte[keylength];
             din.read(publickeyBytes, 0, keylength);

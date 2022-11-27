@@ -12,15 +12,16 @@ import java.net.Socket;
 
 import static sample.Main.aes;
 
-public class AppController extends Controller{
+public class AppController extends Controller {
     @FXML
     private Label welcome;
 
-    public void transferdata(Socket s,String username){
+    public void transferdata(Socket s, String username) {
         this.s = s;
-        welcome.setText("WELCOME "+username);
+        welcome.setText("WELCOME " + username);
     }
-    public void get_list(){
+
+    public void get_list() {
         try {
             dout = new DataOutputStream(s.getOutputStream());
             Stage client_list = new Stage();
@@ -33,14 +34,13 @@ public class AppController extends Controller{
             dout.writeUTF(aes.encrypt("%list%"));
             client_list.setResizable(false);
             client_list.show();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
         }
     }
-    public void decryptservice(){
+
+    public void decryptservice() {
         try {
             Stage decryptstage = new Stage();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("decryption.fxml"));
@@ -53,9 +53,7 @@ public class AppController extends Controller{
             decryptstage.setResizable(false);
             decryptstage.setTitle("Decryption Service");
             decryptstage.show();
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
         }

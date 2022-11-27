@@ -17,46 +17,44 @@ import java.util.List;
 import static sample.Main.aes;
 
 
-public class FileChooserController extends Controller{
+public class FileChooserController extends Controller {
 
     @FXML
-    private Button select_one,select_multiple,sendfiles;
+    private Button select_one, select_multiple, sendfiles;
     @FXML
     private ListView<String> send_list;
-    public void transferdata(Socket s)
-    {
+
+    public void transferdata(Socket s) {
         this.s = s;
     }
-    public void selectafile(){
+
+    public void selectafile() {
 
         FileChooser fc = new FileChooser();
-        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("All","*"),new FileChooser.ExtensionFilter("Images","*.png","*.jpg"));
+        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("All", "*"), new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg"));
         File selected_File = fc.showOpenDialog(null);
 
-        if(selected_File != null)
-        {
+        if (selected_File != null) {
             send_list.getItems().add(selected_File.getAbsolutePath());
-        }
-        else
+        } else
             System.out.print("Not valid file");
     }
-    public void selectmultiplefiles(){
+
+    public void selectmultiplefiles() {
         int i;
         FileChooser fc = new FileChooser();
-        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("All","*"),new FileChooser.ExtensionFilter("Images","*.png","*.jpg"));
+        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("All", "*"), new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg"));
         List<File> selected_Files = fc.showOpenMultipleDialog(null);
 
-        if(selected_Files != null)
-        {
+        if (selected_Files != null) {
             for (i = 0; i < selected_Files.size(); i++) {
                 send_list.getItems().add(selected_Files.get(i).getAbsolutePath());
             }
-        }
-        else
+        } else
             System.out.print("Not valid file");
     }
 
-    public void sendthefiles(){
+    public void sendthefiles() {
         int i;
         File file;
         FileInputStream fis;
@@ -89,14 +87,14 @@ public class FileChooserController extends Controller{
                     dout.write(sendData, 0, sendData.length);
                     dout.flush();
                     sendData = null;
+                    fis.close();
                     System.gc();
                 }
             }
 
             Stage stage = (Stage) send_list.getScene().getWindow();
             stage.close();
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
         }

@@ -20,24 +20,24 @@ import java.util.List;
 import static sample.Main.aes;
 
 public class clientlistcontroller extends Controller {
-    private int cid =0;
+    private int cid = 0;
     @FXML
-    private Button button1,button2,button3,button4,button5,button6,button7,button8,button9,button10,showbutton;
+    private Button button1, button2, button3, button4, button5, button6, button7, button8, button9, button10, showbutton;
 
     private Stage stage;
     private String currentchat;
     private final List<Button> ButtonList = new ArrayList<>();
-    public void transferdata(Socket s)
-    {
+
+    public void transferdata(Socket s) {
         this.s = s;
     }
 
-    public  void show() throws IOException {
+    public void show() throws IOException {
         String str;
         din = new DataInputStream(s.getInputStream());
-        Collections.addAll(ButtonList,button1,button2,button3,button4,button5,button6,button7,button8,button9,button10);
+        Collections.addAll(ButtonList, button1, button2, button3, button4, button5, button6, button7, button8, button9, button10);
 
-        int i ;
+        int i;
         try {
             for (i = 0; i < 10; i++) {
                 ButtonList.get(i).setOnAction(new EventHandler<>() {
@@ -83,13 +83,13 @@ public class clientlistcontroller extends Controller {
             showbutton.setDisable(true);
             showbutton.setOpacity(0.0);
             stage.show();
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
         }
     }
-    public void chat() throws IOException{
+
+    public void chat() throws IOException {
         try {
             dout = new DataOutputStream(s.getOutputStream());
             dout.writeUTF(aes.encrypt(("%chat% " + cid)));
@@ -104,11 +104,9 @@ public class clientlistcontroller extends Controller {
             cdc.run_task();
             Chatscreen.setResizable(false);
             Chatscreen.show();
-        }
-        catch(IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
             System.exit(-1);
         }
     }
-    }
+}

@@ -19,42 +19,43 @@ import java.net.Socket;
 import static sample.Main.aes;
 
 
-public class ChatDialogController extends Controller{
+public class ChatDialogController extends Controller {
     @FXML
     private AnchorPane ap;
-    @FXML
-    private Button send_file_button,dirchoose;
+    private final String[] queue = new String[10];
     @FXML
     private TextField message;
     @FXML
-    private TextArea ta,myta;
+    private Button send_file_button, dirchoose;
     @FXML
     private ToggleButton togglebutton;
     @FXML
     private Label encryplabel;
     private int id;
-    private final String[] queue= new String[10];
+    @FXML
+    private TextArea ta, myta;
     private boolean encryptflag = false;
     private File directory;
     private final DirectoryChooser dc = new DirectoryChooser();
-    public void transferdata(int cid, Socket s){
+
+    public void transferdata(int cid, Socket s) {
         id = cid;
         this.s = s;
     }
 
-    public void direchooser()
-    {
+    public void direchooser() {
         directory = dc.showDialog(null);
     }
-    public synchronized void checkandwrite() throws Exception{
 
-        int front,rear;
+    public synchronized void checkandwrite() throws Exception {
+
+        int front, rear;
         front = rear = -1;
         String fileName;
         String hash;
         byte[] receivedData;
         FileOutputStream fos;
-        while(din.available()> 0) {
+        while (din.available() > 0) {
             try {
                 String str = aes.decrypt(din.readUTF());
                 if (str.equals("%file%")) {
@@ -91,34 +92,31 @@ public class ChatDialogController extends Controller{
                         dout.writeUTF(aes.encrypt(("%others%" + " " + queue[front++])));
                     }
                 }
-            }catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
                 System.exit(0);
             }
         }
 
     }
-     void run_task(){
-        Task<Thread> task = new Task<>(){
+
+    void run_task() {
+        Task<Thread> task = new Task<>() {
 
             @Override
             protected Thread call() throws Exception {
 
-                Stage stage ;
+                Stage stage;
                 din = new DataInputStream(s.getInputStream());
                 dout = new DataOutputStream(s.getOutputStream());
                 stage = (Stage) message.getScene().getWindow();
 
-                while(true)
-                {
-                    while(!stage.isFocused())
-                    {
+                while (true) {
+                    while (!stage.isFocused()) {
                         Thread.sleep(200);
                     }
                     checkandwrite();
-                    if(!stage.isShowing())
-                    {
+                    if (!stage.isShowing()) {
                         break;
                     }
                     Thread.sleep(100);
@@ -135,14 +133,13 @@ public class ChatDialogController extends Controller{
             dout = new DataOutputStream(s.getOutputStream());
             dout.writeUTF(aes.encrypt(("%chat% " + id)));
             dout.flush();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
         }
     }
-    public void encryption_toggle(){
+
+    public void encryption_toggle() {
         String str;
         try {
             if (togglebutton.isSelected()) {
@@ -170,14 +167,13 @@ public class ChatDialogController extends Controller{
             dout.flush();
             myta.clear();
             ta.clear();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
         }
     }
-    public void send_message(){
+
+    public void send_message() {
         try {
             dout = new DataOutputStream(s.getOutputStream());
             dout.writeUTF(aes.encrypt(message.getText()));
@@ -189,14 +185,13 @@ public class ChatDialogController extends Controller{
                 }
             }
             message.clear();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
         }
     }
-    public void start_file_window(){
+
+    public void start_file_window() {
         try {
             Stage file_chooser = new Stage();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("FileChooser.fxml"));
@@ -208,9 +203,7 @@ public class ChatDialogController extends Controller{
             file_chooser.setResizable(false);
             file_chooser.setTitle("File sender");
             file_chooser.show();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
         }

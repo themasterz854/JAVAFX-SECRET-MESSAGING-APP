@@ -16,9 +16,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 class AES {
-    private static final String encryptionKey           = "ABCDEFGHIJKLMNOP";
-    private static final String characterEncoding       = "UTF-8";
-    private static final String cipherTransformation    = "AES/CBC/PKCS5PADDING";
+    private static final String encryptionKey = "ABCDEFGHIJKLMNOP";
+    private static final String characterEncoding = "UTF-8";
+    private static final String cipherTransformation = "AES/CBC/PKCS5PADDING";
     private static final String aesEncryptionAlgorithm = "AES";
 
     public String encrypt(String plainText) {
@@ -101,11 +101,13 @@ abstract class Controller {
     protected DataOutputStream dout;
     protected DataInputStream din;
 }
+
 public class Main extends Application {
-    public static int flag=0;
+    public static int flag = 0;
     public static AES aes = new AES();
     private DataOutputStream dout;
     private Socket s;
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -144,9 +146,7 @@ public class Main extends Application {
                         dout.flush();
                         primaryStage.close();
                         System.exit(0);
-                    }
-                    catch(Exception e)
-                    {
+                    } catch (Exception e) {
                         e.printStackTrace();
                         System.exit(0);
                     }
@@ -160,11 +160,10 @@ public class Main extends Application {
                 primaryStage.setResizable(false);
                 primaryStage.show();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(0);
         }
-          catch (Exception e) {
-                e.printStackTrace();
-                System.exit(0);
-            }
     }
 
 }

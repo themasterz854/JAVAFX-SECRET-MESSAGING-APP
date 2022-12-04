@@ -15,14 +15,13 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
-import java.security.InvalidKeyException;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
+import java.nio.file.Files;
+import java.security.*;
 import java.security.spec.EncodedKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
@@ -66,6 +65,24 @@ public class LoginController extends Controller {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public String decrypt(String encryptedmessage, PrivateKey privateKey) {
+        Cipher decryptCipher;
+        String decryptedMessage;
+        byte[] encryptedMessageBytes = Base64.getDecoder().decode(encryptedmessage);
+
+        try {
+            decryptCipher = Cipher.getInstance("RSA");
+            decryptCipher.init(Cipher.DECRYPT_MODE, privateKey);
+            byte[] decryptedMessageBytes = decryptCipher.doFinal(encryptedMessageBytes);
+            decryptedMessage = new String(decryptedMessageBytes, StandardCharsets.UTF_8);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException |
+                 InvalidKeyException e) {
+            throw new RuntimeException(e);
+        }
+
+        return decryptedMessage;
     }
 
     public Socket getSocket() {
@@ -167,8 +184,15 @@ public class LoginController extends Controller {
         }
         String response;
         try {
+
             DataOutputStream dout = new DataOutputStream(s.getOutputStream());
             DataInputStream din = new DataInputStream(s.getInputStream());
+            rsa rsaobj = new rsa();
+            rsaobj.getPublickey();
+            rsaobj.getPrivatekey();
+            File publicKeyFile = new File("public.key");
+            byte[] publicKeyBytes;
+
             int keylength;
             keylength = din.readInt();
             byte[] publickeyBytes = new byte[keylength];
@@ -176,8 +200,19 @@ public class LoginController extends Controller {
             EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publickeyBytes);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             PublicKey publickey = keyFactory.generatePublic(publicKeySpec);
-            dout.writeUTF(encrypt("ABCDEFGHIJKLMNOP", publickey));
+            System.out.println("public key received");
+            publicKeyBytes = Files.readAllBytes(publicKeyFile.toPath());
+            dout.writeInt(publicKeyBytes.length);
             dout.flush();
+            dout.write(publicKeyBytes);
+            System.out.println("sent public key");
+            dout.flush();
+            response = decrypt(din.readUTF(), rsaobj.privateKey);
+            System.out.println(response);
+            aes.encryptionKey = response;
+            //dout.writeUTF(encrypt("ABCDEFGHIJKLMNOP", publickey));
+            //dout.flush();
+
             if (username.getText().equals("") || password.getText().equals("")) {
                 status.setText("Username,Password should be non empty");
                 dout.writeUTF(aes.encrypt("%exit%"));

@@ -35,7 +35,7 @@ public class ChatDialogController extends Controller {
     @FXML
     private TextArea ta, myta;
     private boolean encryptflag = false;
-    private File directory;
+    private File directory = new File(String.format("%s/Downloads", System.getProperty("user.home").replace('\\', '/')));
     private final DirectoryChooser dc = new DirectoryChooser();
 
     public void transferdata(int cid, Socket s) {
@@ -203,6 +203,7 @@ public class ChatDialogController extends Controller {
             file_chooser.setResizable(false);
             file_chooser.setTitle("File sender");
             file_chooser.show();
+            myta.appendText("Sending File");
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);

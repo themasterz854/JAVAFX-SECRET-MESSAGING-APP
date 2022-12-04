@@ -176,7 +176,7 @@ public class LoginController extends Controller {
             EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publickeyBytes);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             PublicKey publickey = keyFactory.generatePublic(publicKeySpec);
-            dout.writeUTF(encrypt("Hello", publickey));
+            dout.writeUTF(encrypt("ABCDEFGHIJKLMNOP", publickey));
             dout.flush();
             if (username.getText().equals("") || password.getText().equals("")) {
                 status.setText("Username,Password should be non empty");

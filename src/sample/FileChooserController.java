@@ -1,12 +1,14 @@
 package sample;
 
 
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -54,50 +56,66 @@ public class FileChooserController extends Controller {
             System.out.print("Not valid file");
     }
 
-    public void sendthefiles() {
-        int i;
-        File file;
-        FileInputStream fis;
+    void send_thread() {
+        Task<Thread> task = new Task<>() {
 
-        int n = send_list.getItems().size();
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            dout = new DataOutputStream(s.getOutputStream());
-            StringBuilder hash;
-            for (i = 0; i < n; i++) {
-                file = new File(send_list.getItems().get(i));
-                fis = new FileInputStream(file);
-                byte[] sendData = new byte[(int) file.length()];
-                if (fis.read(sendData) != -1) {
-                    md.update(sendData);
-                    byte[] digest = md.digest();
-                    hash = new StringBuilder();
-                    for (byte x : digest) {
-                        hash.append(String.format("%02x", x));
+            @Override
+            protected Thread call() throws Exception {
+
+                din = new DataInputStream(s.getInputStream());
+                dout = new DataOutputStream(s.getOutputStream());
+
+                int i;
+                File file;
+                FileInputStream fis;
+
+                int n = send_list.getItems().size();
+                try {
+                    MessageDigest md = MessageDigest.getInstance("SHA-256");
+                    dout = new DataOutputStream(s.getOutputStream());
+                    StringBuilder hash;
+                    for (i = 0; i < n; i++) {
+                        file = new File(send_list.getItems().get(i));
+                        fis = new FileInputStream(file);
+                        byte[] sendData = new byte[(int) file.length()];
+                        if (fis.read(sendData) != -1) {
+                            md.update(sendData);
+                            byte[] digest = md.digest();
+                            hash = new StringBuilder();
+                            for (byte x : digest) {
+                                hash.append(String.format("%02x", x));
+                            }
+                            sendData = aes.encrypt(sendData);
+                            dout.writeUTF(aes.encrypt("%file%"));
+                            dout.flush();
+                            dout.writeUTF(aes.encrypt(hash.toString()));
+                            dout.flush();
+                            dout.writeUTF(aes.encrypt(file.getName()));
+                            dout.flush();
+                            dout.writeUTF(aes.encrypt(Integer.toString(sendData.length)));
+                            dout.flush();
+                            dout.write(sendData, 0, sendData.length);
+                            dout.flush();
+                            sendData = null;
+                            fis.close();
+                            System.gc();
+                        }
                     }
-                    sendData = aes.encrypt(sendData);
-                    dout.writeUTF(aes.encrypt("%file%"));
-                    dout.flush();
-                    dout.writeUTF(aes.encrypt(hash.toString()));
-                    dout.flush();
-                    dout.writeUTF(aes.encrypt(file.getName()));
-                    dout.flush();
-                    dout.writeUTF(aes.encrypt(Integer.toString(sendData.length)));
-                    dout.flush();
-                    dout.write(sendData, 0, sendData.length);
-                    dout.flush();
-                    sendData = null;
-                    fis.close();
-                    System.gc();
-                }
-            }
 
-            Stage stage = (Stage) send_list.getScene().getWindow();
-            stage.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.exit(-1);
+                }
+                return null;
+            }
+        };
+        new Thread(task).start();
+    }
+    public void sendthefiles() {
+        send_thread();
+        Stage stage = (Stage) send_list.getScene().getWindow();
+        stage.close();
     }
 
 }

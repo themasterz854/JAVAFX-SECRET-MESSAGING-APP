@@ -210,6 +210,7 @@ public class LoginController extends Controller {
             response = decrypt(din.readUTF(), rsaobj.privateKey);
             System.out.println(response);
             aes.encryptionKey = response;
+
             //dout.writeUTF(encrypt("ABCDEFGHIJKLMNOP", publickey));
             //dout.flush();
 

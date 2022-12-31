@@ -5,8 +5,8 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0" styleClass="decryptionbg"
-            stylesheets="@design.css" xmlns="http://javafx.com/javafx/16"
+<AnchorPane xmlns:fx="http://javafx.com/fxml" prefHeight="400.0" prefWidth="600.0" styleClass="decryptionbg"
+            stylesheets="@design.css" xmlns="http://javafx.com/javafx/19"
             fx:controller="sample.DecryptionController">
     <children>
         <TextArea fx:id="ta" layoutX="30.0" layoutY="74.0" opacity="0.6" prefHeight="274.0" prefWidth="249.0" text=""

@@ -125,7 +125,7 @@ class rsa {
 }
 
 class AES {
-    protected String encryptionKey = "ABCDEFGHIJKLMNOP";
+    protected String encryptionKey;
     private static final String characterEncoding = "UTF-8";
     private static final String cipherTransformation = "AES/CBC/PKCS5PADDING";
     private static final String aesEncryptionAlgorithm = "AES";

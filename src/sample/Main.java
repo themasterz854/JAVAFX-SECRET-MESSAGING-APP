@@ -13,6 +13,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -214,6 +215,9 @@ abstract class Controller {
 public class Main extends Application {
     public static int flag = 0;
     public static AES aes = new AES();
+
+    public static String serveripaddress;
+    public static int serverport;
     private DataOutputStream dout;
     private Socket s;
 
@@ -238,6 +242,9 @@ public class Main extends Application {
             if (flag == 1) {
                 LoginController lc = loader.getController();
                 s = lc.getSocket();
+                serveripaddress = ((InetSocketAddress) s.getRemoteSocketAddress()).getAddress().getHostAddress();
+                serverport = s.getPort();
+                System.out.println("Server address " + serveripaddress + ":" + serverport);
                 username = lc.getusername();
                 Stage introdialog = new Stage();
                 introdialog.setTitle("Intro");

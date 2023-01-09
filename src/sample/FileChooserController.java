@@ -13,6 +13,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.security.MessageDigest;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class FileChooserController extends Controller {
         this.s = s;
     }
 
-    public void selectafile() {
+    public void selectafile() throws URISyntaxException {
 
         FileChooser fc = new FileChooser();
         fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("All", "*"), new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg"));
@@ -56,7 +57,7 @@ public class FileChooserController extends Controller {
             System.out.print("Not valid file");
     }
 
-    void send_thread() {
+    public void send_thread() {
         Task<Thread> task = new Task<>() {
 
             @Override

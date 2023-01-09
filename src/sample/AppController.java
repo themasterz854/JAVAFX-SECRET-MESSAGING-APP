@@ -15,7 +15,6 @@ import static sample.Main.aes;
 public class AppController extends Controller {
     @FXML
     private Label welcome;
-
     public void transferdata(Socket s, String username) {
         this.s = s;
         welcome.setText("WELCOME " + username);
@@ -53,6 +52,24 @@ public class AppController extends Controller {
             decryptstage.setResizable(false);
             decryptstage.setTitle("Decryption Service");
             decryptstage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
+    }
+
+    public void NAS() {
+        try {
+            dout = new DataOutputStream(s.getOutputStream());
+            Stage NASList = new Stage();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("NAS.fxml"));
+            Parent root = loader.load();
+            NASListController naslc = loader.getController();
+            naslc.transferdata(s);
+            Scene list_scene = new Scene(root);
+            NASList.setScene(list_scene);
+            NASList.setResizable(false);
+            NASList.show();
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);

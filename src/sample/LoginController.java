@@ -146,6 +146,7 @@ public class LoginController extends Controller {
 
         try {
             s = new Socket(serverip.getText().trim().split(":")[0], Integer.parseInt(serverip.getText().trim().split(":")[1]));
+
         } catch (Exception e) {
             status2.setText("Server not running at that ip");
             return;
@@ -177,6 +178,7 @@ public class LoginController extends Controller {
         }
         try {
             s = new Socket(serverip.getText().trim().split(":")[0], Integer.parseInt(serverip.getText().trim().split(":")[1]));
+
 
         } catch (SocketException e) {
             status.setText("Server not running at that ip");

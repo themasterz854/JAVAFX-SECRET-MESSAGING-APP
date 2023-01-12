@@ -4,15 +4,18 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0" styleClass="appbg"
+            stylesheets="@design.css" xmlns="http://javafx.com/javafx/19"
+            fx:controller="sample.AppController">
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="appbg" stylesheets="@design.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.AppController">
-
-    <Button layoutX="448.0" layoutY="201.0" mnemonicParsing="false" onAction="#get_list" text="getlist" />
-    <Button layoutX="30.0" layoutY="213.0" mnemonicParsing="false" onAction="#decryptservice" text="Decryption Service" />
-    <Label fx:id="welcome" layoutX="176.0" layoutY="65.0" prefHeight="81.0" prefWidth="219.0" text="WELCOME USER" textFill="WHITE">
+    <Button layoutX="448.0" layoutY="201.0" mnemonicParsing="false" onAction="#get_list" text="getlist"/>
+    <Button layoutX="30.0" layoutY="213.0" mnemonicParsing="false" onAction="#decryptservice"
+            text="Decryption Service"/>
+    <Label fx:id="welcome" layoutX="176.0" layoutY="65.0" prefHeight="81.0" prefWidth="219.0" text="WELCOME USER"
+           textFill="WHITE">
         <font>
-            <Font size="30.0" />
+            <Font size="30.0"/>
         </font>
     </Label>
-   <Button layoutX="145.0" layoutY="310.0" mnemonicParsing="false" onAction="#NAS" text="NAS" />
+    <Button layoutX="145.0" layoutY="310.0" mnemonicParsing="false" onAction="#NAS" text="NAS"/>
 </AnchorPane>

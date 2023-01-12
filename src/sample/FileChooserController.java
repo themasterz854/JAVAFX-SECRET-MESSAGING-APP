@@ -5,15 +5,13 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.Socket;
-import java.net.URISyntaxException;
 import java.security.MessageDigest;
 import java.util.List;
 
@@ -23,27 +21,34 @@ import static sample.Main.aes;
 public class FileChooserController extends Controller {
 
     @FXML
-    private Button select_one, select_multiple, sendfiles;
+    protected Button select_one, select_multiple, sendfiles;
     @FXML
-    private ListView<String> send_list;
+    protected ListView<String> sendlist;
+    @FXML
+    protected TextArea status;
 
     public void transferdata(Socket s) {
         this.s = s;
     }
 
-    public void selectafile() throws URISyntaxException {
+    public void selectafile() {
+        sendlist.getItems().clear();
+        sendlist.getItems().removeAll();
 
         FileChooser fc = new FileChooser();
         fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("All", "*"), new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg"));
         File selected_File = fc.showOpenDialog(null);
 
         if (selected_File != null) {
-            send_list.getItems().add(selected_File.getAbsolutePath());
+            sendlist.getItems().add(selected_File.getAbsolutePath());
         } else
             System.out.print("Not valid file");
     }
 
     public void selectmultiplefiles() {
+        sendlist.getItems().clear();
+        sendlist.getItems().removeAll();
+
         int i;
         FileChooser fc = new FileChooser();
         fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("All", "*"), new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg"));
@@ -51,32 +56,32 @@ public class FileChooserController extends Controller {
 
         if (selected_Files != null) {
             for (i = 0; i < selected_Files.size(); i++) {
-                send_list.getItems().add(selected_Files.get(i).getAbsolutePath());
+                sendlist.getItems().add(selected_Files.get(i).getAbsolutePath());
             }
         } else
             System.out.print("Not valid file");
     }
 
-    public void send_thread() {
+    public void send_thread(String mode) {
         Task<Thread> task = new Task<>() {
 
             @Override
             protected Thread call() throws Exception {
 
-                din = new DataInputStream(s.getInputStream());
+
                 dout = new DataOutputStream(s.getOutputStream());
 
                 int i;
                 File file;
                 FileInputStream fis;
 
-                int n = send_list.getItems().size();
+                int n = sendlist.getItems().size();
                 try {
                     MessageDigest md = MessageDigest.getInstance("SHA-256");
-                    dout = new DataOutputStream(s.getOutputStream());
+
                     StringBuilder hash;
                     for (i = 0; i < n; i++) {
-                        file = new File(send_list.getItems().get(i));
+                        file = new File(sendlist.getItems().get(i));
                         fis = new FileInputStream(file);
                         byte[] sendData = new byte[(int) file.length()];
                         if (fis.read(sendData) != -1) {
@@ -87,7 +92,8 @@ public class FileChooserController extends Controller {
                                 hash.append(String.format("%02x", x));
                             }
                             sendData = aes.encrypt(sendData);
-                            dout.writeUTF(aes.encrypt("%file%"));
+                            status.appendText("Uploading file " + file.getName() + "\n");
+                            dout.writeUTF(aes.encrypt(mode));
                             dout.flush();
                             dout.writeUTF(aes.encrypt(hash.toString()));
                             dout.flush();
@@ -102,6 +108,7 @@ public class FileChooserController extends Controller {
                             System.gc();
                         }
                     }
+                    status.appendText("All Files uploaded\n");
 
 
                 } catch (Exception e) {
@@ -114,9 +121,8 @@ public class FileChooserController extends Controller {
         new Thread(task).start();
     }
     public void sendthefiles() {
-        send_thread();
-        Stage stage = (Stage) send_list.getScene().getWindow();
-        stage.close();
+        status.appendText("\nUploading the files\n");
+        send_thread("%file%");
     }
 
 }

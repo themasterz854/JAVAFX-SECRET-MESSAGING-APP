@@ -8,6 +8,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -70,7 +71,7 @@ public class FileChooserController extends Controller {
 
 
                 dout = new DataOutputStream(s.getOutputStream());
-
+                din = new DataInputStream(s.getInputStream());
                 int i;
                 File file;
                 FileInputStream fis;
@@ -78,12 +79,33 @@ public class FileChooserController extends Controller {
                 int n = sendlist.getItems().size();
                 try {
                     MessageDigest md = MessageDigest.getInstance("SHA-256");
-
+                    int filebuffer = 1024 * 1024 * 75;
+                    byte[] sendData = new byte[filebuffer];
                     StringBuilder hash;
+                    dout.writeUTF(aes.encrypt(mode));
+                    dout.flush();
                     for (i = 0; i < n; i++) {
                         file = new File(sendlist.getItems().get(i));
                         fis = new FileInputStream(file);
-                        byte[] sendData = new byte[(int) file.length()];
+                        dout.writeLong(file.length());
+                        dout.flush();
+                        String response = din.readUTF();
+                        System.out.println(response);
+                        int read;
+                        while ((read = fis.read(sendData)) > 0) {
+
+                            dout.writeInt(read);
+                            dout.flush();
+                            System.out.println("sent bytes " + read);
+                            dout.write(sendData, 0, read);
+                            dout.flush();
+
+                        }
+                        dout.writeInt(read);
+                        dout.flush();
+                        System.out.println("sent the file");
+                        /*
+
                         if (fis.read(sendData) != -1) {
                             md.update(sendData);
                             byte[] digest = md.digest();
@@ -99,8 +121,8 @@ public class FileChooserController extends Controller {
                             status.appendText("Uploading file " + file.getName() + "\n");
                             dout.writeUTF(aes.encrypt(mode));
                             dout.flush();
-                            dout.writeUTF(aes.encrypt(hash.toString()));
-                            dout.flush();
+                            //dout.writeUTF(aes.encrypt(hash.toString()));
+                            //dout.flush();
                             dout.writeUTF(aes.encrypt(file.getName()));
                             dout.flush();
                             dout.writeUTF(aes.encrypt(Integer.toString(sendData.length)));
@@ -110,7 +132,7 @@ public class FileChooserController extends Controller {
                             sendData = null;
                             fis.close();
                             System.gc();
-                        }
+                        }*/
                     }
                     status.appendText("All Files uploaded\n");
 

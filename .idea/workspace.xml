@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
+      <artifact name="JAVAFX-SECRET-MESSAGING-LINUX-APP:jar" />
       <artifact name="SECRETMESSAGING:jar" />
     </artifacts-to-build>
   </component>
@@ -9,12 +10,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="099cf42d-c374-4003-a57b-149ca6a3dd7c" name="Changes" comment="removed classpath from MANIFEST.MF file, which was causing the jar to not execute properly">
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/SECRETMESSAGING_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/SECRETMESSAGING_jar.xml" afterDir="false" />
+    <list default="true" id="099cf42d-c374-4003-a57b-149ca6a3dd7c" name="Changes" comment="nas implementation started">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/JAVAFX_SECRET_MESSAGING_LINUX_APP/SECRETMESSAGINGLINUX.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/JAVAFX_SECRET_MESSAGING_LINUX_APP/SECRETMESSAGINGLINUX.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/SECRETMESSAGING/SECRETMESSAGING.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/SECRETMESSAGING/SECRETMESSAGING.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/FileChooserController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/FileChooserController$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/FileChooserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/FileChooserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/FileChooserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/FileChooserController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,21 +154,6 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
 }</component>
-  <component name="RunManager" selected="Application.Javafx">
-    <configuration name="JAVAFX-SECRET-MESSAGING-APP.jar (1)" type="JarApplication" temporary="true">
-      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/JAVAFX_SECRET_MESSAGING_APP_jar/JAVAFX-SECRET-MESSAGING-APP.jar" />
-      <method v="2" />
-    </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="JAR Application.JAVAFX-SECRET-MESSAGING-APP.jar (1)" />
-        <item itemvalue="JAR Application.JAVAFX-SECRET-MESSAGING-APP.jar (1)" />
-        <item itemvalue="JAR Application.JAVAFX-SECRET-MESSAGING-APP.jar (1)" />
-        <item itemvalue="JAR Application.JAVAFX-SECRET-MESSAGING-APP.jar (1)" />
-        <item itemvalue="JAR Application.JAVAFX-SECRET-MESSAGING-APP.jar (1)" />
-      </list>
-    </recent_temporary>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

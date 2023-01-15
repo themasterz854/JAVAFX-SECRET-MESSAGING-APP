@@ -91,7 +91,11 @@ public class FileChooserController extends Controller {
                             for (byte x : digest) {
                                 hash.append(String.format("%02x", x));
                             }
+                            System.out.println("size before encryption " + sendData.length);
+
                             sendData = aes.encrypt(sendData);
+                            System.gc();
+                            System.out.println("Size after encryption " + sendData.length);
                             status.appendText("Uploading file " + file.getName() + "\n");
                             dout.writeUTF(aes.encrypt(mode));
                             dout.flush();

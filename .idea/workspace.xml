@@ -345,7 +345,14 @@
       <option name="project" value="LOCAL" />
       <updated>1673764273568</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="test of chunk file transfer is complete">
+      <created>1674150165447</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1674150165447</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -365,12 +372,12 @@
             <list>
               <RecentGroup>
                 <option name="FILTER_VALUES">
-                  <option value="local" />
+                  <option value="master" />
                 </option>
               </RecentGroup>
               <RecentGroup>
                 <option name="FILTER_VALUES">
-                  <option value="master" />
+                  <option value="local" />
                 </option>
               </RecentGroup>
             </list>
@@ -406,7 +413,8 @@
     <MESSAGE value="nas implementation started" />
     <MESSAGE value="delete functionality implemented, I guess NAS is done&#10;I forgot to upload artifacts (JARS)" />
     <MESSAGE value="starting the most difficult task so far, file splitting and transfering in chunks" />
-    <option name="LAST_COMMIT_MESSAGE" value="starting the most difficult task so far, file splitting and transfering in chunks" />
+    <MESSAGE value="test of chunk file transfer is complete" />
+    <option name="LAST_COMMIT_MESSAGE" value="test of chunk file transfer is complete" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />

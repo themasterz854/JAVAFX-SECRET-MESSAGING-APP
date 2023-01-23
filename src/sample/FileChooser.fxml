@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0" styleClass="filechooser"
-            stylesheets="@design.css" xmlns="http://javafx.com/javafx/17.0.2-ea"
+            stylesheets="@design.css" xmlns="http://javafx.com/javafx/19"
             fx:controller="sample.FileChooserController">
     <children>
         <Button fx:id="select_one" layoutX="14.0" layoutY="302.0" mnemonicParsing="false" onAction="#selectafile"
@@ -14,11 +14,13 @@
         <ListView fx:id="sendlist" layoutX="266.0" layoutY="18.0" opacity="0.7" prefHeight="363.0" prefWidth="303.0"/>
         <Button fx:id="sendfiles" layoutX="90.0" layoutY="361.0" mnemonicParsing="false" onAction="#sendthefiles"
                 text="Send"/>
-        <TextArea fx:id="status" editable="false" layoutX="14.0" layoutY="68.0" prefHeight="200.0" prefWidth="200.0"
+        <TextArea fx:id="status" editable="false" layoutX="14.0" layoutY="59.0" prefHeight="200.0" prefWidth="200.0"
                   promptText="STATUS" wrapText="true">
             <font>
                 <Font size="24.0"/>
             </font>
         </TextArea>
+        <ProgressBar fx:id="pb" focusTraversable="false" layoutX="14.0" layoutY="25.0" prefWidth="200.0"
+                     progress="0.0"/>
     </children>
 </AnchorPane>

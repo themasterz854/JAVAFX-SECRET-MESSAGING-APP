@@ -4,13 +4,16 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
+import javafx.scene.text.Text;
 
 import java.io.*;
 import java.net.Socket;
 import java.security.MessageDigest;
 
+import static java.lang.Math.round;
 import static sample.Main.aes;
 
 
@@ -19,7 +22,12 @@ public class NASListController extends FileChooserController {
     private ListView<String> FileList;
 
     @FXML
+    private ProgressBar receivepb;
+    @FXML
     private TextArea receivestatus;
+
+    @FXML
+    private Text receivedprogress;
 
     private File directory = new File(String.format("%s/Downloads", System.getProperty("user.home").replace('\\', '/')));
 
@@ -53,14 +61,16 @@ public class NASListController extends FileChooserController {
 
             @Override
             protected Thread call() throws Exception {
+                updateProgress(0.0, 1);
+
                 ObservableList<String> selectedarray = FileList.getSelectionModel().getSelectedItems();
                 din = new DataInputStream(s.getInputStream());
                 dout = new DataOutputStream(s.getOutputStream());
                 try {
                     MessageDigest md = MessageDigest.getInstance("SHA-256");
-
+                    long totalsize = din.readLong();
+                    long receivedsofar = 0;
                     for (String ignored : selectedarray) {
-
                         String str = aes.decrypt(din.readUTF());
                         if (str.equals("%file%")) {
                             String hash = aes.decrypt(din.readUTF());
@@ -70,10 +80,12 @@ public class NASListController extends FileChooserController {
                             byte[] receivedData = new byte[fileSize];
                             din.readFully(receivedData);
                             receivedData = aes.decrypt(receivedData);
-
                             FileOutputStream fos = new FileOutputStream(directory.getAbsolutePath() + "/" + fileName);
                             fos.write(receivedData, 0, receivedData.length);
                             fos.close();
+                            receivedsofar += receivedData.length;
+                            updateProgress(receivedsofar, totalsize);
+                            receivedprogress.setText(round(((double) receivedsofar / totalsize) * 100) + "%");
                             receivedData = null;
                             System.gc();
                         }
@@ -87,7 +99,10 @@ public class NASListController extends FileChooserController {
                 return null;
             }
         };
+        receivepb.setProgress(0.0);
         new Thread(task).start();
+        receivepb.progressProperty().bind(task.progressProperty());
+
     }
     public void receivefile() throws IOException {
         StringBuilder finallist = new StringBuilder();

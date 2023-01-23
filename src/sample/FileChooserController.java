@@ -5,7 +5,9 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
 import java.io.DataInputStream;
@@ -16,11 +18,16 @@ import java.net.Socket;
 import java.security.MessageDigest;
 import java.util.List;
 
+import static java.lang.Math.round;
 import static sample.Main.aes;
 
 
 public class FileChooserController extends Controller {
 
+    @FXML
+    protected ProgressBar pb;
+    @FXML
+    protected Text sentprogress;
     @FXML
     protected Button select_one, select_multiple, sendfiles;
     @FXML
@@ -75,31 +82,46 @@ public class FileChooserController extends Controller {
                 int i;
                 File file;
                 FileInputStream fis;
+                updateProgress(0.0, 1);
 
                 int n = sendlist.getItems().size();
                 try {
+                    long transferredsofar = 0;
+                    long totalsize = 0;
+                    for (i = 0; i < n; i++) {
+                        totalsize += new File(sendlist.getItems().get(i)).length();
+                    }
                     MessageDigest md = MessageDigest.getInstance("SHA-256");
                     int filebuffer = 1024 * 1024 * 75;
                     byte[] sendData = new byte[filebuffer];
                     StringBuilder hash;
                     dout.writeUTF(aes.encrypt(mode));
                     dout.flush();
+                    dout.writeInt(n);
+                    dout.flush();
                     for (i = 0; i < n; i++) {
                         file = new File(sendlist.getItems().get(i));
                         fis = new FileInputStream(file);
                         dout.writeLong(file.length());
                         dout.flush();
+                        dout.writeUTF(file.getName());
+                        dout.flush();
                         String response = din.readUTF();
                         System.out.println(response);
                         int read;
+
                         while ((read = fis.read(sendData)) > 0) {
 
                             dout.writeInt(read);
                             dout.flush();
-                            System.out.println("sent bytes " + read);
+
                             dout.write(sendData, 0, read);
                             dout.flush();
-
+                            System.out.println("sent bytes " + read);
+                            System.out.println(din.readUTF());
+                            transferredsofar += read;
+                            updateProgress(transferredsofar, totalsize);
+                            sentprogress.setText(round(((double) transferredsofar / totalsize) * 100) + "%");
                         }
                         dout.writeInt(read);
                         dout.flush();
@@ -144,7 +166,12 @@ public class FileChooserController extends Controller {
                 return null;
             }
         };
+        pb.setProgress(0.0);
+
         new Thread(task).start();
+
+        pb.progressProperty().bind(task.progressProperty());
+
     }
     public void sendthefiles() {
         status.appendText("\nUploading the files\n");

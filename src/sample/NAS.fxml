@@ -27,13 +27,14 @@
             </font>
         </TextArea>
         <Button layoutX="322.0" layoutY="368.0" mnemonicParsing="false" onAction="#deletethefiles" text="Delete"/>
-        <ProgressBar fx:id="pb" layoutX="14.0" layoutY="96.0" prefHeight="25.0" prefWidth="246.0" progress="0.0"/>
-        <ProgressBar fx:id="receivepb" focusTraversable="false" layoutX="320.0" layoutY="96.0" prefHeight="25.0"
+        <ProgressBar fx:id="pb" layoutX="14.0" layoutY="96.0" prefHeight="25.0" prefWidth="246.0" progress="0.0"
+                     style="-fx-accent: black;"/>
+        <ProgressBar fx:id="receivepb" focusTraversable="false" layoutX="306.0" layoutY="96.0" prefHeight="25.0"
                      prefWidth="238.0" progress="0.0" style="-fx-accent: black;"/>
-        <Text fx:id="receivedprogress" layoutX="568.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0%"
-              wrappingWidth="25.0"/>
+        <Text fx:id="receivedprogress" layoutX="558.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0%"
+              wrappingWidth="33.0"/>
         <Text fx:id="sentprogress" layoutX="267.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0%"
-              wrappingWidth="25.0"/>
+              wrappingWidth="33.0"/>
 
     </children>
 </AnchorPane>

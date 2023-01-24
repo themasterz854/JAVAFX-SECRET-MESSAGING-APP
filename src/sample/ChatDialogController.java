@@ -54,23 +54,30 @@ public class ChatDialogController extends Controller {
         String fileName;
         String hash;
         byte[] receivedData;
-        FileOutputStream fos;
+        FileOutputStream fos = null;
         while (din.available() > 0) {
             try {
                 String str = aes.decrypt(din.readUTF());
                 if (str.equals("%file%")) {
-                    hash = aes.decrypt(din.readUTF());
+                    int actualreceived, received;
                     fileName = aes.decrypt(din.readUTF());
+                    while (true) {
+                        actualreceived = Integer.parseInt(aes.decrypt(din.readUTF()));
+                        if (actualreceived < 0) {
+                            break;
+                        }
+                        received = Integer.parseInt(aes.decrypt(din.readUTF()));
+                        receivedData = new byte[received];
+                        din.readFully(receivedData);
+                        receivedData = aes.decrypt(receivedData);
+                        fos = new FileOutputStream(directory.getAbsolutePath() + "/" + fileName);
+                        fos.write(receivedData, 0, receivedData.length);
+                    }
+                    hash = aes.decrypt(din.readUTF());
+
+                    fos.close();
                     myta.appendText("Receiving hash for file " + fileName + "\n" + hash + "\n");
                     ta.appendText("\n\n");
-                    int fileSize = Integer.parseInt(aes.decrypt(din.readUTF()));
-                    receivedData = new byte[fileSize];
-                    din.readFully(receivedData);
-                    receivedData = aes.decrypt(receivedData);
-                    myta.appendText("\n" + receivedData.length);
-                    fos = new FileOutputStream(directory.getAbsolutePath() + "/" + fileName);
-                    fos.write(receivedData, 0, receivedData.length);
-                    fos.close();
                     receivedData = null;
                     System.gc();
                 } else {

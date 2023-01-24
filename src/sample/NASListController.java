@@ -68,28 +68,41 @@ public class NASListController extends FileChooserController {
                 dout = new DataOutputStream(s.getOutputStream());
                 try {
                     MessageDigest md = MessageDigest.getInstance("SHA-256");
-                    long totalsize = din.readLong();
+                    long totalsize = Long.parseLong(aes.decrypt(din.readUTF()));
                     long receivedsofar = 0;
+                    FileOutputStream fos = null;
+                    byte[] receivedData;
                     for (String ignored : selectedarray) {
                         String str = aes.decrypt(din.readUTF());
-                        if (str.equals("%file%")) {
-                            String hash = aes.decrypt(din.readUTF());
+
+                        if (str.equals("%NASFile%")) {
+                            int actualreceived, received;
                             String fileName = aes.decrypt(din.readUTF());
                             receivestatus.appendText("Receiving file " + fileName + "\n");
-                            int fileSize = Integer.parseInt(aes.decrypt(din.readUTF()));
-                            byte[] receivedData = new byte[fileSize];
-                            din.readFully(receivedData);
-                            receivedData = aes.decrypt(receivedData);
-                            FileOutputStream fos = new FileOutputStream(directory.getAbsolutePath() + "/" + fileName);
-                            fos.write(receivedData, 0, receivedData.length);
+                            fos = new FileOutputStream(directory.getAbsolutePath() + "/" + fileName);
+                            while (true) {
+                                actualreceived = Integer.parseInt(aes.decrypt(din.readUTF()));
+                                if (actualreceived < 0) {
+                                    break;
+                                }
+                                receivedsofar += actualreceived;
+                                received = Integer.parseInt(aes.decrypt(din.readUTF()));
+                                receivedData = new byte[received];
+                                din.readFully(receivedData);
+                                receivedData = aes.decrypt(receivedData);
+                                fos.write(receivedData, 0, receivedData.length);
+                                dout.writeUTF(aes.encrypt("Client ACK"));
+                                dout.flush();
+                                updateProgress(receivedsofar, totalsize);
+                                receivedprogress.setText(round(((double) receivedsofar / totalsize) * 100) + "%");
+                            }
+                            StringBuilder hash = new StringBuilder(aes.decrypt(din.readUTF()));
+                            System.out.println("receiving hash " + hash);
                             fos.close();
-                            receivedsofar += receivedData.length;
-                            updateProgress(receivedsofar, totalsize);
-                            receivedprogress.setText(round(((double) receivedsofar / totalsize) * 100) + "%");
-                            receivedData = null;
-                            System.gc();
                         }
                     }
+                    receivedData = null;
+                    System.gc();
                     receivestatus.appendText("All files received\n");
 
                 } catch (Exception e) {
@@ -129,6 +142,9 @@ public class NASListController extends FileChooserController {
         dout.writeUTF(aes.encrypt("%delete%"));
         dout.flush();
         receivestatus.appendText("Deleting files on NAS Server\n");
+        for (String ignored : selectedarray) {
+            receivestatus.appendText(aes.decrypt(din.readUTF()));
+        }
         receivestatus.appendText(aes.decrypt(din.readUTF()));
         refresh();
     }

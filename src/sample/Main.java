@@ -132,9 +132,11 @@ class AES {
     private static final String aesEncryptionAlgorithm = "AES";
 
     public String encrypt(String plainText) {
+
         String encryptedText = "";
         try {
             Cipher cipher = Cipher.getInstance(cipherTransformation);
+
             byte[] key = encryptionKey.getBytes(characterEncoding);
             SecretKeySpec secretKey = new SecretKeySpec(key, aesEncryptionAlgorithm);
             IvParameterSpec ivparameterspec = new IvParameterSpec(key);
@@ -180,7 +182,7 @@ class AES {
             decryptedText = new String(cipher.doFinal(cipherText), StandardCharsets.UTF_8);
 
         } catch (Exception E) {
-            System.err.println("decrypt Exception : " + E.getMessage());
+            System.err.println("Decrypt Exception : " + E.getMessage());
         }
         return decryptedText;
     }
@@ -198,11 +200,10 @@ class AES {
             decryptedText = cipher.doFinal(cipherText);
 
         } catch (Exception E) {
-            System.err.println("decrypt Exception : " + E.getMessage());
+            System.err.println("Decrypt byte Exception : " + E.getMessage());
         }
         return decryptedText;
     }
-
 
 }
 
@@ -213,6 +214,8 @@ abstract class Controller {
 }
 
 public class Main extends Application {
+
+    public static int filebuffer = 1024 * 1024 * 75;
     public static int flag = 0;
     public static AES aes = new AES();
 

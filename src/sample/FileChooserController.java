@@ -20,6 +20,7 @@ import java.util.List;
 
 import static java.lang.Math.round;
 import static sample.Main.aes;
+import static sample.Main.filebuffer;
 
 
 public class FileChooserController extends Controller {
@@ -92,69 +93,51 @@ public class FileChooserController extends Controller {
                         totalsize += new File(sendlist.getItems().get(i)).length();
                     }
                     MessageDigest md = MessageDigest.getInstance("SHA-256");
-                    int filebuffer = 1024 * 1024 * 75;
+
                     byte[] sendData = new byte[filebuffer];
                     StringBuilder hash;
                     dout.writeUTF(aes.encrypt(mode));
                     dout.flush();
-                    dout.writeInt(n);
+                    dout.writeUTF(aes.encrypt(Integer.toString(n)));
                     dout.flush();
                     for (i = 0; i < n; i++) {
                         file = new File(sendlist.getItems().get(i));
+                        status.appendText("Sending file " + file.getName());
                         fis = new FileInputStream(file);
-                        dout.writeLong(file.length());
-                        dout.flush();
-                        dout.writeUTF(file.getName());
-                        dout.flush();
-                        String response = din.readUTF();
+                        String response = aes.decrypt(din.readUTF());
                         System.out.println(response);
+                        dout.writeUTF(aes.encrypt(file.getName()));
+                        dout.flush();
+
                         int read;
-
                         while ((read = fis.read(sendData)) > 0) {
-
-                            dout.writeInt(read);
+                            byte[] readbytes = new byte[read];
+                            System.arraycopy(sendData, 0, readbytes, 0, read);
+                            md.update(readbytes);
+                            byte[] encryptedSendData = aes.encrypt(readbytes);
+                            int encryptedsize = encryptedSendData.length;
+                            dout.writeUTF(aes.encrypt(Integer.toString(read)));
                             dout.flush();
-
-                            dout.write(sendData, 0, read);
+                            dout.writeUTF(aes.encrypt(Integer.toString(encryptedsize)));
+                            dout.flush();
+                            dout.write(encryptedSendData, 0, encryptedsize);
                             dout.flush();
                             System.out.println("sent bytes " + read);
-                            System.out.println(din.readUTF());
+                            System.out.println(aes.decrypt(din.readUTF()));
                             transferredsofar += read;
                             updateProgress(transferredsofar, totalsize);
                             sentprogress.setText(round(((double) transferredsofar / totalsize) * 100) + "%");
                         }
-                        dout.writeInt(read);
+                        dout.writeUTF(aes.encrypt(Integer.toString(read)));
                         dout.flush();
                         System.out.println("sent the file");
-                        /*
-
-                        if (fis.read(sendData) != -1) {
-                            md.update(sendData);
-                            byte[] digest = md.digest();
-                            hash = new StringBuilder();
-                            for (byte x : digest) {
-                                hash.append(String.format("%02x", x));
-                            }
-                            System.out.println("size before encryption " + sendData.length);
-
-                            sendData = aes.encrypt(sendData);
-                            System.gc();
-                            System.out.println("Size after encryption " + sendData.length);
-                            status.appendText("Uploading file " + file.getName() + "\n");
-                            dout.writeUTF(aes.encrypt(mode));
-                            dout.flush();
-                            //dout.writeUTF(aes.encrypt(hash.toString()));
-                            //dout.flush();
-                            dout.writeUTF(aes.encrypt(file.getName()));
-                            dout.flush();
-                            dout.writeUTF(aes.encrypt(Integer.toString(sendData.length)));
-                            dout.flush();
-                            dout.write(sendData, 0, sendData.length);
-                            dout.flush();
-                            sendData = null;
-                            fis.close();
-                            System.gc();
-                        }*/
+                        byte[] digest = md.digest();
+                        hash = new StringBuilder();
+                        for (byte x : digest) {
+                            hash.append(String.format("%02x", x));
+                        }
+                        dout.writeUTF(aes.encrypt(hash.toString()));
+                        dout.flush();
                     }
                     status.appendText("All Files uploaded\n");
 

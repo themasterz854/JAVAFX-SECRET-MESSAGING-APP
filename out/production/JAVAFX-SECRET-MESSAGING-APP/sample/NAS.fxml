@@ -1,31 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0" styleClass="filechooser"
-            stylesheets="@design.css" xmlns="http://javafx.com/javafx/17.0.2-ea"
-            fx:controller="sample.NASListController">
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="filechooser" stylesheets="@design.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.NASListController">
     <children>
-        <Button fx:id="select_one" layoutX="14.0" layoutY="368.0" mnemonicParsing="false" onAction="#selectafile"
-                text="Select a file"/>
-        <Button fx:id="select_multiple" layoutX="101.0" layoutY="368.0" mnemonicParsing="false"
-                onAction="#selectmultiplefiles" text="Select multiple files"/>
-        <ListView fx:id="FileList" layoutX="300.0" layoutY="95.0" opacity="0.7" prefHeight="268.0" prefWidth="293.0"/>
-        <Button layoutX="410.0" layoutY="368.0" mnemonicParsing="false" onAction="#receivefile" text="Receive"/>
-        <Button layoutX="530.0" layoutY="368.0" mnemonicParsing="false" onAction="#refresh" text="Refresh"/>
-        <ListView fx:id="sendlist" layoutX="14.0" layoutY="96.0" opacity="0.7" prefHeight="268.0" prefWidth="265.0"/>
-        <Button fx:id="sendfiles" layoutX="236.0" layoutY="368.0" mnemonicParsing="false" onAction="#uploadthefiles"
-                text="Send"/>
-        <TextArea fx:id="status" editable="false" layoutX="14.0" layoutY="7.0" prefHeight="80.0" prefWidth="265.0"
-                  text="Upload STATUS" wrapText="true"/>
-        <TextArea fx:id="receivestatus" editable="false" layoutX="300.0" layoutY="7.0" prefHeight="80.0"
-                  prefWidth="293.0" text="Receive STATUS" wrapText="true">
+        <Button fx:id="select_one" layoutX="14.0" layoutY="368.0" mnemonicParsing="false" onAction="#selectafile" text="Select a file" />
+        <Button fx:id="select_multiple" layoutX="101.0" layoutY="368.0" mnemonicParsing="false" onAction="#selectmultiplefiles" text="Select multiple files" />
+        <ListView fx:id="FileList" layoutX="300.0" layoutY="127.0" opacity="0.7" prefHeight="236.0" prefWidth="293.0" />
+        <Button layoutX="410.0" layoutY="368.0" mnemonicParsing="false" onAction="#receivefile" text="Receive" />
+        <Button layoutX="530.0" layoutY="368.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+        <ListView fx:id="sendlist" layoutX="14.0" layoutY="128.0" opacity="0.7" prefHeight="236.0" prefWidth="265.0" />
+        <Button fx:id="sendfiles" layoutX="236.0" layoutY="368.0" mnemonicParsing="false" onAction="#uploadthefiles" text="Send" />
+        <TextArea fx:id="status" editable="false" layoutX="14.0" layoutY="7.0" prefHeight="80.0" prefWidth="265.0" text="Upload STATUS&#10;" wrapText="true" />
+        <TextArea fx:id="receivestatus" editable="false" layoutX="300.0" layoutY="7.0" prefHeight="80.0" prefWidth="293.0" text="Receive STATUS&#10;" wrapText="true">
             <font>
-                <Font size="14.0"/>
+                <Font size="14.0" />
             </font>
         </TextArea>
-        <Button layoutX="322.0" layoutY="368.0" mnemonicParsing="false" onAction="#deletethefiles" text="Delete"/>
+        <Button layoutX="322.0" layoutY="368.0" mnemonicParsing="false" onAction="#deletethefiles" text="Delete" />
+        <ProgressBar fx:id="pb" layoutX="14.0" layoutY="96.0" prefHeight="25.0" prefWidth="246.0" progress="0.0" style="-fx-accent: black;" />
+        <ProgressBar fx:id="receivepb" focusTraversable="false" layoutX="306.0" layoutY="96.0" prefHeight="25.0" prefWidth="238.0" progress="0.0" style="-fx-accent: black;" />
+        <Text fx:id="receivedprogress" layoutX="558.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0%" wrappingWidth="33.0" />
+        <Text fx:id="sentprogress" layoutX="267.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0%" wrappingWidth="33.0" />
 
     </children>
 </AnchorPane>

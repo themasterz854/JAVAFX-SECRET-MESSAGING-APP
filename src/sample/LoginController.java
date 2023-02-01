@@ -163,12 +163,16 @@ public class LoginController extends Controller {
             String server_ip_string = serverip.getText().trim().split(":")[0];
             int server_port = Integer.parseInt(serverip.getText().trim().split(":")[1]);
             s = new Socket(server_ip_string, server_port);
+            System.out.println(s.getLocalPort());
 
             cs = new Socket(server_ip_string, server_port);
+            System.out.println(cs.getLocalPort());
 
             ds = new Socket(server_ip_string, server_port);
+            System.out.println(ds.getLocalPort());
 
             us = new Socket(server_ip_string, server_port);
+            System.out.println(us.getLocalPort());
 
         } catch (Exception e) {
             status2.setText("Server not running at that ip");

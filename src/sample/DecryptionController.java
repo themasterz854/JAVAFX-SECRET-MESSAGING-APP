@@ -17,6 +17,7 @@ public class DecryptionController extends Controller {
 
     public void transferdata(Socket s) {
         this.s = s;
+
     }
 
     public void decryptrequest() {

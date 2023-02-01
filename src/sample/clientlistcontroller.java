@@ -100,7 +100,7 @@ public class clientlistcontroller extends Controller {
             Chatscreen.setScene(ChatScene);
             Chatscreen.setTitle("Chatting with " + currentchat);
             ChatDialogController cdc = loader.getController();
-            cdc.transferdata(cid, s);
+            cdc.transferdata(cid, s, cs, ds, us);
             cdc.run_task();
             Chatscreen.setResizable(false);
             Chatscreen.show();

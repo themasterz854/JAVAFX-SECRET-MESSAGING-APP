@@ -208,9 +208,9 @@ class AES {
 }
 
 abstract class Controller {
-    protected Socket s;
-    protected DataOutputStream dout;
-    protected DataInputStream din;
+    protected Socket s, us, ds, cs;
+    protected DataOutputStream dout, UploadDout, DownloadDout;
+    protected DataInputStream din, UploadDin, DownloadDin;
 }
 
 public class Main extends Application {
@@ -222,7 +222,7 @@ public class Main extends Application {
     public static String serveripaddress;
     public static int serverport;
     private DataOutputStream dout;
-    private Socket s;
+    private Socket s, cs, ds, us;
 
     public static void main(String[] args) {
         launch(args);
@@ -245,6 +245,9 @@ public class Main extends Application {
             if (flag == 1) {
                 LoginController lc = loader.getController();
                 s = lc.getSocket();
+                cs = lc.getChatSocket();
+                ds = lc.getDownloadSocket();
+                us = lc.getUploadSocket();
                 serveripaddress = ((InetSocketAddress) s.getRemoteSocketAddress()).getAddress().getHostAddress();
                 serverport = s.getPort();
                 System.out.println("Server address " + serveripaddress + ":" + serverport);
@@ -273,7 +276,7 @@ public class Main extends Application {
                 loader = new FXMLLoader(getClass().getResource("app.fxml"));
                 root = loader.load();
                 AppController ac = loader.getController();
-                ac.transferdata(s, username);
+                ac.transferdata(s, cs, ds, us, username);
                 scene = new Scene(root);
                 primaryStage.setScene(scene);
                 primaryStage.setResizable(false);

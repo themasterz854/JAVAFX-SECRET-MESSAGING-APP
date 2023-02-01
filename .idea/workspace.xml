@@ -12,22 +12,22 @@
   <component name="ChangeListManager">
     <list default="true" id="4382f61d-d9b6-4455-aea4-25678d76da82" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/JAVAFX_SECRET_MESSAGING_LINUX_APP/SECRETMESSAGINGLINUX.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/JAVAFX_SECRET_MESSAGING_LINUX_APP/SECRETMESSAGINGLINUX.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/SECRETMESSAGING/SECRETMESSAGING.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/SECRETMESSAGING/SECRETMESSAGING.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/ChatDialogController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/ChatDialogController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/ChatDialogController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/ChatDialogController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/FileChooser.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/FileChooser.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/Controller.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/Controller.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/FileChooserController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/FileChooserController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/FileChooserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/FileChooserController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/NAS.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/NAS.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/NASListController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/NASListController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/NASListController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/NASListController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/AppController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/AppController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/ChatDialogController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/ChatDialogController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/DecryptionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/DecryptionController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/FileChooserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/FileChooserController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/LoginController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/NASListController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/NASListController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/clientlistcontroller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/clientlistcontroller.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -149,22 +149,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Zaid/IdeaProjects/JAVAFX-SECRET-MESSAGING-APP&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Downloaded.Files.Path.Enabled": "false",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "last_opened_file_path": "C:/Users/Zaid/IdeaProjects/JAVAFX-SECRET-MESSAGING-APP",
+    "project.structure.last.edited": "Artifacts",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "inlay.hints"
   }
-}</component>
+}]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

@@ -38,9 +38,12 @@ public class ChatDialogController extends Controller {
     private File directory = new File(String.format("%s/Downloads", System.getProperty("user.home").replace('\\', '/')));
     private final DirectoryChooser dc = new DirectoryChooser();
 
-    public void transferdata(int cid, Socket s) {
+    public void transferdata(int cid, Socket s, Socket cs, Socket ds, Socket us) {
         id = cid;
         this.s = s;
+        this.cs = cs;
+        this.ds = ds;
+        this.us = us;
     }
 
     public void direchooser() {
@@ -206,7 +209,7 @@ public class ChatDialogController extends Controller {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("FileChooser.fxml"));
             Parent root = loader.load();
             FileChooserController fcc = loader.getController();
-            fcc.transferdata(s);
+            fcc.transferdata(s, us);
             Scene list_scene = new Scene(root);
             file_chooser.setScene(list_scene);
             file_chooser.setResizable(false);

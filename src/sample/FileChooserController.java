@@ -36,8 +36,10 @@ public class FileChooserController extends Controller {
     @FXML
     protected TextArea status;
 
-    public void transferdata(Socket s) {
+
+    public void transferdata(Socket s, Socket us) {
         this.s = s;
+        this.us = us;
     }
 
     public void selectafile() {
@@ -76,11 +78,11 @@ public class FileChooserController extends Controller {
 
             @Override
             protected Thread call() throws Exception {
-
-
                 dout = new DataOutputStream(s.getOutputStream());
-                din = new DataInputStream(s.getInputStream());
+                UploadDout = new DataOutputStream(us.getOutputStream());
+                UploadDin = new DataInputStream(us.getInputStream());
                 int i;
+
                 File file;
                 FileInputStream fis;
                 updateProgress(0.0, 1);
@@ -98,16 +100,16 @@ public class FileChooserController extends Controller {
                     StringBuilder hash;
                     dout.writeUTF(aes.encrypt(mode));
                     dout.flush();
-                    dout.writeUTF(aes.encrypt(Integer.toString(n)));
-                    dout.flush();
+                    UploadDout.writeUTF(aes.encrypt(Integer.toString(n)));
+                    UploadDout.flush();
                     for (i = 0; i < n; i++) {
                         file = new File(sendlist.getItems().get(i));
-                        status.appendText("Sending file " + file.getName());
+                        status.appendText("Sending file " + file.getName() + "\n");
                         fis = new FileInputStream(file);
-                        String response = aes.decrypt(din.readUTF());
+                        String response = aes.decrypt(UploadDin.readUTF());
                         System.out.println(response);
-                        dout.writeUTF(aes.encrypt(file.getName()));
-                        dout.flush();
+                        UploadDout.writeUTF(aes.encrypt(file.getName()));
+                        UploadDout.flush();
                         byte[] sendData = new byte[filebuffer];
                         byte[] readbytes;
                         byte[] encryptedSendData;
@@ -118,30 +120,30 @@ public class FileChooserController extends Controller {
                             md.update(readbytes);
                             encryptedSendData = aes.encrypt(readbytes);
                             int encryptedsize = encryptedSendData.length;
-                            dout.writeUTF(aes.encrypt(Integer.toString(read)));
-                            dout.flush();
-                            dout.writeUTF(aes.encrypt(Integer.toString(encryptedsize)));
-                            dout.flush();
-                            dout.write(encryptedSendData, 0, encryptedsize);
-                            dout.flush();
+                            UploadDout.writeUTF(aes.encrypt(Integer.toString(read)));
+                            UploadDout.flush();
+                            UploadDout.writeUTF(aes.encrypt(Integer.toString(encryptedsize)));
+                            UploadDout.flush();
+                            UploadDout.write(encryptedSendData, 0, encryptedsize);
+                            UploadDout.flush();
                             System.out.println("sent bytes " + read);
-                            System.out.println(aes.decrypt(din.readUTF()));
+                            System.out.println(aes.decrypt(UploadDin.readUTF()));
                             transferredsofar += read;
                             updateProgress(transferredsofar, totalsize);
                             sentprogress.setText(round(((double) transferredsofar / totalsize) * 100) + "%");
                             sendData = new byte[filebuffer];
                             System.gc();
                         }
-                        dout.writeUTF(aes.encrypt(Integer.toString(read)));
-                        dout.flush();
+                        UploadDout.writeUTF(aes.encrypt(Integer.toString(read)));
+                        UploadDout.flush();
                         System.out.println("sent the file");
                         byte[] digest = md.digest();
                         hash = new StringBuilder();
                         for (byte x : digest) {
                             hash.append(String.format("%02x", x));
                         }
-                        dout.writeUTF(aes.encrypt(hash.toString()));
-                        dout.flush();
+                        UploadDout.writeUTF(aes.encrypt(hash.toString()));
+                        UploadDout.flush();
                         sendData = encryptedSendData = readbytes = null;
                         System.gc();
                     }

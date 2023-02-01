@@ -31,9 +31,10 @@ public class NASListController extends FileChooserController {
 
     private File directory = new File(String.format("%s/Downloads", System.getProperty("user.home").replace('\\', '/')));
 
-    public void transferdata(Socket s) {
+    public void transferdata(Socket s, Socket ds, Socket us) {
         this.s = s;
-
+        this.ds = ds;
+        this.us = us;
         FileList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 

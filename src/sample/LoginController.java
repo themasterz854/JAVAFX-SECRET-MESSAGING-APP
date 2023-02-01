@@ -43,11 +43,14 @@ public class LoginController extends Controller {
     @FXML
     private PasswordField newpassword, newpassword1;
 
-    public void transferdatatonew(Socket s, DataOutputStream dout, DataInputStream din, Label status) {
+    public void transferdatatonew(Socket s, Socket cs, Socket ds, Socket us, DataOutputStream dout, DataInputStream din, Label status) {
         this.s = s;
         this.dout = dout;
         this.din = din;
         this.status = status;
+        this.cs = cs;
+        this.ds = ds;
+        this.us = us;
     }
 
     public String encrypt(String message, PublicKey publicKey) {
@@ -87,6 +90,18 @@ public class LoginController extends Controller {
 
     public Socket getSocket() {
         return s;
+    }
+
+    public Socket getChatSocket() {
+        return cs;
+    }
+
+    public Socket getDownloadSocket() {
+        return ds;
+    }
+
+    public Socket getUploadSocket() {
+        return us;
     }
 
     public String getusername() {
@@ -145,7 +160,15 @@ public class LoginController extends Controller {
         Stage newaccountcreator = new Stage();
 
         try {
-            s = new Socket(serverip.getText().trim().split(":")[0], Integer.parseInt(serverip.getText().trim().split(":")[1]));
+            String server_ip_string = serverip.getText().trim().split(":")[0];
+            int server_port = Integer.parseInt(serverip.getText().trim().split(":")[1]);
+            s = new Socket(server_ip_string, server_port);
+
+            cs = new Socket(server_ip_string, server_port);
+
+            ds = new Socket(server_ip_string, server_port);
+
+            us = new Socket(server_ip_string, server_port);
 
         } catch (Exception e) {
             status2.setText("Server not running at that ip");
@@ -162,7 +185,7 @@ public class LoginController extends Controller {
             Scene newaccount_scene = new Scene(root);
             newaccountcreator.setScene(newaccount_scene);
             LoginController newlc = loader.getController();
-            newlc.transferdatatonew(s, dout, din, status);
+            newlc.transferdatatonew(s, cs, ds, us, dout, din, status);
             newaccountcreator.setOnCloseRequest(windowEvent -> {
                 newaccountcreator.close();
                 System.gc();
@@ -182,9 +205,16 @@ public class LoginController extends Controller {
             return;
         }
         try {
-            s = new Socket(serverip.getText().trim().split(":")[0], Integer.parseInt(serverip.getText().trim().split(":")[1]));
-
-
+            String server_ip_string = serverip.getText().trim().split(":")[0];
+            int server_port = Integer.parseInt(serverip.getText().trim().split(":")[1]);
+            s = new Socket(server_ip_string, server_port);
+            System.out.println(s.getLocalPort());
+            cs = new Socket(server_ip_string, server_port);
+            System.out.println(cs.getLocalPort());
+            ds = new Socket(server_ip_string, server_port);
+            System.out.println(ds.getLocalPort());
+            us = new Socket(server_ip_string, server_port);
+            System.out.println(us.getLocalPort());
         } catch (SocketException e) {
             status.setText("Server not running at that ip");
             return;

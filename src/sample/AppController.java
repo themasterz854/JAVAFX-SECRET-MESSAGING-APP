@@ -15,8 +15,11 @@ import static sample.Main.aes;
 public class AppController extends Controller {
     @FXML
     private Label welcome;
-    public void transferdata(Socket s, String username) {
+    public void transferdata(Socket s, Socket cs, Socket ds, Socket us, String username) {
         this.s = s;
+        this.cs = cs;
+        this.ds = ds;
+        this.us = us;
         welcome.setText("WELCOME " + username);
     }
 
@@ -75,7 +78,7 @@ public class AppController extends Controller {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("NAS.fxml"));
             Parent root = loader.load();
             NASListController naslc = loader.getController();
-            naslc.transferdata(s);
+            naslc.transferdata(s, ds, us);
             Scene list_scene = new Scene(root);
             NASList.setScene(list_scene);
             NASList.setResizable(false);

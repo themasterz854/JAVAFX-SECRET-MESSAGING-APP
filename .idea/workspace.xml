@@ -11,27 +11,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4382f61d-d9b6-4455-aea4-25678d76da82" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/JAVAFX_SECRET_MESSAGING_LINUX_APP_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/JAVAFX_SECRET_MESSAGING_LINUX_APP_jar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/SECRETMESSAGING_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/SECRETMESSAGING_jar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/JAVAFX_SECRET_MESSAGING_LINUX_APP/SECRETMESSAGINGLINUX.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/JAVAFX_SECRET_MESSAGING_LINUX_APP/SECRETMESSAGINGLINUX.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/SECRETMESSAGING/SECRETMESSAGING.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/SECRETMESSAGING/SECRETMESSAGING.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/AES.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/AES.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/ChatDialogController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/ChatDialogController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/ChatDialogController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/ChatDialogController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/Controller.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/Controller.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/FileChooser.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/FileChooser.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/FileChooserController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/FileChooserController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/FileChooserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/FileChooserController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/NAS.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/NAS.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/NASListController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/NASListController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/NASListController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/NASListController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/AppController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/AppController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/ChatDialogController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/ChatDialogController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/FileChooser.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/FileChooser.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/FileChooserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/FileChooserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/LoginController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/NAS.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/NAS.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/NASListController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/NASListController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -389,7 +384,14 @@
       <option name="project" value="LOCAL" />
       <updated>1674460471777</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="send and receive files in chunks of 100 MB implemented">
+      <created>1674541671888</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1674541671888</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -426,7 +428,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="exceptions added" />
     <MESSAGE value="final commit" />
     <MESSAGE value="made linux version, changed ip address format to host on web" />
     <MESSAGE value="updated linux version name" />
@@ -451,7 +452,8 @@
     <MESSAGE value="test of chunk file transfer is complete" />
     <MESSAGE value="test of chunk file transfer is complete (uploading jars)" />
     <MESSAGE value="implemented progress bars" />
-    <option name="LAST_COMMIT_MESSAGE" value="implemented progress bars" />
+    <MESSAGE value="send and receive files in chunks of 100 MB implemented" />
+    <option name="LAST_COMMIT_MESSAGE" value="send and receive files in chunks of 100 MB implemented" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />

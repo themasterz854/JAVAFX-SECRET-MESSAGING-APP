@@ -70,8 +70,10 @@ public class ChatDialogController extends Controller {
                         receivedData = new byte[received];
                         din.readFully(receivedData);
                         receivedData = aes.decrypt(receivedData);
+                        System.gc();
                         fos = new FileOutputStream(directory.getAbsolutePath() + "/" + fileName);
                         fos.write(receivedData, 0, receivedData.length);
+
                     }
                     hash = aes.decrypt(din.readUTF());
 
@@ -209,6 +211,10 @@ public class ChatDialogController extends Controller {
             file_chooser.setScene(list_scene);
             file_chooser.setResizable(false);
             file_chooser.setTitle("File sender");
+            file_chooser.setOnCloseRequest(windowEvent -> {
+                file_chooser.close();
+                System.gc();
+            });
             file_chooser.show();
             myta.appendText("Sending File");
         } catch (Exception e) {

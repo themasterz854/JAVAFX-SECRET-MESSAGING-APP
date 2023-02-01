@@ -74,7 +74,6 @@ public class NASListController extends FileChooserController {
                     byte[] receivedData;
                     for (String ignored : selectedarray) {
                         String str = aes.decrypt(din.readUTF());
-
                         if (str.equals("%NASFile%")) {
                             int actualreceived, received;
                             String fileName = aes.decrypt(din.readUTF());
@@ -88,6 +87,7 @@ public class NASListController extends FileChooserController {
                                 receivedsofar += actualreceived;
                                 received = Integer.parseInt(aes.decrypt(din.readUTF()));
                                 receivedData = new byte[received];
+                                System.gc();
                                 din.readFully(receivedData);
                                 receivedData = aes.decrypt(receivedData);
                                 fos.write(receivedData, 0, receivedData.length);
@@ -100,9 +100,11 @@ public class NASListController extends FileChooserController {
                             System.out.println("receiving hash " + hash);
                             fos.close();
                         }
+                        receivedData = null;
+                        System.gc();
+
                     }
-                    receivedData = null;
-                    System.gc();
+
                     receivestatus.appendText("All files received\n");
 
                 } catch (Exception e) {

@@ -163,7 +163,12 @@ public class LoginController extends Controller {
             newaccountcreator.setScene(newaccount_scene);
             LoginController newlc = loader.getController();
             newlc.transferdatatonew(s, dout, din, status);
+            newaccountcreator.setOnCloseRequest(windowEvent -> {
+                newaccountcreator.close();
+                System.gc();
+            });
             newaccountcreator.showAndWait();
+
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
@@ -198,7 +203,7 @@ public class LoginController extends Controller {
             int keylength;
             keylength = din.readInt();
             byte[] publickeyBytes = new byte[keylength];
-            din.read(publickeyBytes, 0, keylength);
+            din.readFully(publickeyBytes);
             EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publickeyBytes);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             PublicKey publickey = keyFactory.generatePublic(publicKeySpec);
@@ -212,10 +217,6 @@ public class LoginController extends Controller {
             response = decrypt(din.readUTF(), rsaobj.privateKey);
             System.out.println(response);
             aes.encryptionKey = response;
-
-            //dout.writeUTF(encrypt("ABCDEFGHIJKLMNOP", publickey));
-            //dout.flush();
-
             if (username.getText().equals("") || password.getText().equals("")) {
                 status.setText("Username,Password should be non empty");
                 dout.writeUTF(aes.encrypt("%exit%"));

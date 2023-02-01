@@ -23,16 +23,21 @@ public class AppController extends Controller {
     public void get_list() {
         try {
             dout = new DataOutputStream(s.getOutputStream());
-            Stage client_list = new Stage();
+            Stage client_list_stage = new Stage();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("client_list.fxml"));
             Parent root = loader.load();
             clientlistcontroller clc = loader.getController();
             clc.transferdata(s);
             Scene list_scene = new Scene(root);
-            client_list.setScene(list_scene);
+            client_list_stage.setScene(list_scene);
             dout.writeUTF(aes.encrypt("%list%"));
-            client_list.setResizable(false);
-            client_list.show();
+            client_list_stage.setResizable(false);
+            client_list_stage.setOnCloseRequest(windowEvent -> {
+                client_list_stage.close();
+                System.gc();
+            });
+            client_list_stage.show();
+
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
@@ -51,7 +56,12 @@ public class AppController extends Controller {
             dc.run_task();
             decryptstage.setResizable(false);
             decryptstage.setTitle("Decryption Service");
+            decryptstage.setOnCloseRequest(windowEvent -> {
+                decryptstage.close();
+                System.gc();
+            });
             decryptstage.show();
+
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
@@ -69,6 +79,10 @@ public class AppController extends Controller {
             Scene list_scene = new Scene(root);
             NASList.setScene(list_scene);
             NASList.setResizable(false);
+            NASList.setOnCloseRequest(windowEvent -> {
+                NASList.close();
+                System.gc();
+            });
             NASList.show();
         } catch (Exception e) {
             e.printStackTrace();

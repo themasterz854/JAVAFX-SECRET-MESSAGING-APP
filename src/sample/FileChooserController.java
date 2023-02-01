@@ -94,7 +94,7 @@ public class FileChooserController extends Controller {
                     }
                     MessageDigest md = MessageDigest.getInstance("SHA-256");
 
-                    byte[] sendData = new byte[filebuffer];
+
                     StringBuilder hash;
                     dout.writeUTF(aes.encrypt(mode));
                     dout.flush();
@@ -108,13 +108,15 @@ public class FileChooserController extends Controller {
                         System.out.println(response);
                         dout.writeUTF(aes.encrypt(file.getName()));
                         dout.flush();
-
+                        byte[] sendData = new byte[filebuffer];
+                        byte[] readbytes;
+                        byte[] encryptedSendData;
                         int read;
                         while ((read = fis.read(sendData)) > 0) {
-                            byte[] readbytes = new byte[read];
+                            readbytes = new byte[read];
                             System.arraycopy(sendData, 0, readbytes, 0, read);
                             md.update(readbytes);
-                            byte[] encryptedSendData = aes.encrypt(readbytes);
+                            encryptedSendData = aes.encrypt(readbytes);
                             int encryptedsize = encryptedSendData.length;
                             dout.writeUTF(aes.encrypt(Integer.toString(read)));
                             dout.flush();
@@ -127,6 +129,8 @@ public class FileChooserController extends Controller {
                             transferredsofar += read;
                             updateProgress(transferredsofar, totalsize);
                             sentprogress.setText(round(((double) transferredsofar / totalsize) * 100) + "%");
+                            sendData = new byte[filebuffer];
+                            System.gc();
                         }
                         dout.writeUTF(aes.encrypt(Integer.toString(read)));
                         dout.flush();
@@ -138,7 +142,10 @@ public class FileChooserController extends Controller {
                         }
                         dout.writeUTF(aes.encrypt(hash.toString()));
                         dout.flush();
+                        sendData = encryptedSendData = readbytes = null;
+                        System.gc();
                     }
+
                     status.appendText("All Files uploaded\n");
 
 

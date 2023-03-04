@@ -211,6 +211,9 @@ public class LoginController extends Controller {
         try {
             String server_ip_string = serverip.getText().trim().split(":")[0];
             int server_port = Integer.parseInt(serverip.getText().trim().split(":")[1]);
+
+            System.out.println(server_ip_string);
+            System.out.println(server_port);
             s = new Socket(server_ip_string, server_port);
             System.out.println(s.getLocalPort());
             cs = new Socket(server_ip_string, server_port);

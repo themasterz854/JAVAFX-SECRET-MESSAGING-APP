@@ -54,6 +54,7 @@ public class FileChooserController extends Controller {
             sendlist.getItems().add(selected_File.getAbsolutePath());
         } else
             System.out.print("Not valid file");
+        sendfiles.setDisable(false);
     }
 
     public void selectmultiplefiles() {
@@ -71,7 +72,9 @@ public class FileChooserController extends Controller {
             }
         } else
             System.out.print("Not valid file");
+        sendfiles.setDisable(false);
     }
+
 
     public void send_thread(String mode) {
         Task<Thread> task = new Task<>() {
@@ -150,7 +153,6 @@ public class FileChooserController extends Controller {
 
                     status.appendText("All Files uploaded\n");
 
-
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.exit(-1);
@@ -158,8 +160,6 @@ public class FileChooserController extends Controller {
                 return null;
             }
         };
-        pb.setProgress(0.0);
-
         new Thread(task).start();
 
         pb.progressProperty().bind(task.progressProperty());
@@ -168,6 +168,7 @@ public class FileChooserController extends Controller {
     public void sendthefiles() {
         status.appendText("\nUploading the files\n");
         send_thread("%file%");
+        sendfiles.setDisable(true);
     }
 
 }

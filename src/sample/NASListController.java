@@ -3,10 +3,7 @@ package sample;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
 
 import java.io.*;
@@ -27,6 +24,10 @@ public class NASListController extends FileChooserController {
     private TextArea receivestatus;
 
     @FXML
+    private Button deletebutton;
+    @FXML
+    private Button receivebutton;
+    @FXML
     private Text receivedprogress;
 
     private File directory = new File(String.format("%s/Downloads", System.getProperty("user.home").replace('\\', '/')));
@@ -36,6 +37,7 @@ public class NASListController extends FileChooserController {
         this.ds = ds;
         this.us = us;
         FileList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
     }
 
     public void refresh() {
@@ -54,6 +56,8 @@ public class NASListController extends FileChooserController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        receivebutton.setDisable(false);
+        deletebutton.setDisable(false);
 
     }
 
@@ -65,8 +69,8 @@ public class NASListController extends FileChooserController {
                 updateProgress(0.0, 1);
 
                 ObservableList<String> selectedarray = FileList.getSelectionModel().getSelectedItems();
-                din = new DataInputStream(s.getInputStream());
-                dout = new DataOutputStream(s.getOutputStream());
+                din = new DataInputStream(ds.getInputStream());
+                dout = new DataOutputStream(ds.getOutputStream());
                 try {
                     MessageDigest md = MessageDigest.getInstance("SHA-256");
                     long totalsize = Long.parseLong(aes.decrypt(din.readUTF()));
@@ -107,7 +111,7 @@ public class NASListController extends FileChooserController {
                     }
 
                     receivestatus.appendText("All files received\n");
-
+                    receivepb.progressProperty().unbind();
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.exit(-1);
@@ -115,6 +119,7 @@ public class NASListController extends FileChooserController {
                 return null;
             }
         };
+
         receivepb.setProgress(0.0);
         new Thread(task).start();
         receivepb.progressProperty().bind(task.progressProperty());
@@ -132,6 +137,7 @@ public class NASListController extends FileChooserController {
         dout.flush();
         receivestatus.appendText("Receiving files from NAS Server\n");
         receive_thread();
+
     }
 
     public void deletethefiles() throws IOException {
@@ -144,17 +150,25 @@ public class NASListController extends FileChooserController {
         dout.flush();
         dout.writeUTF(aes.encrypt("%delete%"));
         dout.flush();
+
         receivestatus.appendText("Deleting files on NAS Server\n");
+        DownloadDin = new DataInputStream(ds.getInputStream());
         for (String ignored : selectedarray) {
-            receivestatus.appendText(aes.decrypt(din.readUTF()));
+            receivestatus.appendText(aes.decrypt(DownloadDin.readUTF()));
         }
-        receivestatus.appendText(aes.decrypt(din.readUTF()));
+        receivestatus.appendText(aes.decrypt(DownloadDin.readUTF()));
         refresh();
     }
 
     public void uploadthefiles() {
         status.appendText("\nUploading the files to NAS Server\n");
+        FileList.getItems().clear();
+        FileList.getItems().removeAll();
         send_thread("%NASupload%");
+        sendfiles.setDisable(true);
+        receivebutton.setDisable(true);
+        deletebutton.setDisable(true);
+
     }
 
 }

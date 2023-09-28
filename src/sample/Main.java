@@ -217,7 +217,11 @@ public class Main extends Application {
 
     public static int filebuffer = 1024 * 1024 * 75;
     public static int flag = 0;
-    public static AES aes = new AES();
+    public static AES aes;
+
+    static {
+        aes = new AES();
+    }
 
     public static String serveripaddress;
     public static int serverport;
@@ -276,6 +280,7 @@ public class Main extends Application {
                 loader = new FXMLLoader(getClass().getResource("app.fxml"));
                 root = loader.load();
                 AppController ac = loader.getController();
+
                 ac.transferdata(s, cs, ds, us, username);
                 scene = new Scene(root);
                 primaryStage.setScene(scene);

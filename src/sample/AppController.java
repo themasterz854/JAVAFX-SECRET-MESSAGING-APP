@@ -18,6 +18,7 @@ public class AppController extends Controller {
     public void transferdata(Socket s, Socket cs, Socket ds, Socket us, String username) {
         this.s = s;
         this.cs = cs;
+
         this.ds = ds;
         this.us = us;
         welcome.setText("WELCOME " + username);
@@ -30,7 +31,7 @@ public class AppController extends Controller {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("client_list.fxml"));
             Parent root = loader.load();
             clientlistcontroller clc = loader.getController();
-            clc.transferdata(s);
+            clc.transferdata(s, cs, ds, us);
             Scene list_scene = new Scene(root);
             client_list_stage.setScene(list_scene);
             dout.writeUTF(aes.encrypt("%list%"));

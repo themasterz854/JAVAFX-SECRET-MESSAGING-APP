@@ -44,13 +44,13 @@ public class LoginController extends Controller {
     private PasswordField newpassword, newpassword1;
 
     public void transferdatatonew(Socket s, Socket cs, Socket ds, Socket us, DataOutputStream dout, DataInputStream din, Label status) {
-        this.s = s;
+        this.s = s; //server socket
         this.dout = dout;
         this.din = din;
         this.status = status;
-        this.cs = cs;
-        this.ds = ds;
-        this.us = us;
+        this.cs = cs; // chat socket
+        this.ds = ds; // download socket
+        this.us = us; // upload socket
     }
 
     public String encrypt(String message, PublicKey publicKey) {
@@ -253,6 +253,7 @@ public class LoginController extends Controller {
             dout.flush();
             response = decrypt(din.readUTF(), rsaobj.privateKey);
             System.out.println(response);
+            System.out.println(response.length());
             aes.encryptionKey = response;
             if (username.getText().equals("") || password.getText().equals("")) {
                 status.setText("Username,Password should be non empty");
@@ -263,6 +264,8 @@ public class LoginController extends Controller {
             usernamestr = username.getText().trim();
             dout.writeUTF(aes.encrypt((usernamestr + " " + password.getText().trim())));
             dout.flush();
+
+            System.out.println("sent user pass");
             response = aes.decrypt(din.readUTF());
             if (response.equals("ok")) {
                 status.setText("LOGIN SUCCESSFUL");

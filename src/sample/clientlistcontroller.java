@@ -28,8 +28,11 @@ public class clientlistcontroller extends Controller {
     private String currentchat;
     private final List<Button> ButtonList = new ArrayList<>();
 
-    public void transferdata(Socket s) {
+    public void transferdata(Socket s, Socket cs, Socket ds, Socket us) {
         this.s = s;
+        this.cs = cs;
+        this.ds = ds;
+        this.us = us;
     }
 
     public void show() throws IOException {
@@ -100,6 +103,7 @@ public class clientlistcontroller extends Controller {
             Chatscreen.setScene(ChatScene);
             Chatscreen.setTitle("Chatting with " + currentchat);
             ChatDialogController cdc = loader.getController();
+
             cdc.transferdata(cid, s, cs, ds, us);
             cdc.run_task();
             Chatscreen.setResizable(false);

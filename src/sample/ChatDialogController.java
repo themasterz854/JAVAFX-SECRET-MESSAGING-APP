@@ -42,6 +42,7 @@ public class ChatDialogController extends Controller {
         id = cid;
         this.s = s;
         this.cs = cs;
+
         this.ds = ds;
         this.us = us;
     }
@@ -58,6 +59,8 @@ public class ChatDialogController extends Controller {
         String hash;
         byte[] receivedData;
         FileOutputStream fos = null;
+        din = new DataInputStream(cs.getInputStream());
+        dout = new DataOutputStream(cs.getOutputStream());
         while (din.available() > 0) {
             try {
                 String str = aes.decrypt(din.readUTF());
@@ -119,8 +122,8 @@ public class ChatDialogController extends Controller {
             protected Thread call() throws Exception {
 
                 Stage stage;
-                din = new DataInputStream(s.getInputStream());
-                dout = new DataOutputStream(s.getOutputStream());
+                din = new DataInputStream(cs.getInputStream());
+                dout = new DataOutputStream(cs.getOutputStream());
                 stage = (Stage) message.getScene().getWindow();
 
                 while (true) {
@@ -142,7 +145,7 @@ public class ChatDialogController extends Controller {
 
     public void changereceiver() {
         try {
-            dout = new DataOutputStream(s.getOutputStream());
+            dout = new DataOutputStream(cs.getOutputStream());
             dout.writeUTF(aes.encrypt(("%chat% " + id)));
             dout.flush();
         } catch (Exception e) {
@@ -150,7 +153,6 @@ public class ChatDialogController extends Controller {
             System.exit(0);
         }
     }
-
     public void encryption_toggle() {
         String str;
         try {
@@ -187,7 +189,7 @@ public class ChatDialogController extends Controller {
 
     public void send_message() {
         try {
-            dout = new DataOutputStream(s.getOutputStream());
+            dout = new DataOutputStream(cs.getOutputStream());
             dout.writeUTF(aes.encrypt(message.getText()));
             dout.flush();
             if (!encryptflag) {

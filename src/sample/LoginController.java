@@ -13,10 +13,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
@@ -70,7 +67,7 @@ public class LoginController extends Controller {
 
     }
 
-    public String decrypt(String encryptedmessage, PrivateKey privateKey) {
+    public String decrypt(String encryptedmessage, Key privateKey) {
         Cipher decryptCipher;
         String decryptedMessage;
         byte[] encryptedMessageBytes = Base64.getDecoder().decode(encryptedmessage);
@@ -88,6 +85,22 @@ public class LoginController extends Controller {
         return decryptedMessage;
     }
 
+    public byte[] decrypt(byte[] encryptedmessage, Key privateKey) {
+        Cipher decryptCipher;
+        String decryptedMessage;
+        byte[] encryptedMessageBytes = Base64.getDecoder().decode(encryptedmessage);
+        byte[] decryptedMessageBytes;
+        try {
+            decryptCipher = Cipher.getInstance("RSA");
+            decryptCipher.init(Cipher.DECRYPT_MODE, privateKey);
+            decryptedMessageBytes = decryptCipher.doFinal(encryptedMessageBytes);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException |
+                 InvalidKeyException e) {
+            throw new RuntimeException(e);
+        }
+
+        return decryptedMessageBytes;
+    }
     public Socket getSocket() {
         return s;
     }
@@ -156,6 +169,38 @@ public class LoginController extends Controller {
         }
     }
 
+    public void digitalsignature(rsa rsaobj, Key Publickey) throws IOException {
+        DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+        DataInputStream din = new DataInputStream(s.getInputStream());
+        int numberofhashes = Integer.parseInt(decrypt(din.readUTF(), rsaobj.privateKey));
+        int i, j;
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        StringBuilder hash;
+        byte[][] publicencryptedbytesarray = new byte[numberofhashes][];
+        for (i = 0; i < numberofhashes; i++) {
+            publicencryptedbytesarray[i] = new byte[din.readInt()];
+            System.out.println(publicencryptedbytesarray[i].length);
+            dout.writeUTF("ACK");
+
+            din.readFully(publicencryptedbytesarray[i]);
+            dout.writeUTF("ACK");
+            hash = new StringBuilder();
+            for (byte x : publicencryptedbytesarray[i]) {
+                hash.append(String.format("%02x", x));
+            }
+            System.out.println(hash);
+            outputStream.write(decrypt(publicencryptedbytesarray[i], rsaobj.privateKey));
+            System.out.println(i);
+        }
+        byte[] c = outputStream.toByteArray();
+
+        String nope = new String(c, StandardCharsets.UTF_8);
+        nope = decrypt(nope, Publickey);
+        System.out.println(nope);
+        byte[] hashfinal = decrypt(c, Publickey);
+        System.out.println(new String(hashfinal, StandardCharsets.UTF_8));
+
+    }
     public void newuser() {
         Stage newaccountcreator = new Stage();
 
@@ -243,7 +288,7 @@ public class LoginController extends Controller {
             din.readFully(publickeyBytes);
             EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publickeyBytes);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            PublicKey publickey = keyFactory.generatePublic(publicKeySpec);
+            PublicKey serverpublickey = keyFactory.generatePublic(publicKeySpec);
             System.out.println("public key received");
             publicKeyBytes = Files.readAllBytes(publicKeyFile.toPath());
             dout.writeInt(publicKeyBytes.length);
@@ -254,7 +299,10 @@ public class LoginController extends Controller {
             response = decrypt(din.readUTF(), rsaobj.privateKey);
             System.out.println(response);
             System.out.println(response.length());
+
             aes.encryptionKey = response;
+            System.out.println("received aes key");
+            digitalsignature(rsaobj, serverpublickey);
             if (username.getText().equals("") || password.getText().equals("")) {
                 status.setText("Username,Password should be non empty");
                 dout.writeUTF(aes.encrypt("%exit%"));

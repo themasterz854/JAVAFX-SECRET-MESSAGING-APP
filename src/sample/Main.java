@@ -126,10 +126,10 @@ class rsa {
 }
 
 class AES {
-    protected String encryptionKey;
     private static final String characterEncoding = "UTF-8";
     private static final String cipherTransformation = "AES/CBC/PKCS5PADDING";
     private static final String aesEncryptionAlgorithm = "AES";
+    protected String encryptionKey;
 
     public String encrypt(String plainText) {
 
@@ -218,13 +218,13 @@ public class Main extends Application {
     public static int filebuffer = 1024 * 1024 * 75;
     public static int flag = 0;
     public static AES aes;
+    public static String serveripaddress;
+    public static int serverport;
 
     static {
         aes = new AES();
     }
 
-    public static String serveripaddress;
-    public static int serverport;
     private DataOutputStream dout;
     private Socket s, cs, ds, us;
 

@@ -30,7 +30,7 @@ public class NASListController extends FileChooserController {
     @FXML
     private Text receivedprogress;
 
-    private File directory = new File(String.format("%s/Downloads", System.getProperty("user.home").replace('\\', '/')));
+    private final File directory = new File(String.format("%s/Downloads", System.getProperty("user.home").replace('\\', '/')));
 
     public void transferdata(Socket s, Socket ds, Socket us) {
         this.s = s;
@@ -101,8 +101,7 @@ public class NASListController extends FileChooserController {
                                 updateProgress(receivedsofar, totalsize);
                                 receivedprogress.setText(round(((double) receivedsofar / totalsize) * 100) + "%");
                             }
-                            StringBuilder hash = new StringBuilder(aes.decrypt(din.readUTF()));
-                            System.out.println("receiving hash " + hash);
+                            System.out.println("receiving hash " + aes.decrypt(din.readUTF()));
                             fos.close();
                         }
                         receivedData = null;
@@ -125,6 +124,7 @@ public class NASListController extends FileChooserController {
         receivepb.progressProperty().bind(task.progressProperty());
 
     }
+
     public void receivefile() throws IOException {
         StringBuilder finallist = new StringBuilder();
         ObservableList<String> selectedarray = FileList.getSelectionModel().getSelectedItems();

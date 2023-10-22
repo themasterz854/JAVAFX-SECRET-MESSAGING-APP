@@ -15,10 +15,10 @@ import static sample.Main.aes;
 public class AppController extends Controller {
     @FXML
     private Label welcome;
+
     public void transferdata(Socket s, Socket cs, Socket ds, Socket us, String username) {
         this.s = s;
         this.cs = cs;
-
         this.ds = ds;
         this.us = us;
         welcome.setText("WELCOME " + username);

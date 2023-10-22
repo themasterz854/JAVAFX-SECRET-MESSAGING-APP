@@ -20,13 +20,12 @@ import java.util.List;
 import static sample.Main.aes;
 
 public class clientlistcontroller extends Controller {
+    private final List<Button> ButtonList = new ArrayList<>();
     private int cid = 0;
     @FXML
     private Button button1, button2, button3, button4, button5, button6, button7, button8, button9, button10, showbutton;
-
     private Stage stage;
     private String currentchat;
-    private final List<Button> ButtonList = new ArrayList<>();
 
     public void transferdata(Socket s, Socket cs, Socket ds, Socket us) {
         this.s = s;

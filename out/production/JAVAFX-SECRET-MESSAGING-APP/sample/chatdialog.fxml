@@ -4,7 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="ap" onMouseClicked="#changereceiver" pickOnBounds="false" prefHeight="344.0"
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="ap" onMouseClicked="#changereceiver" pickOnBounds="false"
+            prefHeight="344.0"
             prefWidth="551.0" styleClass="chatbg" stylesheets="@design.css"
             xmlns="http://javafx.com/javafx/19" fx:controller="sample.ChatDialogController">
     <children>

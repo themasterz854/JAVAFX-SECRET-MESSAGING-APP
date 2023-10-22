@@ -165,6 +165,7 @@ public class FileChooserController extends Controller {
         pb.progressProperty().bind(task.progressProperty());
 
     }
+
     public void sendthefiles() {
         status.appendText("\nUploading the files\n");
         send_thread("%file%");

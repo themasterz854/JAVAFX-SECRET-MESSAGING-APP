@@ -20,9 +20,10 @@ import static sample.Main.aes;
 
 
 public class ChatDialogController extends Controller {
+    private final String[] queue = new String[10];
+    private final DirectoryChooser dc = new DirectoryChooser();
     @FXML
     private AnchorPane ap;
-    private final String[] queue = new String[10];
     @FXML
     private TextField message;
     @FXML
@@ -36,7 +37,6 @@ public class ChatDialogController extends Controller {
     private TextArea ta, myta;
     private boolean encryptflag = false;
     private File directory = new File(String.format("%s/Downloads", System.getProperty("user.home").replace('\\', '/')));
-    private final DirectoryChooser dc = new DirectoryChooser();
 
     public void transferdata(int cid, Socket s, Socket cs, Socket ds, Socket us) {
         id = cid;
@@ -153,6 +153,7 @@ public class ChatDialogController extends Controller {
             System.exit(0);
         }
     }
+
     public void encryption_toggle() {
         String str;
         try {

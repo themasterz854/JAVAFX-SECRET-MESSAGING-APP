@@ -20,7 +20,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.security.*;
 import java.security.spec.EncodedKeySpec;
-import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.regex.Pattern;
@@ -87,7 +86,6 @@ public class LoginController extends Controller {
 
     public byte[] decrypt(byte[] encryptedmessage, Key privateKey) {
         Cipher decryptCipher;
-        String decryptedMessage;
         byte[] encryptedMessageBytes = Base64.getDecoder().decode(encryptedmessage);
         byte[] decryptedMessageBytes;
         try {
@@ -101,6 +99,7 @@ public class LoginController extends Controller {
 
         return decryptedMessageBytes;
     }
+
     public Socket getSocket() {
         return s;
     }
@@ -121,6 +120,49 @@ public class LoginController extends Controller {
         return usernamestr;
     }
 
+    public boolean keyexchange() {
+
+        try {
+            DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+            DataInputStream din = new DataInputStream(s.getInputStream());
+            rsa rsaobj = new rsa();
+            rsaobj.getPublickey();
+            rsaobj.getPrivatekey();
+            File publicKeyFile = new File("public.key");
+            byte[] publicKeyBytes;
+
+            int keylength;
+            keylength = din.readInt();
+            byte[] publickeyBytes = new byte[keylength];
+            din.readFully(publickeyBytes);
+            EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publickeyBytes);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            PublicKey serverpublickey = keyFactory.generatePublic(publicKeySpec);
+            System.out.println("public key received");
+            publicKeyBytes = Files.readAllBytes(publicKeyFile.toPath());
+            dout.writeInt(publicKeyBytes.length);
+            dout.flush();
+            dout.write(publicKeyBytes);
+            System.out.println("sent public key");
+            dout.flush();
+
+            aes.encryptionKey = decrypt(din.readUTF(), rsaobj.privateKey);
+            System.out.println("received aes key");
+            if (!digitalsignature(rsaobj, serverpublickey)) {
+                status2.setText("HASH VERIFICATION ERROR");
+                return false;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return true;
+
+    }
+
     public void createnewaccount() {
         Stage stage = (Stage) status2.getScene().getWindow();
         try {
@@ -128,7 +170,7 @@ public class LoginController extends Controller {
             Pattern P2 = Pattern.compile("[A-Za-z\\d]*[$-/:-?{-~!\"^_`\\[\\]]");
             Pattern P3 = Pattern.compile("[A-Za-z\\d]*[$-/:-?{-~!\"^_`\\[\\]][A-Za-z\\d]*");
 
-            if (newpassword.getText().equals("") || newusername.getText().equals("") || newpassword1.getText().equals("")) {
+            if (newpassword.getText().isEmpty() || newusername.getText().isEmpty() || newpassword1.getText().isEmpty()) {
                 status.setText("All fields must be non empty");
                 return;
             }
@@ -142,8 +184,11 @@ public class LoginController extends Controller {
                 status.setText("no special characters allowed");
                 return;
             }
+            if (!keyexchange()) {
+                status.setText("KEY EXCHANGE ERROR");
+                return;
+            }
             if (newpassword.getText().equals(newpassword1.getText())) {
-
                 dout.writeUTF(aes.encrypt("%newaccount%"));
                 dout.flush();
 
@@ -169,17 +214,17 @@ public class LoginController extends Controller {
         }
     }
 
-    public void digitalsignature(rsa rsaobj, Key Publickey) throws IOException {
+    public boolean digitalsignature(rsa rsaobj, Key Publickey) throws Exception {
         DataOutputStream dout = new DataOutputStream(s.getOutputStream());
         DataInputStream din = new DataInputStream(s.getInputStream());
         int numberofhashes = Integer.parseInt(decrypt(din.readUTF(), rsaobj.privateKey));
-        int i, j;
+        int i;
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         StringBuilder hash;
         byte[][] publicencryptedbytesarray = new byte[numberofhashes][];
         for (i = 0; i < numberofhashes; i++) {
             publicencryptedbytesarray[i] = new byte[din.readInt()];
-            System.out.println(publicencryptedbytesarray[i].length);
+
             dout.writeUTF("ACK");
 
             din.readFully(publicencryptedbytesarray[i]);
@@ -188,19 +233,27 @@ public class LoginController extends Controller {
             for (byte x : publicencryptedbytesarray[i]) {
                 hash.append(String.format("%02x", x));
             }
-            System.out.println(hash);
+
             outputStream.write(decrypt(publicencryptedbytesarray[i], rsaobj.privateKey));
-            System.out.println(i);
+
         }
         byte[] c = outputStream.toByteArray();
 
-        String nope = new String(c, StandardCharsets.UTF_8);
-        nope = decrypt(nope, Publickey);
-        System.out.println(nope);
-        byte[] hashfinal = decrypt(c, Publickey);
-        System.out.println(new String(hashfinal, StandardCharsets.UTF_8));
 
+        byte[] hashfinal = decrypt(c, Publickey);
+        String hashfinaldisplay = new String(hashfinal, StandardCharsets.UTF_8);
+        System.out.println("RECEIVED " + hashfinaldisplay);
+        MessageDigest hashcomputed = MessageDigest.getInstance("SHA-256");
+        hashcomputed.update(aes.encryptionKey.getBytes());
+        byte[] digest = hashcomputed.digest();
+        StringBuilder hashcomputeddisplay = new StringBuilder();
+        for (byte x : digest) {
+            hashcomputeddisplay.append(String.format("%02x", x));
+        }
+        System.out.println("COMPUTED " + hashcomputeddisplay);
+        return new String(hashcomputeddisplay).equals(hashfinaldisplay);
     }
+
     public void newuser() {
         Stage newaccountcreator = new Stage();
 
@@ -248,8 +301,8 @@ public class LoginController extends Controller {
 
     }
 
-    public void Login() throws IOException {
-        if (serverip.getText().equals("")) {
+    public void Login() throws Exception {
+        if (serverip.getText().isEmpty()) {
             status.setText("pls enter the ip address");
             return;
         }
@@ -273,37 +326,13 @@ public class LoginController extends Controller {
         }
         String response;
         try {
-
             DataOutputStream dout = new DataOutputStream(s.getOutputStream());
             DataInputStream din = new DataInputStream(s.getInputStream());
-            rsa rsaobj = new rsa();
-            rsaobj.getPublickey();
-            rsaobj.getPrivatekey();
-            File publicKeyFile = new File("public.key");
-            byte[] publicKeyBytes;
-
-            int keylength;
-            keylength = din.readInt();
-            byte[] publickeyBytes = new byte[keylength];
-            din.readFully(publickeyBytes);
-            EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publickeyBytes);
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            PublicKey serverpublickey = keyFactory.generatePublic(publicKeySpec);
-            System.out.println("public key received");
-            publicKeyBytes = Files.readAllBytes(publicKeyFile.toPath());
-            dout.writeInt(publicKeyBytes.length);
-            dout.flush();
-            dout.write(publicKeyBytes);
-            System.out.println("sent public key");
-            dout.flush();
-            response = decrypt(din.readUTF(), rsaobj.privateKey);
-            System.out.println(response);
-            System.out.println(response.length());
-
-            aes.encryptionKey = response;
-            System.out.println("received aes key");
-            digitalsignature(rsaobj, serverpublickey);
-            if (username.getText().equals("") || password.getText().equals("")) {
+            if (!keyexchange()) {
+                status2.setText("KEY EXCHANGE ERROR");
+                return;
+            }
+            if (username.getText().isEmpty() || password.getText().isEmpty()) {
                 status.setText("Username,Password should be non empty");
                 dout.writeUTF(aes.encrypt("%exit%"));
                 s = null;
@@ -329,8 +358,6 @@ public class LoginController extends Controller {
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(-1);
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new RuntimeException(e);
         }
     }
 

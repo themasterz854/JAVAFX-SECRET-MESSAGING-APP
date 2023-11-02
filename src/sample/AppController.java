@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
@@ -15,13 +16,23 @@ import static sample.Main.aes;
 public class AppController extends Controller {
     @FXML
     private Label welcome;
+    @FXML
+    private Label NAS_Status;
+    @FXML
+    private Button NAS_Button;
 
-    public void transferdata(Socket s, Socket cs, Socket ds, Socket us, String username) {
+    public void transferdata(Socket s, Socket cs, Socket ds, Socket us, String username, String nas_status) {
         this.s = s;
         this.cs = cs;
         this.ds = ds;
         this.us = us;
         welcome.setText("WELCOME " + username);
+        NAS_Status.setText(nas_status);
+        if (NAS_Status.getText().equals("NAS_ONLINE")) {
+            NAS_Button.setDisable(false);
+        } else if (NAS_Status.getText().equals("NAS_OFFLINE")) {
+            NAS_Button.setDisable(true);
+        }
     }
 
     public void get_list() {

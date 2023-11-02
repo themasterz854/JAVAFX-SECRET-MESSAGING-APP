@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0" styleClass="appbg"
-            stylesheets="@design.css" xmlns="http://javafx.com/javafx/21"
+            stylesheets="@design.css" xmlns="http://javafx.com/javafx/21.0.1"
             fx:controller="sample.AppController">
 
     <Button layoutX="448.0" layoutY="201.0" mnemonicParsing="false" onAction="#get_list" text="getlist"/>
@@ -18,5 +18,7 @@
             <Font size="30.0"/>
         </font>
     </Label>
-    <Button layoutX="145.0" layoutY="310.0" mnemonicParsing="false" onAction="#NAS" text="NAS"/>
+    <Button fx:id="NAS_Button" layoutX="145.0" layoutY="310.0" mnemonicParsing="false" onAction="#NAS" text="NAS"/>
+    <Label fx:id="NAS_Status" layoutX="213.0" layoutY="295.0" prefHeight="57.0" prefWidth="148.0" text="NAS STATUS"
+           textFill="WHITE"/>
 </AnchorPane>

@@ -29,7 +29,8 @@ import static sample.Main.aes;
 
 public class LoginController extends Controller {
 
-    private String usernamestr;
+    private String usernamestr, nas_status;
+
     @FXML
     private Label status, status2;
     @FXML
@@ -120,6 +121,9 @@ public class LoginController extends Controller {
         return usernamestr;
     }
 
+    public String getNAS_Status() {
+        return nas_status.split("%")[1];
+    }
     public boolean keyexchange() {
 
         try {
@@ -147,11 +151,14 @@ public class LoginController extends Controller {
             dout.flush();
 
             aes.encryptionKey = decrypt(din.readUTF(), rsaobj.privateKey);
-            System.out.println("received aes key");
+
             if (!digitalsignature(rsaobj, serverpublickey)) {
                 status2.setText("HASH VERIFICATION ERROR");
                 return false;
             }
+            System.out.println("received and verified aes key");
+            nas_status = aes.decrypt(din.readUTF());
+            System.out.println(nas_status);
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(-1);

@@ -10,31 +10,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4382f61d-d9b6-4455-aea4-25678d76da82" name="Changes" comment="basic implementation of digital signature done">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+    <list default="true" id="4382f61d-d9b6-4455-aea4-25678d76da82" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/sample/AES.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sample/rsa.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/JAVAFX_SECRET_MESSAGING_LINUX_APP/SECRETMESSAGINGLINUX.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/JAVAFX_SECRET_MESSAGING_LINUX_APP/SECRETMESSAGINGLINUX.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/SECRETMESSAGING/SECRETMESSAGING.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/SECRETMESSAGING/SECRETMESSAGING.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/AES.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/AES.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/AppController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/AppController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/ChatDialogController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/ChatDialogController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/FileChooserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/FileChooserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/Controller.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/Controller.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/LoginController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/LoginController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/NASListController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/NASListController$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/NASListController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/NASListController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/chatdialog.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/chatdialog.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/clientlistcontroller$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/clientlistcontroller$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/clientlistcontroller.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/clientlistcontroller.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/login.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/app.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/app.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/rsa.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAVAFX-SECRET-MESSAGING-APP/sample/rsa.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/AppController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/AppController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/ChatDialogController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/ChatDialogController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/FileChooserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/FileChooserController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/LoginController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/NASListController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/NASListController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/app.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/app.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/chatdialog.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/chatdialog.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/clientlistcontroller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/clientlistcontroller.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/login.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -440,7 +434,15 @@
       <option name="project" value="LOCAL" />
       <updated>1695974648055</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="fixed new account creation">
+      <option name="closed" value="true" />
+      <created>1697955770488</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1697955770488</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -479,7 +481,6 @@
     <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="version 1" />
     <MESSAGE value="code cleanup" />
-    <MESSAGE value="fixed new account creation" />
     <MESSAGE value="properly fixed new account creation" />
     <MESSAGE value="added AES support for all communication &#10;need to add AES support for files" />
     <MESSAGE value="public key exchange successful" />
@@ -502,8 +503,8 @@
     <MESSAGE value="multisocket done for chat, need to add enncryption toggle" />
     <MESSAGE value="multisocket done for chat, need to add encryption toggle" />
     <MESSAGE value="basic implementation of digital signature done" />
-    <option name="LAST_COMMIT_MESSAGE" value="basic implementation of digital signature done" />
-    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+    <MESSAGE value="fixed new account creation" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed new account creation" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

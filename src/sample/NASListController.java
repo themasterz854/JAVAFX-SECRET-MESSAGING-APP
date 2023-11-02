@@ -75,7 +75,7 @@ public class NASListController extends FileChooserController {
                     MessageDigest md = MessageDigest.getInstance("SHA-256");
                     long totalsize = Long.parseLong(aes.decrypt(din.readUTF()));
                     long receivedsofar = 0;
-                    FileOutputStream fos = null;
+                    FileOutputStream fos;
                     byte[] receivedData;
                     for (String ignored : selectedarray) {
                         String str = aes.decrypt(din.readUTF());

@@ -13,11 +13,13 @@ import java.security.MessageDigest;
 import static java.lang.Math.round;
 import static sample.Main.aes;
 
-
 public class NASListController extends FileChooserController {
+
+    public final static Sync send_receive_delete_sync = new Sync();
     @FXML
     private ListView<String> FileList;
-
+    @FXML
+    private Button refresh_button;
     @FXML
     private ProgressBar receivepb;
     @FXML
@@ -67,41 +69,40 @@ public class NASListController extends FileChooserController {
             @Override
             protected Thread call() throws Exception {
                 updateProgress(0.0, 1);
-
                 ObservableList<String> selectedarray = FileList.getSelectionModel().getSelectedItems();
-                din = new DataInputStream(ds.getInputStream());
-                dout = new DataOutputStream(ds.getOutputStream());
+                DownloadDin = new DataInputStream(ds.getInputStream());
+                DownloadDout = new DataOutputStream(ds.getOutputStream());
                 try {
-                    MessageDigest md = MessageDigest.getInstance("SHA-256");
-                    long totalsize = Long.parseLong(aes.decrypt(din.readUTF()));
+
+                    long totalsize = Long.parseLong(aes.decrypt(DownloadDin.readUTF()));
                     long receivedsofar = 0;
                     FileOutputStream fos;
                     byte[] receivedData;
                     for (String ignored : selectedarray) {
-                        String str = aes.decrypt(din.readUTF());
+                        String str = aes.decrypt(DownloadDin.readUTF());
                         if (str.equals("%NASFile%")) {
                             int actualreceived, received;
-                            String fileName = aes.decrypt(din.readUTF());
+                            String fileName = aes.decrypt(DownloadDin.readUTF());
                             receivestatus.appendText("Receiving file " + fileName + "\n");
                             fos = new FileOutputStream(directory.getAbsolutePath() + "/" + fileName);
                             while (true) {
-                                actualreceived = Integer.parseInt(aes.decrypt(din.readUTF()));
+                                actualreceived = Integer.parseInt(aes.decrypt(DownloadDin.readUTF()));
                                 if (actualreceived < 0) {
                                     break;
                                 }
                                 receivedsofar += actualreceived;
-                                received = Integer.parseInt(aes.decrypt(din.readUTF()));
+                                received = Integer.parseInt(aes.decrypt(DownloadDin.readUTF()));
                                 receivedData = new byte[received];
                                 System.gc();
-                                din.readFully(receivedData);
+                                DownloadDin.readFully(receivedData);
                                 receivedData = aes.decrypt(receivedData);
                                 fos.write(receivedData, 0, receivedData.length);
-                                dout.writeUTF(aes.encrypt("Client ACK"));
-                                dout.flush();
+                                DownloadDout.writeUTF(aes.encrypt("Client ACK"));
+                                DownloadDout.flush();
                                 updateProgress(receivedsofar, totalsize);
                                 receivedprogress.setText(round(((double) receivedsofar / totalsize) * 100) + "%");
                             }
-                            System.out.println("receiving hash " + aes.decrypt(din.readUTF()));
+                            System.out.println("receiving hash " + aes.decrypt(DownloadDin.readUTF()));
                             fos.close();
                         }
                         receivedData = null;
@@ -110,6 +111,8 @@ public class NASListController extends FileChooserController {
                     }
 
                     receivestatus.appendText("All files received\n");
+                    deletebutton.setDisable(false);
+                    refresh_button.setDisable(false);
                     receivepb.progressProperty().unbind();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -126,48 +129,53 @@ public class NASListController extends FileChooserController {
     }
 
     public void receivefile() throws IOException {
-        StringBuilder finallist = new StringBuilder();
-        ObservableList<String> selectedarray = FileList.getSelectionModel().getSelectedItems();
-        for (String s : selectedarray) {
-            finallist.append(s);
+        synchronized (send_receive_delete_sync) {
+            deletebutton.setDisable(true);
+            refresh_button.setDisable(true);
+            StringBuilder finallist = new StringBuilder();
+            ObservableList<String> selectedarray = FileList.getSelectionModel().getSelectedItems();
+            for (String s : selectedarray) {
+                finallist.append(s);
+            }
+            dout.writeUTF(aes.encrypt(finallist.toString()));
+            dout.flush();
+            dout.writeUTF(aes.encrypt("%receive%"));
+            dout.flush();
+            receivestatus.appendText("Receiving files from NAS Server\n");
+            receive_thread();
         }
-        dout.writeUTF(aes.encrypt(finallist.toString()));
-        dout.flush();
-        dout.writeUTF(aes.encrypt("%receive%"));
-        dout.flush();
-        receivestatus.appendText("Receiving files from NAS Server\n");
-        receive_thread();
-
     }
 
     public void deletethefiles() throws IOException {
-        StringBuilder finallist = new StringBuilder();
-        ObservableList<String> selectedarray = FileList.getSelectionModel().getSelectedItems();
-        for (String s : selectedarray) {
-            finallist.append(s);
-        }
-        dout.writeUTF(aes.encrypt(finallist.toString()));
-        dout.flush();
-        dout.writeUTF(aes.encrypt("%delete%"));
-        dout.flush();
+        synchronized (send_receive_delete_sync) {
+            refresh_button.setDisable(true);
+            StringBuilder finallist = new StringBuilder();
+            ObservableList<String> selectedarray = FileList.getSelectionModel().getSelectedItems();
+            for (String s : selectedarray) {
+                finallist.append(s);
+            }
+            dout.writeUTF(aes.encrypt(finallist.toString()));
+            dout.flush();
+            dout.writeUTF(aes.encrypt("%delete%"));
+            dout.flush();
 
-        receivestatus.appendText("Deleting files on NAS Server\n");
-        DownloadDin = new DataInputStream(ds.getInputStream());
-        for (String ignored : selectedarray) {
+            receivestatus.appendText("Deleting files on NAS Server\n");
+            DownloadDin = new DataInputStream(ds.getInputStream());
+            for (String ignored : selectedarray) {
+                receivestatus.appendText(aes.decrypt(DownloadDin.readUTF()));
+            }
             receivestatus.appendText(aes.decrypt(DownloadDin.readUTF()));
+            refresh_button.setDisable(false);
+            refresh();
         }
-        receivestatus.appendText(aes.decrypt(DownloadDin.readUTF()));
-        refresh();
     }
 
     public void uploadthefiles() {
-        status.appendText("\nUploading the files to NAS Server\n");
-        FileList.getItems().clear();
-        FileList.getItems().removeAll();
-        send_thread("%NASupload%");
-        sendfiles.setDisable(true);
-        receivebutton.setDisable(true);
-        deletebutton.setDisable(true);
+        synchronized (send_receive_delete_sync) {
+            status.appendText("\nUploading the files to NAS Server\n");
+            send_thread("%NASupload%");
+            sendfiles.setDisable(true);
+        }
 
     }
 

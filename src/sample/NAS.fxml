@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0" styleClass="filechooser"
-            stylesheets="@design.css" xmlns="http://javafx.com/javafx/19"
+            stylesheets="@design.css" xmlns="http://javafx.com/javafx/21.0.1"
             fx:controller="sample.NASListController">
     <children>
         <Button fx:id="select_one" layoutX="14.0" layoutY="368.0" mnemonicParsing="false" onAction="#selectafile"
@@ -15,7 +19,8 @@
         <ListView fx:id="FileList" layoutX="300.0" layoutY="127.0" opacity="0.7" prefHeight="236.0" prefWidth="293.0"/>
         <Button fx:id="receivebutton" disable="true" layoutX="410.0" layoutY="368.0" mnemonicParsing="false"
                 onAction="#receivefile" text="Receive"/>
-        <Button layoutX="530.0" layoutY="368.0" mnemonicParsing="false" onAction="#refresh" text="Refresh"/>
+        <Button fx:id="refresh_button" layoutX="530.0" layoutY="368.0" mnemonicParsing="false" onAction="#refresh"
+                text="Refresh"/>
         <ListView fx:id="sendlist" layoutX="14.0" layoutY="128.0" opacity="0.7" prefHeight="236.0" prefWidth="265.0"/>
         <Button fx:id="sendfiles" disable="true" layoutX="236.0" layoutY="368.0" mnemonicParsing="false"
                 onAction="#uploadthefiles" text="Send"/>

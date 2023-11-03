@@ -154,7 +154,7 @@ public class LoginController extends Controller {
 
             if (!digitalsignature(rsaobj, serverpublickey)) {
                 status2.setText("HASH VERIFICATION ERROR");
-                return false;
+                return true;
             }
             System.out.println("received and verified aes key");
             nas_status = aes.decrypt(din.readUTF());
@@ -166,7 +166,7 @@ public class LoginController extends Controller {
             throw new RuntimeException(e);
         }
 
-        return true;
+        return false;
 
     }
 
@@ -191,7 +191,7 @@ public class LoginController extends Controller {
                 status.setText("no special characters allowed");
                 return;
             }
-            if (!keyexchange()) {
+            if (keyexchange()) {
                 status.setText("KEY EXCHANGE ERROR");
                 return;
             }
@@ -335,7 +335,7 @@ public class LoginController extends Controller {
         try {
             DataOutputStream dout = new DataOutputStream(s.getOutputStream());
             DataInputStream din = new DataInputStream(s.getInputStream());
-            if (!keyexchange()) {
+            if (keyexchange()) {
                 status2.setText("KEY EXCHANGE ERROR");
                 return;
             }

@@ -83,7 +83,9 @@ public class ChatDialogController extends Controller {
                     }
                     hash = aes.decrypt(din.readUTF());
 
-                    fos.close();
+                    if (fos != null) {
+                        fos.close();
+                    }
                     myta.appendText("Receiving hash for file " + fileName + "\n" + hash + "\n");
                     ta.appendText("\n\n");
                     receivedData = null;

@@ -11,6 +11,7 @@ import java.io.DataOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
+
 abstract class Controller {
     protected Socket s, us, ds, cs;
     protected DataOutputStream dout, UploadDout, DownloadDout;
@@ -19,7 +20,7 @@ abstract class Controller {
 
 public class Main extends Application {
 
-    public static int filebuffer = 1024 * 1024 * 75;
+    public static int filebuffer = 1024 * 1024 * 375;
     public static int flag = 0;
     public static AES aes;
     public static String serveripaddress;

@@ -24,6 +24,7 @@ public class clientlistcontroller extends Controller {
     private int cid = 0;
     @FXML
     private Button button1, button2, button3, button4, button5, button6, button7, button8, button9, button10, showbutton;
+
     private Stage stage;
     private String currentchat;
 
@@ -46,9 +47,7 @@ public class clientlistcontroller extends Controller {
                     String str1;
                     String[] data;
                     Button testbutton;
-
                     int i;
-
                     @Override
                     public void handle(ActionEvent event) {
                         try {
@@ -73,7 +72,6 @@ public class clientlistcontroller extends Controller {
             str = aes.decrypt(din.readUTF());
             i = 0;
             while (!str.equals("end of list")) {
-
                 ButtonList.get(i).setText(str);
                 ButtonList.get(i).setDisable(false);
                 ButtonList.get(i).setOpacity(1.0);

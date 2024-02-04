@@ -87,9 +87,8 @@ public class rsa {
             encryptCipher.init(Cipher.ENCRYPT_MODE, publicKey);
             byte[] secretMessageBytes = message.getBytes(StandardCharsets.UTF_8);
             byte[] encryptedMessageBytes = encryptCipher.doFinal(secretMessageBytes);
-            String encodedMessage = Base64.getEncoder().encodeToString(encryptedMessageBytes);
-            System.out.println(encodedMessage);
-            return encodedMessage;
+
+            return Base64.getEncoder().encodeToString(encryptedMessageBytes);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException |
                  InvalidKeyException e) {
             throw new RuntimeException(e);

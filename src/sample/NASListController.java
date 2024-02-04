@@ -8,14 +8,12 @@ import javafx.scene.text.Text;
 
 import java.io.*;
 import java.net.Socket;
-import java.security.MessageDigest;
 
 import static java.lang.Math.round;
 import static sample.Main.aes;
-
 public class NASListController extends FileChooserController {
 
-    public final static Sync send_receive_delete_sync = new Sync();
+    public final Sync send_receive_delete_sync;
     @FXML
     private ListView<String> FileList;
     @FXML
@@ -32,7 +30,12 @@ public class NASListController extends FileChooserController {
     @FXML
     private Text receivedprogress;
 
-    private final File directory = new File(String.format("%s/Downloads", System.getProperty("user.home").replace('\\', '/')));
+    private final File directory;
+
+    public NASListController() {
+        send_receive_delete_sync = new Sync();
+        directory = new File(System.getProperty("user.home").replace('\\', '/') + "/Downloads");
+    }
 
     public void transferdata(Socket s, Socket ds, Socket us) {
         this.s = s;
@@ -105,7 +108,6 @@ public class NASListController extends FileChooserController {
                             System.out.println("receiving hash " + aes.decrypt(DownloadDin.readUTF()));
                             fos.close();
                         }
-                        receivedData = null;
                         System.gc();
 
                     }

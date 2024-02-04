@@ -88,7 +88,6 @@ public class ChatDialogController extends Controller {
                     }
                     myta.appendText("Receiving hash for file " + fileName + "\n" + hash + "\n");
                     ta.appendText("\n\n");
-                    receivedData = null;
                     System.gc();
                 } else {
                     String[] data = str.split(" ");

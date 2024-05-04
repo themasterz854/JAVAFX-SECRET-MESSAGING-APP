@@ -74,9 +74,14 @@ public class Main extends Application {
                 primaryStage.setTitle("Application");
                 primaryStage.setOnCloseRequest(windowEvent -> {
                     try {
+                        dout = new DataOutputStream(cs.getOutputStream());
+                        dout.writeUTF(aes.encrypt("%exit%"));
                         dout = new DataOutputStream(s.getOutputStream());
                         dout.writeUTF(aes.encrypt("%exit%"));
-                        dout.flush();
+                        dout = new DataOutputStream(ds.getOutputStream());
+                        dout.writeUTF(aes.encrypt("%exit%"));
+                        dout = new DataOutputStream(us.getOutputStream());
+                        dout.writeUTF(aes.encrypt("%exit%"));
                         primaryStage.close();
                         System.exit(0);
                     } catch (Exception e) {

@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 
 import static sample.Main.aes;
@@ -95,6 +96,14 @@ public class AppController extends Controller {
             NASList.setScene(list_scene);
             NASList.setResizable(false);
             NASList.setOnCloseRequest(windowEvent -> {
+                try {
+                    DataOutputStream dout = new DataOutputStream(ds.getOutputStream());
+                    dout.writeUTF(aes.encrypt("%exit%"));
+                    dout = new DataOutputStream(us.getOutputStream());
+                    dout.writeUTF(aes.encrypt("%exit%"));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 NASList.close();
                 System.gc();
             });

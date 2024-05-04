@@ -2,10 +2,10 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml" prefHeight="207.0" prefWidth="897.0" xmlns="http://javafx.com/javafx/19"
-            fx:controller="sample.clientlistcontroller">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="207.0" prefWidth="897.0"
+            xmlns="http://javafx.com/javafx/21.0.1" fx:controller="sample.clientlistcontroller">
     <children>
-        <ButtonBar layoutX="19.0" layoutY="54.0" prefHeight="40.0" prefWidth="200.0">
+        <ButtonBar fx:id="buttonBar" layoutX="19.0" layoutY="54.0" prefHeight="40.0" prefWidth="200.0">
             <buttons>
                 <Button fx:id="button1" disable="true" mnemonicParsing="false" onAction="#show" opacity="0.0"
                         text="Button"/>

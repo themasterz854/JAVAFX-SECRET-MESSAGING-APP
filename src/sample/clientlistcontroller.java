@@ -104,6 +104,17 @@ public class clientlistcontroller extends Controller {
             cdc.transferdata(cid, s, cs, ds, us);
             cdc.run_task();
             Chatscreen.setResizable(false);
+            Chatscreen.setOnCloseRequest(windowEvent -> {
+                try {
+                    DataOutputStream cdout = new DataOutputStream(cs.getOutputStream());
+                    cdout.writeUTF(aes.encrypt("%exit%"));
+                    cdout.flush();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                Chatscreen.close();
+                System.gc();
+            });
             Chatscreen.show();
         } catch (IOException e) {
             e.printStackTrace();

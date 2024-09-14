@@ -27,7 +27,11 @@ public class Main extends Application {
     public static int serverport;
 
     static {
-        aes = new AES();
+        try {
+            aes = new AES();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private DataOutputStream dout;

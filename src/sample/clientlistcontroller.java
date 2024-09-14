@@ -109,7 +109,7 @@ public class clientlistcontroller extends Controller {
                     DataOutputStream cdout = new DataOutputStream(cs.getOutputStream());
                     cdout.writeUTF(aes.encrypt("%exit%"));
                     cdout.flush();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 Chatscreen.close();
@@ -119,6 +119,8 @@ public class clientlistcontroller extends Controller {
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(-1);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

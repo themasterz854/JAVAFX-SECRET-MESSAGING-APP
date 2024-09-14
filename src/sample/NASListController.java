@@ -6,7 +6,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.net.Socket;
 
 import static java.lang.Math.round;
@@ -58,7 +61,7 @@ public class NASListController extends FileChooserController {
             for (String s : filesarray) {
                 FileList.getItems().add(s + "\n");
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         receivebutton.setDisable(false);
@@ -130,7 +133,7 @@ public class NASListController extends FileChooserController {
 
     }
 
-    public void receivefile() throws IOException {
+    public void receivefile() throws Exception {
         synchronized (send_receive_delete_sync) {
             deletebutton.setDisable(true);
             refresh_button.setDisable(true);
@@ -148,7 +151,7 @@ public class NASListController extends FileChooserController {
         }
     }
 
-    public void deletethefiles() throws IOException {
+    public void deletethefiles() throws Exception {
         synchronized (send_receive_delete_sync) {
             refresh_button.setDisable(true);
             StringBuilder finallist = new StringBuilder();

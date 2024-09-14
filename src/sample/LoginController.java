@@ -140,19 +140,19 @@ public class LoginController extends Controller {
             EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publickeyBytes);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             PublicKey serverpublickey = keyFactory.generatePublic(publicKeySpec);
-            System.out.println("public key received");
+            System.out.println("server public key received");
             publicKeyBytes = Files.readAllBytes(publicKeyFile.toPath());
             dout.writeInt(publicKeyBytes.length);
             dout.flush();
             dout.write(publicKeyBytes);
-            System.out.println("sent public key");
+            System.out.println("sent client public key");
             dout.flush();
 
-            aes.encryptionKey = decrypt(din.readUTF(), rsaobj.privateKey);
-
+            aes.setEncryptionKey(decrypt(din.readUTF(), rsaobj.privateKey));
+            System.out.println("Encryption key " + aes.encryptionKey);
             if (!digitalsignature(rsaobj, serverpublickey)) {
                 status2.setText("HASH VERIFICATION ERROR");
-                return true;
+                return false;
             }
             System.out.println("received and verified aes key");
             nas_status = aes.decrypt(din.readUTF());
@@ -163,7 +163,7 @@ public class LoginController extends Controller {
             throw new RuntimeException(e);
         }
 
-        return false;
+        return true;
 
     }
 
@@ -188,7 +188,7 @@ public class LoginController extends Controller {
                 status.setText("no special characters allowed");
                 return;
             }
-            if (keyexchange()) {
+            if (!keyexchange()) {
                 status.setText("KEY EXCHANGE ERROR");
                 return;
             }
@@ -224,29 +224,33 @@ public class LoginController extends Controller {
         int numberofhashes = Integer.parseInt(decrypt(din.readUTF(), rsaobj.privateKey));
         int i;
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        StringBuilder hash;
+        StringBuilder computedpublichash;
         byte[][] publicencryptedbytesarray = new byte[numberofhashes][];
         for (i = 0; i < numberofhashes; i++) {
             publicencryptedbytesarray[i] = new byte[din.readInt()];
-
             dout.writeUTF("ACK");
-
             din.readFully(publicencryptedbytesarray[i]);
             dout.writeUTF("ACK");
-            hash = new StringBuilder();
+            String publichash = din.readUTF();
+            dout.writeUTF("ACK");
+            computedpublichash = new StringBuilder();
             for (byte x : publicencryptedbytesarray[i]) {
-                hash.append(String.format("%02x", x));
+                computedpublichash.append(String.format("%02x", x));
             }
-
-            outputStream.write(decrypt(publicencryptedbytesarray[i], rsaobj.privateKey));
-
+            System.out.println("public hash received : " + publichash);
+            System.out.println("public hash computed : " + computedpublichash);
+            if (publichash.contentEquals(computedpublichash)) {
+                outputStream.write(decrypt(publicencryptedbytesarray[i], rsaobj.privateKey));
+            } else {
+                return false;
+            }
         }
         byte[] c = outputStream.toByteArray();
 
 
         byte[] hashfinal = decrypt(c, Publickey);
         String hashfinaldisplay = new String(hashfinal, StandardCharsets.UTF_8);
-        System.out.println("RECEIVED " + hashfinaldisplay);
+        System.out.println("RECEIVED aes hash " + hashfinaldisplay);
         MessageDigest hashcomputed = MessageDigest.getInstance("SHA-256");
         hashcomputed.update(aes.encryptionKey.getBytes());
         byte[] digest = hashcomputed.digest();
@@ -264,16 +268,16 @@ public class LoginController extends Controller {
             String server_ip_string = serverip.getText().trim().split(":")[0];
             int server_port = Integer.parseInt(serverip.getText().trim().split(":")[1]);
             s = new Socket(server_ip_string, server_port);
-            System.out.println(s.getLocalPort());
+            System.out.println("Server comm port : " + s.getLocalPort());
 
             cs = new Socket(server_ip_string, server_port);
-            System.out.println(cs.getLocalPort());
+            System.out.println("Chat comm port : " + cs.getLocalPort());
 
             ds = new Socket(server_ip_string, server_port);
-            System.out.println(ds.getLocalPort());
+            System.out.println("Download port : " + ds.getLocalPort());
 
             us = new Socket(server_ip_string, server_port);
-            System.out.println(us.getLocalPort());
+            System.out.println("Upload port : " + us.getLocalPort());
 
         } catch (Exception e) {
             status2.setText("Server not running at that ip");
@@ -313,16 +317,16 @@ public class LoginController extends Controller {
             String server_ip_string = serverip.getText().trim().split(":")[0];
             int server_port = Integer.parseInt(serverip.getText().trim().split(":")[1]);
 
-            System.out.println(server_ip_string);
-            System.out.println(server_port);
+            System.out.println("Server ip : " + server_ip_string);
+            System.out.println("Server port : " + server_port);
             s = new Socket(server_ip_string, server_port);
-            System.out.println(s.getLocalPort());
+            System.out.println("Server comm port : " + s.getLocalPort());
             cs = new Socket(server_ip_string, server_port);
-            System.out.println(cs.getLocalPort());
+            System.out.println("Chat comm port : " + cs.getLocalPort());
             ds = new Socket(server_ip_string, server_port);
-            System.out.println(ds.getLocalPort());
+            System.out.println("Download port :" + ds.getLocalPort());
             us = new Socket(server_ip_string, server_port);
-            System.out.println(us.getLocalPort());
+            System.out.println("Upload port : " + us.getLocalPort());
         } catch (SocketException e) {
             status.setText("Server not running at that ip");
             return;
@@ -331,7 +335,7 @@ public class LoginController extends Controller {
         try {
             DataOutputStream dout = new DataOutputStream(s.getOutputStream());
             DataInputStream din = new DataInputStream(s.getInputStream());
-            if (keyexchange()) {
+            if (!keyexchange()) {
                 status2.setText("KEY EXCHANGE ERROR");
                 return;
             }
@@ -342,11 +346,15 @@ public class LoginController extends Controller {
                 return;
             }
             usernamestr = username.getText().trim();
-            dout.writeUTF(aes.encrypt((usernamestr + " " + password.getText().trim())));
+            String test = aes.encrypt((usernamestr + " " + password.getText().trim()));
+            System.out.println("test " + test);
+            System.out.println("test decrypted " + aes.decrypt(test));
+            dout.writeUTF(test);
             dout.flush();
 
             System.out.println("sent user pass");
             response = aes.decrypt(din.readUTF());
+            System.out.println("response " + response);
             if (response.equals("ok")) {
                 status.setText("LOGIN SUCCESSFUL");
                 username.clear();
